@@ -1,287 +1,1772 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Колесо фортуны</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Колесо Фортуни MEGA IMBA 3D</title>
+    <!-- Підключення бібліотеки для конфетті -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            background-color: #1a1a1a;
-            color: white;
-            padding: 50px 20px;
-            user-select: none;
+        /* =========================================
+           БАЗОВІ НАЛАШТУВАННЯ ТА ШРИФТИ
+        ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=JetBrains+Mono:wght@700&display=swap');
+
+        :root {
+            /* Дефолтна тема (Кіберпанк) */
+            --theme-bg-1: #0a0a0f; 
+            --theme-bg-2: #1f0033; 
+            --theme-bg-3: #001122;
+            
+            --accent-1: #00f2fe; 
+            --accent-2: #4facfe; 
+            --accent-danger: #ff416c;
+            
+            --glass-bg: rgba(20, 20, 25, 0.6); 
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --wheel-shadow: rgba(79, 172, 254, 0.3);
         }
 
-        .main-layout {
-            display: flex;
-            align-items: center;
-            gap: 60px;
-            background: #2a2a2a;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .left-side {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 { 
-            color: #ffcc00; 
-            margin-top: 0;
-            margin-bottom: 20px;
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Montserrat', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
         }
         
-        .wheel-container {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            margin: 20px 0;
+        body { 
+            color: white; 
+            user-select: none; 
+            overflow: hidden; 
+            background-color: var(--theme-bg-1); 
+            perspective: 1000px; 
+            transition: cursor 0.3s;
+        }
+
+        /* =========================================
+           СИСТЕМА КАСТОМНИХ КУРСОРІВ
+        ========================================= */
+        body.cursor-crosshair { cursor: crosshair; }
+        body.cursor-sword { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ff416c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="14" y1="4" x2="4" y2="14"></line><line x1="4" y1="20" x2="10" y2="20"></line><line x1="20" y1="10" x2="20" y2="4"></line><line x1="20" y1="4" x2="14" y2="4"></line></svg>') 12 12, auto; }
+        body.cursor-wand { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2300f2fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="3" y2="21"></line><path d="M16 3l2 2"></path><path d="M3 16l2 2"></path></svg>') 2 2, auto; }
+        body.cursor-kunai { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 10 12 14 9 10 12 2"></polygon><line x1="12" y1="14" x2="12" y2="22"></line><line x1="10" y1="18" x2="14" y2="18"></line></svg>') 12 2, auto; }
+        body.cursor-rocket { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ff9500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.62 9.378h0A7 7 0 1 1 20 20v0a7 7 0 0 1-7-7v0a7 7 0 0 1-9-2.101h0z"></path><path d="M4 14.899L2 22l7.101-2"></path><path d="M10 10l4 4"></path></svg>') 12 12, auto; }
+        body.cursor-pointer, body.cursor-pointer button, body.cursor-pointer input { cursor: pointer; }
+
+        /* =========================================
+           ФОНИ ТА ЧАСТИНКИ
+        ========================================= */
+        #bg-layer { 
+            position: fixed; 
+            top: -10%; left: -10%; 
+            width: 120%; height: 120%; 
+            z-index: -3; 
+            transition: transform 0.2s ease-out; 
         }
         
-        /* Красная стрелка сверху */
-        .pointer {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 18px solid transparent;
-            border-right: 18px solid transparent;
-            border-top: 35px solid red;
-            z-index: 10;
+        .bg-gradient {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--theme-bg-2) 0%, var(--theme-bg-1) 40%, var(--theme-bg-3) 100%);
+            transition: background 1s ease;
         }
         
-        /* Колесо */
-        .wheel {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid white;
-            box-sizing: border-box;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1); 
+        .bg-spin { animation: bgSpin 40s linear infinite; }
+        @keyframes bgSpin { 
+            100% { transform: rotate(360deg) scale(1.5); } 
+            0% { transform: rotate(0deg) scale(1.5); } 
+        }
+        
+        canvas#particles-bg { 
+            position: fixed; top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
+            z-index: -2; 
+            pointer-events: none; 
+            transition: opacity 0.5s; 
         }
 
-        /* Динамический холст для секторов */
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
+        /* =========================================
+           ЕКРАНИ (VIEWS) ТА UI КОМПОНЕНТИ
+        ========================================= */
+        .view {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; 
+            transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transform: translateY(40px) scale(0.92) rotateX(10deg);
+            transform-style: preserve-3d;
+        }
+        .view.active { 
+            opacity: 1; 
+            pointer-events: all; 
+            transform: translateY(0) scale(1) rotateX(0deg); 
         }
 
-        button {
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            background-color: #ffcc00;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            transition: 0.2s;
-            margin-top: 15px;
-            color: black;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        button:hover { background-color: #ffe066; }
-        button:disabled { background-color: #555; color: #888; cursor: not-allowed; }
-
-        #result {
-            margin-top: 25px;
-            font-size: 28px;
-            font-weight: bold;
-            height: 35px;
-            text-align: center;
+        .glass-panel {
+            background: var(--glass-bg); 
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        /* Правая панель настроек */
-        .right-side {
-            display: flex;
-            flex-direction: column;
-            width: 250px;
+        .btn-back {
+            position: absolute; top: clamp(15px, 3vw, 30px); left: clamp(15px, 3vw, 30px); 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); 
+            padding: 12px 25px; border-radius: 14px; cursor: inherit; font-weight: 700; font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); backdrop-filter: blur(10px); z-index: 50;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-back:hover { 
+            background: rgba(255,255,255,0.15); color: white; 
+            transform: translateX(-5px) scale(1.05); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.3); 
         }
 
-        .right-side label {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #ffcc00;
+        /* =========================================
+           ГОЛОВНЕ МЕНЮ
+        ========================================= */
+        .menu-title { 
+            font-size: clamp(35px, 6vw, 75px); font-weight: 900; margin-bottom: 10px; 
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-1)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            text-shadow: 0 10px 40px var(--wheel-shadow); letter-spacing: 2px; text-align: center; 
+            background-size: 200% auto; animation: textShine 3s linear infinite; line-height: 1.1; 
+        }
+        .menu-subtitle { 
+            font-size: clamp(16px, 3vw, 24px); color: rgba(255,255,255,0.6); font-weight: 600; 
+            margin-bottom: 60px; letter-spacing: 4px; text-transform: uppercase; text-align: center;
+        }
+        @keyframes textShine { to { background-position: 200% center; } }
+        
+        .menu-buttons { 
+            display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 380px; 
+            padding: 0 20px; z-index: 10; perspective: 1000px;
+        }
+        .btn-menu {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08);
+            color: white; font-size: 18px; font-weight: 800; padding: 22px; border-radius: 20px; cursor: inherit;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            position: relative; overflow: hidden; letter-spacing: 1px; transform-style: preserve-3d;
+        }
+        .btn-menu::before { 
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); 
+            transition: left 0.7s ease; transform: skewX(-20deg); 
+        }
+        .btn-menu:hover::before { left: 150%; }
+        .btn-menu:hover { 
+            background: rgba(255,255,255,0.1); transform: translateY(-8px) translateZ(20px); 
+            border-color: var(--accent-2); box-shadow: 0 25px 50px var(--wheel-shadow); color: var(--accent-1); 
         }
 
-        textarea {
-            width: 100%;
-            height: 280px;
-            background-color: #1a1a1a;
-            color: white;
-            border: 2px solid #444;
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 16px;
-            resize: none;
-            box-sizing: border-box;
-            font-family: sans-serif;
-            line-height: 1.4;
+        /* =========================================
+           НАЛАШТУВАННЯ
+        ========================================= */
+        .settings-title { 
+            font-size: clamp(30px, 5vw, 45px); font-weight: 900; margin-bottom: 30px; 
+            color: #fff; text-align: center; text-transform: uppercase; letter-spacing: 2px;
         }
-        textarea:focus {
-            border-color: #ffcc00;
-            outline: none;
+        
+        .settings-tabs { 
+            display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.4); 
+            padding: 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); 
+            max-width: 90vw; overflow-x: auto;
+        }
+        .tab-btn { 
+            background: transparent; border: none; color: rgba(255,255,255,0.5); padding: 12px 24px; 
+            border-radius: 14px; font-weight: 700; cursor: inherit; transition: 0.3s; font-size: 14px; white-space: nowrap;
+        }
+        .tab-btn.active { 
+            background: var(--accent-2); color: white; box-shadow: 0 5px 15px var(--wheel-shadow); 
+        }
+        
+        .settings-content { 
+            display: none; flex-wrap: wrap; justify-content: center; gap: 30px; 
+            max-width: 1000px; padding: 20px; width: 100%; animation: fadeIn 0.4s ease;
+        }
+        .settings-content.active { display: flex; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .settings-column { 
+            width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 20px; padding: 10px;
+        }
+        .settings-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        
+        .settings-label { 
+            display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; 
+            color: rgba(255,255,255,0.7); margin-bottom: 8px; font-weight: 700; 
+        }
+        
+        .custom-select { 
+            width: 100%; padding: 15px; border-radius: 14px; background: rgba(0,0,0,0.4); 
+            border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 15px; font-weight: 600; 
+            outline: none; cursor: inherit; appearance: none; transition: 0.3s; 
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .custom-select:focus, .custom-select:hover { 
+            border-color: var(--accent-2); background: rgba(0,0,0,0.6); 
+        }
+        .custom-select option { 
+            background: #1a1a24; color: white; padding: 10px;
+        }
+        
+        input[type=range] { 
+            -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; 
+            background: rgba(255,255,255,0.1); outline: none; transition: 0.2s; margin-bottom: 5px; 
+        }
+        input[type=range]::-webkit-slider-thumb { 
+            -webkit-appearance: none; appearance: none; width: 22px; height: 22px; 
+            border-radius: 50%; background: var(--accent-1); cursor: inherit; 
+            box-shadow: 0 0 15px var(--accent-2); transition: 0.2s; border: 3px solid #fff;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+        
+        .slider-value { 
+            text-align: right; color: var(--accent-1); font-weight: 900; font-size: 16px; 
+            background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 8px;
+        }
+
+        /* Чекбокс перемикач */
+        .toggle-switch { position: relative; width: 60px; height: 32px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider-toggle { 
+            position: absolute; cursor: inherit; top: 0; left: 0; right: 0; bottom: 0; 
+            background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; 
+            border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .slider-toggle:before { 
+            position: absolute; content: ""; height: 24px; width: 24px; left: 3px; bottom: 3px; 
+            background-color: white; transition: .4s; border-radius: 50%; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        input:checked + .slider-toggle { 
+            background-color: var(--accent-2); border-color: var(--accent-1); 
+            box-shadow: 0 0 15px var(--wheel-shadow);
+        }
+        input:checked + .slider-toggle:before { transform: translateX(28px); }
+
+        /* Панель вибору кольорів (кастомна тема) */
+        .color-pickers-panel { 
+            display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; 
+            margin-top: 10px; border: 1px dashed rgba(255,255,255,0.2); animation: fadeIn 0.3s; 
+        }
+        .color-pickers-panel.active { display: block; }
+        .color-row { 
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; 
+        }
+        input[type="color"] { 
+            -webkit-appearance: none; border: none; width: 35px; height: 35px; 
+            border-radius: 8px; cursor: inherit; background: transparent; 
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { 
+            border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; 
+        }
+
+        /* =========================================
+           ЕКРАН: АВТОРИ
+        ========================================= */
+        .authors-container { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; padding: 20px; }
+        .author-card { padding: 40px 30px; border-radius: 24px; width: 280px; text-align: center; transition: all 0.4s ease; cursor: pointer; position: relative; overflow: hidden;}
+        .author-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent); opacity: 0; transition: 0.4s; }
+        .author-card:hover { transform: translateY(-10px) scale(1.02); }
+        .author-card:hover::before { opacity: 1; }
+        .author-card.finx:hover { box-shadow: 0 20px 50px rgba(255, 65, 108, 0.4); border-color: #ff416c; }
+        .author-card.gemini:hover { box-shadow: 0 20px 50px var(--wheel-shadow); border-color: var(--accent-2); }
+        .author-avatar { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 25px auto; display: flex; justify-content: center; align-items: center; font-size: 50px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.4); position: relative; z-index: 2;}
+        .author-card.finx .author-avatar { background: linear-gradient(135deg, #ff4b2b, #ff416c); }
+        .author-card.gemini .author-avatar { background: linear-gradient(135deg, #00f2fe, #4facfe); }
+        .author-name { font-size: 32px; font-weight: 900; margin-bottom: 10px; position: relative; z-index: 2;}
+        .author-role { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; position: relative; z-index: 2;}
+
+        /* =========================================
+           РЕЖИМ ГРИ (Колесо та Списки)
+        ========================================= */
+        .game-layout { 
+            display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; 
+            width: 100%; max-width: 1400px; padding: 20px; align-items: flex-start;
+        }
+        
+        /* Ліва панель (Історія) */
+        .side-panel { 
+            width: 100%; max-width: 280px; padding: 25px; display: flex; 
+            flex-direction: column; gap: 15px; height: clamp(400px, 60vh, 600px);
+        }
+        .panel-title { 
+            font-size: 16px; font-weight: 800; color: var(--accent-2); 
+            text-transform: uppercase; letter-spacing: 2px; text-align: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 10px;
+        }
+        .history-list { 
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 5px; 
+        }
+        .history-item { 
+            background: rgba(0,0,0,0.3); padding: 12px 15px; border-radius: 12px; font-size: 14px; 
+            font-weight: 700; display: flex; align-items: center; gap: 10px; 
+            border-left: 3px solid var(--accent-1); animation: slideInLeft 0.3s ease;
+        }
+        .history-item .time { 
+            font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.4); 
+        }
+        @keyframes slideInLeft { 
+            from { opacity: 0; transform: translateX(-20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+
+        /* Центральна панель (Колесо) */
+        .wheel-section { 
+            flex: 1; min-width: 300px; display: flex; flex-direction: column; 
+            align-items: center; position: relative; perspective: 1500px; z-index: 10;
+        }
+        
+        .wheel-3d-wrapper { 
+            position: relative; width: min(450px, 85vw); height: min(450px, 85vw); 
+            margin-bottom: 60px; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.6));
+            transform-style: preserve-3d; transition: transform 0.1s linear;
+        }
+        
+        /* Вказівник (стрілочка) */
+        .pointer-container { 
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%) translateZ(40px); 
+            z-index: 10; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6)); transform-origin: top center;
+        }
+        .pointer-container.hit { 
+            animation: pointerBump 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        @keyframes pointerBump { 
+            0% { transform: translateX(-50%) translateZ(40px) rotate(0deg); } 
+            40% { transform: translateX(-50%) translateZ(40px) rotate(18deg) scale(1.1); } 
+            100% { transform: translateX(-50%) translateZ(40px) rotate(0deg); } 
+        }
+
+        .pointer { 
+            width: 0; height: 0; border-left: 30px solid transparent; 
+            border-right: 30px solid transparent; border-top: 60px solid #fff; position: relative;
+        }
+        .pointer::after { 
+            content: ''; position: absolute; top: -58px; left: -20px; width: 0; height: 0; 
+            border-left: 20px solid transparent; border-right: 20px solid transparent; 
+            border-top: 45px solid var(--accent-danger); 
+        }
+
+        /* Само Колесо */
+        .wheel { 
+            width: 100%; height: 100%; border-radius: 50%; border: 12px solid rgba(255,255,255,0.15); 
+            overflow: hidden; background-color: #050508; 
+            box-shadow: inset 0 0 80px rgba(0,0,0,1); 
+            position: relative; transform-style: preserve-3d;
+        }
+        .wheel.led-active { animation: ledPulse 3s infinite alternate; }
+        @keyframes ledPulse {
+            0% { box-shadow: 0 0 20px rgba(79, 172, 254, 0.2), inset 0 0 80px rgba(0,0,0,1); border-color: rgba(79, 172, 254, 0.15); }
+            100% { box-shadow: 0 0 60px var(--accent-danger), inset 0 0 80px rgba(0,0,0,1); border-color: var(--accent-danger); }
+        }
+        
+        .wheel-center-hub {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) translateZ(20px);
+            width: 20%; height: 20%; background: radial-gradient(circle, #2a2a35 0%, #0a0a0f 100%);
+            border-radius: 50%; border: 4px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.1);
+            z-index: 5; display: flex; justify-content: center; align-items: center;
+        }
+        .wheel-center-hub::after { 
+            content: '★'; color: var(--accent-2); font-size: clamp(16px, 4vw, 24px); 
+            text-shadow: 0 0 10px var(--accent-1); 
+        }
+
+        canvas#wheelCanvas { width: 100%; height: 100%; display: block; }
+        
+        /* Кнопка КРУТИТИ */
+        .btn-spin { 
+            background: linear-gradient(135deg, var(--accent-danger), #ff4b2b); border: none; color: white; 
+            font-size: 24px; font-weight: 900; padding: 20px 80px; border-radius: 50px; cursor: inherit; 
+            text-transform: uppercase; box-shadow: 0 15px 30px rgba(255, 65, 108, 0.4), inset 0 2px 0 rgba(255,255,255,0.3); 
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); letter-spacing: 3px; 
+            position: relative; overflow: hidden; transform: translateZ(30px);
+        }
+        .btn-spin::before { 
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); 
+            transform: skewX(-20deg); transition: 0s; 
+        }
+        .btn-spin:hover { 
+            transform: scale(1.08) translateY(-5px) translateZ(40px); 
+            box-shadow: 0 25px 40px rgba(255, 65, 108, 0.6), inset 0 2px 0 rgba(255,255,255,0.3); 
+        }
+        .btn-spin:hover::before { left: 200%; transition: 0.8s ease; }
+        .btn-spin:active { transform: scale(0.95) translateZ(10px); }
+        .btn-spin:disabled { 
+            filter: grayscale(1); cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.5; 
+        }
+
+        /* Права панель (Список елементів) */
+        .list-section { 
+            width: 100%; max-width: 320px; padding: 25px; display: flex; flex-direction: column; 
+            gap: 20px; height: clamp(400px, 60vh, 600px);
+        }
+        .add-item-box { 
+            display: flex; gap: 10px; background: rgba(0,0,0,0.4); padding: 12px; 
+            border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); 
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .add-item-box input { 
+            flex: 1; background: transparent; border: none; color: white; padding: 5px 10px; 
+            font-size: 16px; outline: none; font-weight: 700; min-width: 0; cursor: inherit;
+        }
+        .add-btn { 
+            background: var(--accent-2); border: none; color: white; width: 45px; height: 45px; 
+            border-radius: 14px; cursor: inherit; font-weight: bold; font-size: 26px; 
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; 
+            flex-shrink: 0; box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        .add-btn:hover { background: var(--accent-1); transform: rotate(90deg) scale(1.1); }
+
+        .items-list { 
+            display: flex; flex-direction: column; gap: 12px; flex: 1; overflow-y: auto; padding-right: 10px; 
+        }
+        
+        /* Стиль скроллбару */
+        .items-list::-webkit-scrollbar, .history-list::-webkit-scrollbar, .settings-content::-webkit-scrollbar { width: 6px; }
+        .items-list::-webkit-scrollbar-track, .history-list::-webkit-scrollbar-track, .settings-content::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
+        .items-list::-webkit-scrollbar-thumb, .history-list::-webkit-scrollbar-thumb, .settings-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .items-list::-webkit-scrollbar-thumb:hover { background: var(--accent-2); }
+
+        .item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(255, 255, 255, 0.05); padding: 16px 20px; border-radius: 16px; 
+            font-weight: 800; border: 1px solid rgba(255,255,255,0.03); transition: 0.2s; 
+            cursor: inherit; font-size: 15px; letter-spacing: 0.5px; animation: slideInRight 0.3s ease;
+        }
+        .item:hover { 
+            background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); transform: translateX(-3px);
+        }
+        .item.secret-active { border-left: 4px solid var(--accent-1); background: rgba(79, 172, 254, 0.15); box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);}
+        @keyframes slideInRight { 
+            from { opacity: 0; transform: translateX(20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+        
+        .delete-btn { 
+            background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); 
+            width: 32px; height: 32px; border-radius: 10px; font-size: 16px; cursor: inherit; 
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .delete-btn:hover { background: var(--accent-danger); color: white; transform: scale(1.1) rotate(90deg); }
+
+        /* =========================================
+           МОДАЛЬНЕ ВІКНО (ПЕРЕМОЖЕЦЬ / АВТОРИ)
+        ========================================= */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
+            display: flex; justify-content: center; align-items: center; z-index: 1000; 
+            opacity: 0; pointer-events: none; transition: 0.4s ease; perspective: 1000px;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content { 
+            background: #13131a; padding: 60px 40px; border-radius: 35px; text-align: center; 
+            max-width: 90vw; width: 550px; box-shadow: 0 30px 80px rgba(0,0,0,0.9), inset 0 2px 0 rgba(255,255,255,0.1); 
+            transform: scale(0.5) rotateX(20deg) translateY(50px); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .modal-content::before { 
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; 
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.15) 0%, transparent 60%); 
+            z-index: 0; pointer-events: none;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) rotateX(0deg) translateY(0); }
+        .modal-title { 
+            font-size: 22px; color: var(--accent-1); margin-bottom: 20px; font-weight: 900; 
+            letter-spacing: 4px; position: relative; z-index: 1; text-transform: uppercase; 
+            text-shadow: 0 0 15px var(--wheel-shadow);
+        }
+        .modal-body-text { 
+            font-size: 50px; font-weight: 900; margin-bottom: 50px; color: white; 
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.4); 
+            position: relative; z-index: 1; line-height: 1.2; word-wrap: break-word;
+        }
+        .modal-body-text span.highlight { color: var(--accent-danger); text-shadow: 0 0 20px rgba(255, 65, 108, 0.6); }
+
+        .btn-awesome { 
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); border: none; 
+            color: white; padding: 18px 50px; border-radius: 40px; cursor: inherit; 
+            font-weight: 900; font-size: 18px; letter-spacing: 2px; box-shadow: 0 15px 35px var(--wheel-shadow); 
+            transition: 0.3s; position: relative; z-index: 1; text-transform: uppercase; 
+        }
+        .btn-awesome:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 20px 45px var(--wheel-shadow); }
+
+        /* =========================================
+           ЕФЕКТИ КЛІКУ ТА ДОТИКУ
+        ========================================= */
+        .click-fx { position: fixed; pointer-events: none; z-index: 99999; transform: translate(-50%, -50%); }
+        
+        .fx-ripple { 
+            width: 20px; height: 20px; border: 2px solid var(--accent-1); border-radius: 50%; 
+            animation: rippleAnim 0.6s ease-out forwards; 
+        }
+        @keyframes rippleAnim { 
+            0% { width: 0; height: 0; opacity: 1; border-width: 4px; } 
+            100% { width: 120px; height: 120px; opacity: 0; border-width: 1px; } 
+        }
+        
+        .fx-spark { 
+            width: 12px; height: 12px; background: var(--accent-2); border-radius: 50%; 
+            box-shadow: 0 0 15px var(--accent-1); animation: sparkAnim 0.5s ease-out forwards; 
+        }
+        @keyframes sparkAnim { 
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 
+            100% { transform: translate(-50%, -150%) scale(0); opacity: 0; } 
+        }
+        
+        .fx-emoji { font-size: 28px; animation: floatUp 0.8s ease-out forwards; text-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        @keyframes floatUp { 
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 
+            100% { transform: translate(-50%, -120px) scale(1.5) rotate(20deg); opacity: 0; } 
+        }
+
+        /* =========================================
+           МОБІЛЬНІ АДАПТАЦІЇ
+        ========================================= */
+        @media (max-width: 900px) {
+            .game-layout { 
+                flex-direction: column; align-items: center; padding: 80px 10px 20px 10px; 
+                flex-wrap: nowrap; overflow-y: auto; height: 100vh;
+            }
+            .side-panel, .list-section { max-width: 100%; height: auto; max-height: 400px; }
+            .wheel-section { order: -1; min-height: 450px; justify-content: center; }
+            .btn-back { top: 15px; left: 15px; padding: 10px 15px; font-size: 12px; }
+            .settings-content { padding: 80px 10px 20px 10px; height: 100vh; overflow-y: auto; align-content: flex-start; }
+            .settings-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 10px;}
+            .authors-container { padding-top: 80px; }
         }
     </style>
 </head>
 <body>
+    <!-- Фоновий контейнер з 3D ефектом -->
+    <div id="bg-layer">
+        <div class="bg-gradient bg-spin" id="bg-grad"></div>
+    </div>
+    <canvas id="particles-bg"></canvas>
 
-    <div class="main-layout">
+    <!-- =====================================
+         ЕКРАН: ГОЛОВНЕ МЕНЮ
+    ====================================== -->
+    <div id="view-menu" class="view active">
+        <h1 class="menu-title">WHEEL OF FORTUNE</h1>
+        <div class="menu-subtitle">MEGA IMBA EDITION</div>
+        <div class="menu-buttons">
+            <button class="btn-menu btn-click" onclick="switchView('view-game')" style="border-color: var(--accent-2);">🚀 ПОЧАТИ ГРУ</button>
+            <button class="btn-menu btn-click" onclick="switchView('view-settings')">⚙️ НАЛАШТУВАННЯ</button>
+            <button class="btn-menu btn-click" style="border-color: rgba(255, 65, 108, 0.4);" onclick="switchView('view-authors')">👑 ПРО АВТОРІВ</button>
+        </div>
+    </div>
+
+    <!-- =====================================
+         ЕКРАН: АВТОРИ
+    ====================================== -->
+    <div id="view-authors" class="view">
+        <button class="btn-back btn-click" onclick="switchView('view-menu')">← НАЗАД</button>
+        <h1 class="settings-title">ТВОРЦІ ШЕДЕВРУ</h1>
+        <div class="authors-container">
+            <div class="author-card glass-panel finx btn-click" onclick="openAuthorModal('finx')">
+                <div class="author-avatar">😎</div>
+                <div class="author-name">FINX</div>
+                <div class="author-role">Головний розробник & Ідеолог</div>
+            </div>
+            <div class="author-card glass-panel gemini btn-click" onclick="openAuthorModal('gemini')">
+                <div class="author-avatar">🤖</div>
+                <div class="author-name">Gemini</div>
+                <div class="author-role">AI Асистент від Google</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================
+         ЕКРАН: ГРА (Колесо та Списки)
+    ====================================== -->
+    <div id="view-game" class="view">
+        <button class="btn-back btn-click" onclick="switchView('view-menu')">← В МЕНЮ</button>
         
-        <div class="left-side">
-            <h1>Колесо фортуны</h1>
-            <div class="wheel-container">
-                <div class="pointer"></div>
-                <div class="wheel" id="wheel">
-                    <canvas id="wheelCanvas" width="600" height="600"></canvas>
+        <div class="game-layout">
+            
+            <!-- Ліва панель: Історія переможців -->
+            <div class="side-panel glass-panel">
+                <div class="panel-title">📜 Історія</div>
+                <div class="history-list" id="history-list"></div>
+            </div>
+
+            <!-- Центральна панель: Колесо -->
+            <div class="wheel-section">
+                <div class="wheel-3d-wrapper" id="wheel-3d-wrapper">
+                    <!-- Стрілочка -->
+                    <div class="pointer-container" id="wheel-pointer">
+                        <div class="pointer"></div>
+                    </div>
+                    
+                    <!-- Колесо -->
+                    <div class="wheel led-active" id="wheel">
+                        <div class="wheel-center-hub"></div>
+                        <canvas id="wheelCanvas" width="800" height="800"></canvas>
+                    </div>
+                </div>
+                
+                <button class="btn-spin btn-click" id="spin-btn">КРУТИТИ</button>
+            </div>
+
+            <!-- Права панель: Список елементів -->
+            <div class="list-section glass-panel">
+                <div class="panel-title" style="margin-bottom:0;">🎯 Елементи (<span id="items-count">0</span>)</div>
+                
+                <div class="add-item-box">
+                    <input type="text" id="new-item-input" placeholder="Новий варіант..." autocomplete="off">
+                    <button class="add-btn btn-click" id="add-btn">+</button>
+                </div>
+                
+                <div class="items-list" id="items-list">
+                    <!-- Список генерується через JS -->
                 </div>
             </div>
-            <button id="spin-btn">Крутить!</button>
-            <div id="result"></div>
+
+        </div>
+    </div>
+
+    <!-- =====================================
+         ЕКРАН: НАЛАШТУВАННЯ
+    ====================================== -->
+    <div id="view-settings" class="view">
+        <button class="btn-back btn-click" onclick="switchView('view-menu')">← ЗБЕРЕГТИ</button>
+        <h1 class="settings-title">НАЛАШТУВАННЯ</h1>
+        
+        <div class="settings-tabs">
+            <button class="tab-btn active btn-click" onclick="switchTab('tab-game', this)">🎮 Гра</button>
+            <button class="tab-btn btn-click" onclick="switchTab('tab-visuals', this)">✨ Вигляд та Ефекти</button>
+            <button class="tab-btn btn-click" onclick="switchTab('tab-physics', this)">🌪 Фізика</button>
+            <button class="tab-btn btn-click" onclick="switchTab('tab-audio', this)">🔊 Звук</button>
         </div>
 
-        <div class="right-side">
-            <label for="options-input">Варианты (каждый с новой строки):</label>
-            <textarea id="options-input">МНЕ
-ВАМ
-ПРИЗ
-СКИДКА
-УДАЧА</textarea>
+        <!-- Вкладка: Гра -->
+        <div class="settings-content glass-panel active" id="tab-game">
+            <div class="settings-column" style="max-width: 500px;">
+                <div class="settings-row">
+                    <div>
+                        <span class="settings-label">Режим на вибування</span>
+                        <div style="font-size:12px; color:rgba(255,255,255,0.5); font-weight:600;">Переможець видаляється зі списку</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="set-elimination" class="btn-click">
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                <div>
+                    <span class="settings-label">Час обертання: <span id="val-time" class="slider-value">5</span> сек</span>
+                    <input type="range" id="set-time" min="2" max="15" value="5" step="1">
+                </div>
+            </div>
         </div>
 
+        <!-- Вкладка: Вигляд -->
+        <div class="settings-content glass-panel" id="tab-visuals">
+            <div class="settings-column">
+                <div>
+                    <span class="settings-label">Глобальна Тема:</span>
+                    <select id="set-theme" class="custom-select btn-click">
+                        <option value="cyberpunk">Кіберпанк (Неон + Рожевий)</option>
+                        <option value="matrix">Матриця (Чорний + Зелений)</option>
+                        <option value="sakura">Сакура (Аніме / Рожевий)</option>
+                        <option value="bloodmoon">Кривавий Місяць (Темно-червоний)</option>
+                        <option value="ocean">Океан (Глибокий синій)</option>
+                        <option value="gold">Золотий Люкс (Чорний + Золото)</option>
+                        <option value="vaporwave">Vaporwave (Ретро 80-ті)</option>
+                        <option value="darkmatter">Темна Матерія (Космос)</option>
+                        <option value="sunset">Захід Сонця (Помаранчевий)</option>
+                        <option value="custom">🎨 СВІЙ ДИЗАЙН (Кастомні кольори)</option>
+                    </select>
+                    
+                    <!-- Панель кастомних кольорів -->
+                    <div class="color-pickers-panel" id="custom-colors-panel">
+                        <div class="color-row"><span>Фон (Центр)</span> <input type="color" id="col-bg1" value="#0a0a0f"></div>
+                        <div class="color-row"><span>Фон (Краї)</span> <input type="color" id="col-bg2" value="#1f0033"></div>
+                        <div class="color-row"><span>Акцент 1 (Колесо)</span> <input type="color" id="col-ac1" value="#00f2fe"></div>
+                        <div class="color-row"><span>Акцент 2 (Кнопки)</span> <input type="color" id="col-ac2" value="#ff416c"></div>
+                    </div>
+                </div>
+                <div>
+                    <span class="settings-label">Курсор миші:</span>
+                    <select id="set-cursor" class="custom-select btn-click">
+                        <option value="default">Стандартний</option>
+                        <option value="crosshair">Приціл (Crosshair)</option>
+                        <option value="sword">Неоновий Меч ⚔️</option>
+                        <option value="wand">Магічна Паличка 🪄</option>
+                        <option value="kunai">Кунай (Ніндзя) 🗡️</option>
+                        <option value="rocket">Ракета 🚀</option>
+                    </select>
+                </div>
+                <div>
+                    <span class="settings-label">Ефект при кліку/дотику (ПК та Телефон):</span>
+                    <select id="set-clickfx" class="custom-select btn-click">
+                        <option value="ripple">Неоновий Пульс (Круг)</option>
+                        <option value="sparkle">Іскри (Магія)</option>
+                        <option value="hearts">Сердечка 💖</option>
+                        <option value="skulls">Черепи 💀</option>
+                        <option value="money">Монетки 💰</option>
+                        <option value="stars">Зірки ⭐</option>
+                        <option value="fire">Вогонь 🔥</option>
+                        <option value="none">Вимкнути</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-column">
+                <div>
+                    <span class="settings-label">Стиль Колеса:</span>
+                    <select id="set-style" class="custom-select btn-click">
+                        <option value="neon">Неон (Градієнти + Світло)</option>
+                        <option value="flat">Флет (Строгий мінімалізм)</option>
+                        <option value="dark">Дарк (Темний фон секторів)</option>
+                    </select>
+                </div>
+                <div>
+                    <span class="settings-label">Базовий розмір тексту: <span id="val-text" class="slider-value">35</span> px</span>
+                    <input type="range" id="set-text" min="15" max="60" value="35" step="1">
+                    <div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:5px;">(Текст автоматично зменшиться, якщо елементів багато)</div>
+                </div>
+                <div>
+                    <span class="settings-label">Фонові частинки:</span>
+                    <select id="set-particles" class="custom-select btn-click">
+                        <option value="stars">Космічні зорі</option>
+                        <option value="snow">Сніг</option>
+                        <option value="matrix">Матриця (Цифри)</option>
+                        <option value="bubbles">Бульбашки</option>
+                        <option value="none">Вимкнути частинки</option>
+                    </select>
+                </div>
+                <div>
+                    <span class="settings-label">Стиль Конфеті:</span>
+                    <select id="set-confetti" class="custom-select btn-click">
+                        <option value="classic">Класичне</option>
+                        <option value="stars">Зірки</option>
+                        <option value="emoji">Емодзі (💰🎉✨)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка: Фізика -->
+        <div class="settings-content glass-panel" id="tab-physics">
+            <div class="settings-column">
+                <div class="settings-row">
+                    <div>
+                        <span class="settings-label">Паралакс Ефект (3D фон)</span>
+                        <div style="font-size:12px; color:rgba(255,255,255,0.5); font-weight:600;">Реагує на мишку та гіроскоп телефону</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="set-parallax" checked class="btn-click">
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                <div>
+                    <span class="settings-label">Стиль анімації крутіння:</span>
+                    <select id="set-anim" class="custom-select btn-click">
+                        <option value="smooth">Плавна (Класика)</option>
+                        <option value="elastic">Еластична (Відскок в кінці)</option>
+                        <option value="linear">Рівномірна (Без уповільнення)</option>
+                        <option value="easeinout">М'який старт-стоп</option>
+                        <option value="crazy">Шалена (Crazy)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка: Звук -->
+        <div class="settings-content glass-panel" id="tab-audio">
+            <div class="settings-column" style="max-width: 500px;">
+                <div>
+                    <span class="settings-label">Гучність: <span id="val-volume" class="slider-value">50</span>%</span>
+                    <input type="range" id="set-volume" min="0" max="100" value="50" step="1">
+                </div>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                <div>
+                    <span class="settings-label">Звуковий пакет:</span>
+                    <select id="set-sound" class="custom-select btn-click">
+                        <option value="classic">Класика (Пік-пік)</option>
+                        <option value="arcade">Аркада (Ретро 8-bit)</option>
+                        <option value="soft">М'який (Chill)</option>
+                        <option value="casino">Казино (Кліки тріскачки)</option>
+                        <option value="cyberpunk">Кіберпанк (Синтезатор)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================
+         МОДАЛКА: ПЕРЕМОЖЕЦЬ
+    ====================================== -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modal-title">ПЕРЕМОЖЕЦЬ</div>
+            <div class="modal-body-text" id="modal-text">ВАШ ПРИЗ</div>
+            <button class="btn-awesome btn-click" id="modal-btn" onclick="closeModal()">КРУТО!</button>
+        </div>
     </div>
 
     <script>
+        // =========================================
+        // 1. ГЛОБАЛЬНІ ДАНІ ТА НАЛАШТУВАННЯ
+        // =========================================
+        let cfg = {
+            time: 6, 
+            anim: 'smooth', 
+            sound: 'classic', 
+            volume: 50,
+            style: 'neon', 
+            textSize: 35, 
+            theme: 'cyberpunk', 
+            particles: 'stars', 
+            confetti: 'classic',
+            parallax: true, 
+            elimination: false,
+            cursor: 'default', 
+            clickfx: 'ripple',
+            customColors: { 
+                bg1: '#0a0a0f', 
+                bg2: '#1f0033', 
+                ac1: '#00f2fe', 
+                ac2: '#ff416c' 
+            }
+        };
+
+        // Завантаження збережених налаштувань
+        const savedCfg = localStorage.getItem('megaWheelCfg');
+        if (savedCfg) { 
+            cfg = { ...cfg, ...JSON.parse(savedCfg) }; 
+        }
+
+        function saveCfg() { 
+            localStorage.setItem('megaWheelCfg', JSON.stringify(cfg)); 
+        }
+
+        // Список елементів та історія
+        let items = JSON.parse(localStorage.getItem('megaWheelItems')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
+        let history = JSON.parse(localStorage.getItem('megaWheelHistory')) || [];
+        
+        let isSpinning = false;
+        let isAudioInit = false;
+        let secretTargetIndex = -1;
+
+        // =========================================
+        // 2. UI СИСТЕМА (Перемикання екранів)
+        // =========================================
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            // Ініціалізація аудіо при першій взаємодії
+            initAudioAndSensors(); 
+            playUIBeat();
+            
+            // Якщо перейшли в гру - обов'язково перемальовуємо колесо
+            if(viewId === 'view-game') {
+                // Затримка гарантує, що DOM повністю оновився і canvas готовий до отрисовки
+                setTimeout(drawWheel, 100);
+            }
+        }
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.settings-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            playUIBeat();
+        }
+
+        // =========================================
+        // 3. СИСТЕМА КЛІКІВ ТА КУРСОРІВ
+        // =========================================
+        function applyCursor() {
+            document.body.className = ''; // Очищаємо всі класи
+            if (cfg.cursor !== 'default') {
+                document.body.classList.add(`cursor-${cfg.cursor}`);
+            }
+        }
+
+        // Використовуємо pointerdown - це працює і для мишки, і для пальців на телефоні
+        document.addEventListener('pointerdown', (e) => {
+            if(cfg.clickfx === 'none') return;
+            
+            const el = document.createElement('div');
+            el.className = 'click-fx';
+            el.style.left = e.clientX + 'px';
+            el.style.top = e.clientY + 'px';
+            
+            if(cfg.clickfx === 'ripple') {
+                el.classList.add('fx-ripple');
+            } 
+            else if(cfg.clickfx === 'sparkle') {
+                for(let i=0; i<3; i++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'click-fx fx-spark';
+                    spark.style.left = (e.clientX + (Math.random()-0.5)*30) + 'px';
+                    spark.style.top = (e.clientY + (Math.random()-0.5)*30) + 'px';
+                    document.body.appendChild(spark);
+                    setTimeout(() => spark.remove(), 500);
+                }
+                return;
+            } 
+            else {
+                el.classList.add('fx-emoji');
+                if(cfg.clickfx === 'hearts') el.innerText = '💖';
+                if(cfg.clickfx === 'skulls') el.innerText = '💀';
+                if(cfg.clickfx === 'money') el.innerText = '💰';
+                if(cfg.clickfx === 'stars') el.innerText = '⭐';
+                if(cfg.clickfx === 'fire') el.innerText = '🔥';
+            }
+            
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        });
+
+        // Додаємо звук на всі кнопки з класом btn-click
+        document.querySelectorAll('.btn-click').forEach(btn => {
+            btn.addEventListener('click', playUIBeat);
+        });
+
+        // =========================================
+        // 4. ТЕМИ ТА ДИЗАЙН (Color Picker)
+        // =========================================
+        const themesList = {
+            cyberpunk: { bg1: '#0a0a0f', bg2: '#1f0033', a1: '#00f2fe', a2: '#ff416c' },
+            matrix:    { bg1: '#000800', bg2: '#001a00', a1: '#00ff41', a2: '#ffffff' },
+            sakura:    { bg1: '#ffe5ec', bg2: '#ffb3c6', a1: '#ff8fab', a2: '#ff1493' },
+            bloodmoon: { bg1: '#1a0000', bg2: '#330000', a1: '#ff0000', a2: '#ff4d4d' },
+            ocean:     { bg1: '#001f3f', bg2: '#0074D9', a1: '#7FDBFF', a2: '#39CCCC' },
+            gold:      { bg1: '#0d0d0d', bg2: '#1a1814', a1: '#ffd700', a2: '#ff4500' },
+            vaporwave: { bg1: '#20004a', bg2: '#4a0082', a1: '#ff00ff', a2: '#00ffff' },
+            darkmatter:{ bg1: '#050508', bg2: '#0a0a1a', a1: '#7b2cbf', a2: '#e0aaff' },
+            sunset:    { bg1: '#2d0a0a', bg2: '#521414', a1: '#ff7b00', a2: '#ffaa00' }
+        };
+
+        function applyTheme() {
+            const root = document.documentElement;
+            const panel = document.getElementById('custom-colors-panel');
+            
+            let currentColors = {};
+
+            if (cfg.theme === 'custom') {
+                panel.classList.add('active');
+                currentColors = cfg.customColors;
+            } else {
+                panel.classList.remove('active');
+                currentColors = themesList[cfg.theme];
+            }
+            
+            // Застосовуємо кольори до CSS змінних
+            root.style.setProperty('--theme-bg-1', currentColors.bg1);
+            root.style.setProperty('--theme-bg-2', currentColors.bg2);
+            root.style.setProperty('--theme-bg-3', '#000000'); // Завжди чорний для глибини
+            root.style.setProperty('--accent-1', currentColors.a1);
+            root.style.setProperty('--accent-2', currentColors.a1); 
+            root.style.setProperty('--accent-danger', currentColors.a2);
+            
+            // Генеруємо тінь на основі акцентного кольору
+            root.style.setProperty('--wheel-shadow', `rgba(${hexToRgb(currentColors.a1)}, 0.3)`);
+            
+            // Перемальовуємо колесо новими кольорами
+            setTimeout(drawWheel, 50);
+        }
+        
+        function hexToRgb(hex) {
+            let r=0, g=0, b=0;
+            if(hex.startsWith('#') && hex.length >= 7) { 
+                r = parseInt(hex.slice(1,3), 16); 
+                g = parseInt(hex.slice(3,5), 16); 
+                b = parseInt(hex.slice(5,7), 16); 
+            }
+            return `${r}, ${g}, ${b}`;
+        }
+
+        // =========================================
+        // 5. БІНДІНГ НАЛАШТУВАННЯ (Зв'язок UI з JS)
+        // =========================================
+        function bindInput(id, key, valId, type = 'slider', callback) {
+            const el = document.getElementById(id); 
+            if (!el) return;
+            
+            if (type === 'slider') {
+                const valEl = document.getElementById(valId); 
+                el.value = cfg[key]; 
+                if(valEl) valEl.innerText = cfg[key];
+                
+                const updateBg = (val) => { 
+                    const pct = ((val - el.min) / (el.max - el.min)) * 100; 
+                    el.style.background = `linear-gradient(to right, var(--accent-1) 0%, var(--accent-2) ${pct}%, rgba(255,255,255,0.1) ${pct}%, rgba(255,255,255,0.1) 100%)`; 
+                };
+                
+                el.addEventListener('input', function() { 
+                    cfg[key] = parseInt(this.value); 
+                    if(valEl) valEl.innerText = cfg[key]; 
+                    updateBg(this.value); 
+                    saveCfg(); 
+                    if(callback) callback(); 
+                });
+                updateBg(el.value);
+                
+            } else if (type === 'select') {
+                el.value = cfg[key]; 
+                el.addEventListener('change', (e) => { 
+                    cfg[key] = e.target.value; 
+                    saveCfg(); 
+                    if(callback) callback(); 
+                });
+                
+            } else if (type === 'checkbox') {
+                el.checked = cfg[key]; 
+                el.addEventListener('change', (e) => { 
+                    cfg[key] = e.target.checked; 
+                    saveCfg(); 
+                    if(callback) callback(); 
+                });
+            }
+        }
+
+        // Слухачі для кастомних кольорів
+        ['bg1', 'bg2', 'ac1', 'ac2'].forEach(k => {
+            const el = document.getElementById('col-'+k);
+            el.value = cfg.customColors[k];
+            el.addEventListener('input', (e) => { 
+                cfg.customColors[k] = e.target.value; 
+                saveCfg(); 
+                applyTheme(); 
+            });
+        });
+
+        // Ініціалізація інпутів
+        bindInput('set-time', 'time', 'val-time', 'slider');
+        bindInput('set-text', 'textSize', 'val-text', 'slider', drawWheel);
+        bindInput('set-volume', 'volume', 'val-volume', 'slider', () => { 
+            if(masterGain) masterGain.gain.value = cfg.volume / 100; 
+        });
+        bindInput('set-anim', 'anim', null, 'select');
+        bindInput('set-sound', 'sound', null, 'select');
+        bindInput('set-confetti', 'confetti', null, 'select');
+        bindInput('set-cursor', 'cursor', null, 'select', applyCursor);
+        bindInput('set-clickfx', 'clickfx', null, 'select');
+        bindInput('set-style', 'style', null, 'select', () => { 
+            document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel'; 
+            drawWheel(); 
+        });
+        bindInput('set-theme', 'theme', null, 'select', applyTheme);
+        bindInput('set-particles', 'particles', null, 'select', initParticles);
+        bindInput('set-parallax', 'parallax', null, 'checkbox', () => { 
+            if(!cfg.parallax) { targetRotX = 0; targetRotY = 0; targetBgX = 0; targetBgY = 0; } 
+        });
+        bindInput('set-elimination', 'elimination', null, 'checkbox');
+
+        // Застосовуємо початкові налаштування
+        applyTheme();
+        applyCursor();
+
+        // =========================================
+        // 6. МАЛЮВАННЯ КОЛЕСА (CANVAS 2D)
+        // =========================================
         const canvas = document.getElementById('wheelCanvas');
         const ctx = canvas.getContext('2d');
         const wheel = document.getElementById('wheel');
         const spinBtn = document.getElementById('spin-btn');
-        const resultText = document.getElementById('result');
-        const optionsInput = document.getElementById('options-input');
-
-        let sectors = [];
-        let isSpinning = false;
-        let currentRotation = 0;
-
-        // Яркая палитра цветов для секторов
-        const colors = [
-            '#ffcc00', '#444444', '#3498db', '#e74c3c', 
-            '#2ecc71', '#9b59b6', '#1abc9c', '#e67e22'
-        ];
-
-        // Функция отрисовки секторов на Canvas
+        const pointerEl = document.getElementById('wheel-pointer');
+        
         function drawWheel() {
-            const lines = optionsInput.value.split('\n').map(line => line.trim()).filter(line => line !== "");
-            sectors = lines.length > 0 ? lines : ["Пусто"];
-            
-            const numSectors = sectors.length;
-            const arc = (2 * Math.PI) / numSectors;
-            const radius = canvas.width / 2;
-
+            if(!canvas) return;
+            // Очищуємо канвас перед малюванням
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Якщо список порожній, не малюємо нічого (але краще додати хоча б 1 елемент)
+            if(items.length === 0) return;
 
-            sectors.forEach((text, i) => {
+            const radius = canvas.width / 2;
+            const arc = (2 * Math.PI) / items.length; 
+            
+            // Отримуємо поточні кольори з CSS
+            const rootStyle = getComputedStyle(document.documentElement);
+            const a1 = rootStyle.getPropertyValue('--accent-1').trim() || '#00f2fe';
+            const a2 = rootStyle.getPropertyValue('--accent-2').trim() || '#4facfe';
+            const a3 = rootStyle.getPropertyValue('--accent-danger').trim() || '#ff416c';
+            
+            // Палітра для секторів
+            const paletteNeon = [a1, a2, a3, '#f093fb', '#43e97b', '#f5576c', '#38f9d7', '#e0c3fc'];
+            
+            items.forEach((text, i) => {
                 const angle = i * arc;
                 
-                // Рисуем цветной сектор
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(radius, radius);
-                ctx.arc(radius, radius, radius, angle, angle + arc);
-                ctx.lineTo(radius, radius);
-                ctx.fill();
+                ctx.beginPath(); 
+                
+                // Визначаємо колір сектора
+                if (cfg.style === 'dark') { 
+                    ctx.fillStyle = i % 2 === 0 ? '#1a1a24' : '#111118'; 
+                } else { 
+                    let baseColor = paletteNeon[i % paletteNeon.length];
+                    if (cfg.style === 'neon') {
+                        let grad = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+                        grad.addColorStop(0, '#111'); 
+                        grad.addColorStop(1, baseColor);
+                        ctx.fillStyle = grad;
+                    } else {
+                        // Flat стиль
+                        ctx.fillStyle = baseColor; 
+                    }
+                }
 
-                // Добавляем текст
-                ctx.save();
-                ctx.translate(radius, radius);
-                // Поворачиваем холст на середину текущего сектора
+                // Малюємо сектор
+                ctx.moveTo(radius, radius); 
+                ctx.arc(radius, radius, radius, angle, angle + arc); 
+                ctx.fill();
+                
+                // Рамка сектора
+                ctx.strokeStyle = "rgba(255,255,255,0.15)"; 
+                ctx.lineWidth = 2; 
+                ctx.stroke();
+
+                // Малюємо текст
+                ctx.save(); 
+                ctx.translate(radius, radius); 
                 ctx.rotate(angle + arc / 2);
                 
-                // Настройка шрифта и цвета букв в зависимости от фона
-                ctx.textAlign = "right";
-                ctx.textBaseline = "middle";
-                ctx.fillStyle = (colors[i % colors.length] === '#ffcc00') ? 'black' : 'white';
-                ctx.font = "bold 30px sans-serif";
+                ctx.textAlign = "right"; 
+                ctx.textBaseline = "middle"; 
+                ctx.fillStyle = cfg.style === 'dark' ? paletteNeon[i % paletteNeon.length] : "white";
                 
-                // Пишем текст вдоль радиуса (крутится красиво вместе с колесом)
-                ctx.fillText(text.toUpperCase(), radius - 40, 0);
+                // ДИНАМІЧНИЙ РОЗМІР ТЕКСТУ
+                // Чим більше елементів, тим меншим стає шрифт
+                let maxFontSizeByArc = (radius * arc) * 0.45;
+                let actualFontSize = Math.min(cfg.textSize, maxFontSizeByArc, 60); 
+                if (actualFontSize < 10) actualFontSize = 10; // Мінімальний розмір
+
+                ctx.font = `900 ${actualFontSize}px Montserrat, sans-serif`;
+                
+                if (cfg.style === 'neon' || cfg.style === 'dark') { 
+                    ctx.shadowColor = "rgba(0,0,0,0.8)"; 
+                    ctx.shadowBlur = 10; 
+                    ctx.shadowOffsetX = 2; 
+                    ctx.shadowOffsetY = 2; 
+                } else { 
+                    ctx.shadowColor = "transparent"; 
+                }
+
+                let textFmt = String(text).toUpperCase();
+                const maxWidth = radius - 110; // Відступ від країв
+                ctx.translate(radius - 30, 0); 
+                
+                // Стискаємо довгий текст
+                const textWidth = ctx.measureText(textFmt).width;
+                if (textWidth > maxWidth) { 
+                    ctx.scale(maxWidth / textWidth, 1); 
+                }
+                
+                ctx.fillText(textFmt, 0, 0);
                 ctx.restore();
             });
         }
 
-        // Обновляем колесо при вводе текста в меню справа
-        optionsInput.addEventListener('input', drawWheel);
-        drawWheel(); // Начальная отрисовка при старте страницы
+        // =========================================
+        // 7. ЛОГІКА ДОДАВАННЯ ТА ІСТОРІЇ
+        // =========================================
+        const itemsListEl = document.getElementById('items-list');
+        const historyListEl = document.getElementById('history-list');
+        const itemInput = document.getElementById('new-item-input');
+        const countEl = document.getElementById('items-count');
 
-        function startSpin(isSecretMode) {
-            if (isSpinning) return;
-            isSpinning = true;
-            spinBtn.disabled = true;
-            resultText.innerText = "Колесо запущено...";
-
-            let targetIndex = 0;
-
-            if (isSecretMode) {
-                // СЕКРЕТНЫЙ РЕЖИМ (Правый клик): 80% на первый элемент, 20% на остальные
-                let roll = Math.random() * 100;
-                if (roll <= 80) {
-                    targetIndex = 0; // Всегда выпадает самый первый вариант из списка (например, МНЕ)
-                } else {
-                    targetIndex = Math.floor(Math.random() * (sectors.length - 1)) + 1;
-                }
-            } else {
-                // ЧЕСТНЫЙ РЕЖИМ (Левый клик): Абсолютно равные шансы для всех
-                targetIndex = Math.floor(Math.random() * sectors.length);
-            }
-
-            const numSectors = sectors.length;
-            const arcDegrees = 360 / numSectors;
-
-            // Расчет угла для остановки строго под верхней стрелкой (стрелка на 270 градусах в координатах Canvas)
-            let targetAngle = 270 - (targetIndex * arcDegrees + arcDegrees / 2);
+        // Функція відображення списку елементів
+        function renderList() {
+            itemsListEl.innerHTML = ''; 
+            countEl.innerText = items.length;
             
-            // Нормализуем угол, чтобы избежать отрицательных значений
-            if (targetAngle < 0) targetAngle += 360;
-
-            let turns = 5 * 360; // 5 полных быстрых оборотов
-            let tinyOffset = (Math.random() * (arcDegrees * 0.7)) - (arcDegrees * 0.35); // Смещение, чтобы стрелка не указывала строго в центр
-
-            // Считаем итоговое вращение
-            currentRotation += turns + (targetAngle - (currentRotation % 360)) + tinyOffset;
-
-            // Крутим колесо
-            wheel.style.transform = "rotate(" + currentRotation + "deg)";
-
-            // Конец анимации через 4 секунды
-            setTimeout(() => {
-                resultText.innerText = "Выпало: " + sectors[targetIndex].toUpperCase() + "! 🎉";
-                spinBtn.disabled = false;
-                isSpinning = false;
-            }, 4000);
+            items.forEach((item, index) => {
+                const div = document.createElement('div'); 
+                div.className = 'item btn-click';
+                // Секретний режим на ПК (правий клік на елемент)
+                div.addEventListener('contextmenu', (e) => {
+                    e.preventDefault(); 
+                    secretTargetIndex = index;
+                    document.querySelectorAll('.item').forEach(el => el.classList.remove('secret-active'));
+                    div.classList.add('secret-active');
+                    playTickSound();
+                });
+                div.innerHTML = `
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+                        ${item}
+                    </span>
+                    <button class="delete-btn" onclick="removeItem(event, ${index})">✕</button>
+                `;
+                itemsListEl.appendChild(div);
+            });
+            
+            // Зберігаємо в LocalStorage
+            localStorage.setItem('megaWheelItems', JSON.stringify(items));
+            
+            // Якщо в нас 0 чи 1 елемент - вимикаємо кнопку (крутити немає сенсу)
+            spinBtn.disabled = items.length <= 1;
+            
+            // Скидаємо секрет при перемалюванні
+            secretTargetIndex = -1;
+            
+            // ОДРАЗУ перемальовуємо колесо
+            drawWheel();
         }
 
-        // Обычный левый клик — ЧЕСТНАЯ ИГРА
-        spinBtn.addEventListener('click', function() {
-            startSpin(false);
+        // Видалення елемента
+        window.removeItem = function(event, index) {
+            event.stopPropagation(); 
+            items.splice(index, 1); 
+            
+            // Щоб колесо не зламалось, додаємо ПУСТО
+            if (items.length === 0) {
+                items.push("ПУСТО");
+            }
+            
+            renderList(); 
+            initAudioAndSensors(); 
+            playUIBeat();
+        }
+
+        // Додавання елемента
+        document.getElementById('add-btn').addEventListener('click', () => {
+            const val = itemInput.value.trim();
+            if (val) { 
+                // Якщо був лише один елемент "ПУСТО", заміняємо його
+                if (items.length === 1 && items[0] === "ПУСТО") {
+                    items = [];
+                }
+                items.push(val); 
+                itemInput.value = ''; 
+                renderList(); 
+                initAudioAndSensors(); 
+            }
         });
 
-        // Секретный правый клик — АКТИВАЦИЯ ПОД КРУТКУ (80% на 20%)
-        spinBtn.addEventListener('contextmenu', function(e) {
-            e.preventDefault(); // Блокируем выпадающее контекстное меню браузера
-            startSpin(true);    // Включаем магический режим
+        // Додавання по клавіші Enter
+        itemInput.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') {
+                document.getElementById('add-btn').click(); 
+            }
         });
+
+        // Відображення історії
+        function renderHistory() {
+            historyListEl.innerHTML = '';
+            if (history.length === 0) { 
+                historyListEl.innerHTML = '<div style="color: rgba(255,255,255,0.3); text-align: center; padding: 20px; font-size: 13px;">Тут будуть переможці</div>'; 
+                return; 
+            }
+            
+            [...history].reverse().forEach(entry => {
+                const div = document.createElement('div'); 
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <span class="time">${entry.time}</span> 
+                    <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${entry.name}</span>
+                `;
+                historyListEl.appendChild(div);
+            });
+        }
+        
+        function addToHistory(name) {
+            const now = new Date(); 
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            history.push({ name: name, time: timeStr });
+            if (history.length > 30) history.shift(); // Зберігаємо тільки 30 останніх
+            
+            localStorage.setItem('megaWheelHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // =========================================
+        // 8. ЛОГІКА ОБЕРТАННЯ
+        // =========================================
+        let currentRotation = 0; 
+        let animationFrameId;
+
+        const easings = {
+            smooth: t => 1 - Math.pow(1 - t, 4), 
+            elastic: t => t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1,
+            linear: t => t,
+            easeinout: t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+            crazy: t => { const c1 = 1.70158; return 1 + (c1 + 1) * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
+        };
+
+        function startSpin() {
+            if (isSpinning || items.length <= 1) return;
+            
+            isSpinning = true; 
+            spinBtn.disabled = true;
+            cancelAnimationFrame(animationFrameId); 
+
+            // Секретний режим (якщо заздалегідь клікнули правою кнопкою на елемент у списку)
+            let targetIndex = (secretTargetIndex >= 0 && secretTargetIndex < items.length) ? secretTargetIndex : Math.floor(Math.random() * items.length);
+            const arcDegrees = 360 / items.length;
+            
+            // Розрахунок кута (щоб вказівник був зверху на 270 градусах)
+            let targetAngle = 270 - (targetIndex * arcDegrees + arcDegrees / 2);
+            if (targetAngle < 0) targetAngle += 360;
+
+            let spins = Math.max(5, cfg.time * 2);
+            let currentMod = currentRotation % 360;
+            let distanceToTarget = targetAngle - currentMod;
+            if (distanceToTarget <= 0) distanceToTarget += 360; 
+
+            // Додаємо невеликий зсув (щоб стрілка не завжди вказувала рівно в центр)
+            let offset = (Math.random() * (arcDegrees * 0.7)) - (arcDegrees * 0.35);
+            let totalDistance = (spins * 360) + distanceToTarget + offset;
+            let startRotation = currentRotation;
+
+            let startTime = null;
+            let lastPassedSegment = Math.floor((startRotation + 90) / arcDegrees); 
+
+            function animateSpin(timestamp) {
+                if (!startTime) startTime = timestamp;
+                let elapsed = timestamp - startTime;
+                let progress = Math.min(elapsed / (cfg.time * 1000), 1);
+
+                // Застосовуємо easing анімацію
+                let easeValue = easings[cfg.anim](progress);
+                currentRotation = startRotation + totalDistance * easeValue;
+
+                // Крутимо CSS
+                wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+                // Анімація стрілочки та звук (Тік-Тік)
+                let currentPassedSegment = Math.floor((currentRotation + 90) / arcDegrees);
+                if (currentPassedSegment !== lastPassedSegment && progress < 1) {
+                    if (progress > 0 && progress < 0.98) { 
+                        playTickSound();
+                        pointerEl.classList.remove('hit'); 
+                        void pointerEl.offsetWidth; // Тригер рефлоу
+                        pointerEl.classList.add('hit');
+                    }
+                    lastPassedSegment = currentPassedSegment;
+                }
+
+                if (progress < 1) { 
+                    animationFrameId = requestAnimationFrame(animateSpin); 
+                } else {
+                    // КІНЕЦЬ КРУТІННЯ
+                    playWinSound();
+                    const winnerName = items[targetIndex].toUpperCase();
+                    modalPendingDeleteIndex = targetIndex; 
+                    addToHistory(winnerName);
+                    openWinModal(winnerName);
+                    isSpinning = false;
+                    
+                    // Скидаємо секрет після прокруту
+                    secretTargetIndex = -1;
+                    document.querySelectorAll('.item').forEach(el => el.classList.remove('secret-active'));
+                }
+            }
+            animationFrameId = requestAnimationFrame(animateSpin);
+        }
+        
+        spinBtn.addEventListener('click', startSpin);
+
+        // =========================================
+        // 9. МОДАЛКА
+        // =========================================
+        const modal = document.getElementById('modal');
+        const mTitle = document.getElementById('modal-title');
+        const mText = document.getElementById('modal-text');
+        const mBtn = document.getElementById('modal-btn');
+        let modalPendingDeleteIndex = -1;
+
+        function openWinModal(winner) {
+            mTitle.innerText = "ПЕРЕМОЖЕЦЬ!";
+            mTitle.style.color = "var(--accent-1)";
+            mText.style.fontSize = winner.length > 10 ? "35px" : "50px";
+            mText.innerHTML = winner;
+            mBtn.innerText = cfg.elimination ? "ЗАБРАТИ ТА ВИДАЛИТИ" : "ЗАБРАТИ";
+            
+            modal.classList.add('active');
+            
+            // Запуск конфетті
+            if (typeof confetti === 'function') {
+                let confCfg = { zIndex: 2000, spread: 100, origin: { y: 0.6 } };
+                if (cfg.confetti === 'stars') {
+                    confCfg.shapes = ['star'];
+                } else if (cfg.confetti === 'emoji') {
+                    confCfg.shapes = [
+                        confetti.shapeFromText({ text: '🎉'}), 
+                        confetti.shapeFromText({ text: '💰'}), 
+                        confetti.shapeFromText({ text: '✨'})
+                    ];
+                } else {
+                    confCfg.colors = ['#FF416C', '#4FACFE', '#FF4B2B', '#00F2FE', '#f093fb', '#fff'];
+                }
+                
+                confetti({ ...confCfg, particleCount: 150 });
+                setTimeout(() => confetti({ ...confCfg, particleCount: 100, angle: 60, origin: { x: 0 } }), 200);
+                setTimeout(() => confetti({ ...confCfg, particleCount: 100, angle: 120, origin: { x: 1 } }), 400);
+            }
+        }
+
+        function openAuthorModal(author) {
+            mTitle.style.color = author === 'finx' ? "#ff416c" : "var(--accent-2)";
+            mText.style.fontSize = "26px";
+            if (author === 'finx') {
+                mTitle.innerText = "ПРО АВТОРА";
+                mText.innerHTML = "Привіт! 😎 Я створюю крутий код та генерую ідеї. Підписуйся:<br><br><span class='highlight' style='font-size: 35px;'>@finx056</span><br><span style='font-size: 16px; color: #888;'>в ТікТоці</span>";
+            } else {
+                mTitle.innerText = "ПРО АСИСТЕНТА";
+                mText.innerHTML = "🤖 Я — штучний інтелект від Google. Допомагаю FINX писати ідеальний код та втілювати ці шалені ідеї!";
+            }
+            mBtn.innerText = "ЗРОЗУМІЛО";
+            modal.classList.add('active');
+            playWinSound(true);
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            playUIBeat();
+            
+            // Якщо включений режим на вибування - видаляємо елемент
+            if (cfg.elimination && modalPendingDeleteIndex !== -1) {
+                setTimeout(() => {
+                    items.splice(modalPendingDeleteIndex, 1);
+                    if (items.length === 0) items.push("ПУСТО");
+                    modalPendingDeleteIndex = -1;
+                    renderList();
+                }, 400);
+            } else {
+                spinBtn.disabled = items.length <= 1;
+            }
+        }
+
+        // =========================================
+        // 10. АУДІО СИСТЕМА
+        // =========================================
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx, masterGain;
+
+        function initAudioAndSensors() { 
+            if (!isAudioInit) {
+                isAudioInit = true;
+                if(AudioContext) {
+                    audioCtx = new AudioContext(); 
+                    masterGain = audioCtx.createGain();
+                    masterGain.connect(audioCtx.destination);
+                    masterGain.gain.value = cfg.volume / 100;
+                }
+                
+                // Для iOS гіроскопу
+                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().catch(console.error);
+                }
+            }
+        }
+        
+        function playUIBeat() {
+            if (!audioCtx || cfg.volume === 0) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator(); 
+                const gain = audioCtx.createGain();
+                
+                osc.connect(gain); 
+                gain.connect(masterGain); 
+                
+                osc.type = 'sine'; 
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
+        function playTickSound() {
+            if (!audioCtx || cfg.volume === 0) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator(); 
+                const gain = audioCtx.createGain();
+                
+                osc.connect(gain); 
+                gain.connect(masterGain); 
+                let t = audioCtx.currentTime;
+                
+                if (cfg.sound === 'classic') { 
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, t); 
+                    gain.gain.setValueAtTime(0.3, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05); 
+                    osc.start(); osc.stop(t + 0.05); 
+                } 
+                else if (cfg.sound === 'arcade') { 
+                    osc.type = 'square'; osc.frequency.setValueAtTime(350, t); 
+                    gain.gain.setValueAtTime(0.1, t); gain.gain.setValueAtTime(0, t + 0.02); 
+                    osc.start(); osc.stop(t + 0.02); 
+                } 
+                else if (cfg.sound === 'casino') { 
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(1200, t); 
+                    gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.02); 
+                    osc.start(); osc.stop(t + 0.02); 
+                } 
+                else if (cfg.sound === 'cyberpunk') { 
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(120, t); 
+                    gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.08); 
+                    osc.start(); osc.stop(t + 0.08); 
+                } 
+                else { 
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(400, t); 
+                    gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.2, t + 0.02); 
+                    gain.gain.linearRampToValueAtTime(0, t + 0.08); 
+                    osc.start(); osc.stop(t + 0.08); 
+                }
+            } catch(e) {}
+        }
+
+        function playWinSound(short = false) {
+            if (!audioCtx || cfg.volume === 0) return;
+            try {
+                let chords = [];
+                if (cfg.sound === 'arcade' || cfg.sound === 'casino') {
+                    chords = [440, 554.37, 659.25, 880];
+                } else if (cfg.sound === 'cyberpunk') {
+                    chords = [150, 200, 250, 300];
+                } else {
+                    chords = [523.25, 659.25, 783.99, 1046.50];
+                }
+                
+                chords.forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator(); 
+                    const gain = audioCtx.createGain();
+                    
+                    osc.connect(gain); 
+                    gain.connect(masterGain);
+                    
+                    osc.type = (cfg.sound === 'cyberpunk' || cfg.sound === 'arcade') ? 'square' : 'triangle'; 
+                    osc.frequency.value = freq;
+                    
+                    let startT = audioCtx.currentTime + (short ? 0 : i * 0.1); 
+                    let endT = startT + (short ? 0.3 : 1.5);
+                    
+                    gain.gain.setValueAtTime(0, startT); 
+                    gain.gain.linearRampToValueAtTime(0.2, startT + 0.1); 
+                    gain.gain.exponentialRampToValueAtTime(0.01, endT);
+                    
+                    osc.start(startT); 
+                    osc.stop(endT);
+                });
+            } catch(e) {}
+        }
+
+        document.body.addEventListener('click', initAudioAndSensors, { once: true });
+        document.body.addEventListener('touchstart', initAudioAndSensors, { once: true });
+
+        // =========================================
+        // 11. ПАРАЛАКС ТА ГІРОСКОП
+        // =========================================
+        const wheel3dWrapper = document.getElementById('wheel-3d-wrapper');
+        const bgLayer = document.getElementById('bg-layer');
+        let targetRotX = 0, targetRotY = 0, currentRotX = 0, currentRotY = 0;
+        let targetBgX = 0, targetBgY = 0, currentBgX = 0, currentBgY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            if(!cfg.parallax || window.innerWidth < 900) return;
+            const x = (e.clientX / window.innerWidth - 0.5) * 2; 
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+            
+            targetRotY = x * 15; 
+            targetRotX = -y * 15; 
+            targetBgX = -x * 30; 
+            targetBgY = -y * 30;
+        });
+
+        window.addEventListener('deviceorientation', (e) => {
+            if(!cfg.parallax) return;
+            // Для мобілок (гіроскоп)
+            let beta = Math.min(Math.max(e.beta - 45, -30), 30); 
+            let gamma = Math.min(Math.max(e.gamma, -30), 30); 
+            
+            targetRotX = -(beta / 30) * 20; 
+            targetRotY = (gamma / 30) * 20; 
+            targetBgX = -(gamma / 30) * 20; 
+            targetBgY = -(beta / 30) * 20;
+        });
+
+        function render3DLoop() {
+            if (cfg.parallax) {
+                currentRotX += (targetRotX - currentRotX) * 0.1; 
+                currentRotY += (targetRotY - currentRotY) * 0.1;
+                currentBgX += (targetBgX - currentBgX) * 0.05; 
+                currentBgY += (targetBgY - currentBgY) * 0.05;
+                
+                if (document.getElementById('view-game').classList.contains('active')) {
+                    wheel3dWrapper.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
+                }
+                bgLayer.style.transform = `translate(${currentBgX}px, ${currentBgY}px)`;
+            } else {
+                wheel3dWrapper.style.transform = `rotateX(0deg) rotateY(0deg)`; 
+                bgLayer.style.transform = `translate(0px, 0px)`;
+            }
+            requestAnimationFrame(render3DLoop);
+        }
+        render3DLoop();
+
+        // =========================================
+        // 12. ДИНАМІЧНІ ЧАСТИНКИ ФОНУ
+        // =========================================
+        const pCanvas = document.getElementById('particles-bg'); 
+        const pCtx = pCanvas.getContext('2d');
+        let particles = []; 
+        let pAnimationId;
+
+        function resizePCanvas() { 
+            pCanvas.width = window.innerWidth; 
+            pCanvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', resizePCanvas); 
+        resizePCanvas();
+
+        class Particle {
+            constructor(type) { 
+                this.type = type; 
+                this.reset(true); 
+            }
+            
+            reset(randomY = false) {
+                this.x = Math.random() * pCanvas.width;
+                this.y = randomY ? Math.random() * pCanvas.height : (this.type === 'snow' || this.type === 'matrix' ? -10 : pCanvas.height + 10);
+                
+                if (this.type === 'stars') {
+                    this.size = Math.random() * 2 + 0.5; 
+                    this.speedY = (Math.random() - 0.5) * 0.5; 
+                    this.speedX = (Math.random() - 0.5) * 0.5;
+                    this.opacity = Math.random(); 
+                    this.color = Math.random() > 0.5 ? '#ffffff' : '#4facfe';
+                } 
+                else if (this.type === 'snow') {
+                    this.size = Math.random() * 3 + 1; 
+                    this.speedY = Math.random() * 1 + 0.5; 
+                    this.speedX = (Math.random() - 0.5) * 1;
+                    this.opacity = Math.random() * 0.5 + 0.3; 
+                    this.color = '#ffffff';
+                } 
+                else if (this.type === 'matrix') {
+                    this.size = Math.random() * 10 + 10; 
+                    this.speedY = Math.random() * 3 + 2; 
+                    this.speedX = 0;
+                    this.char = String.fromCharCode(0x30A0 + Math.random() * 96); 
+                    this.opacity = Math.random() * 0.8 + 0.2;
+                    this.color = getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim();
+                } 
+                else if (this.type === 'bubbles') {
+                    this.size = Math.random() * 15 + 5; 
+                    this.speedY = -(Math.random() * 2 + 1); 
+                    this.speedX = Math.sin(this.y * 0.05); 
+                    this.opacity = Math.random() * 0.4 + 0.1; 
+                    this.color = 'transparent';
+                }
+            }
+            
+            update() {
+                this.y += this.speedY; 
+                this.x += this.speedX;
+                
+                if (this.type === 'bubbles') { 
+                    this.speedX = Math.sin(this.y * 0.02) * 1.5; 
+                }
+                
+                if (this.type === 'matrix' && Math.random() < 0.05) { 
+                    this.char = String.fromCharCode(0x30A0 + Math.random() * 96); 
+                }
+                
+                if (this.type === 'stars') { 
+                    this.opacity += (Math.random() - 0.5) * 0.05; 
+                    if(this.opacity < 0) this.opacity = 0; 
+                    if(this.opacity > 1) this.opacity = 1;
+                }
+                
+                if ((this.type === 'snow' || this.type === 'matrix') && this.y > pCanvas.height + 20) this.reset();
+                if ((this.type === 'bubbles') && this.y < -20) this.reset();
+                if (this.type === 'stars') { 
+                    if (this.x < 0 || this.x > pCanvas.width || this.y < 0 || this.y > pCanvas.height) this.reset(); 
+                }
+            }
+            
+            draw() {
+                pCtx.globalAlpha = this.opacity;
+                if (this.type === 'matrix') { 
+                    pCtx.fillStyle = this.color; 
+                    pCtx.font = `${this.size}px monospace`; 
+                    pCtx.fillText(this.char, this.x, this.y); 
+                } 
+                else if (this.type === 'bubbles') { 
+                    pCtx.strokeStyle = "rgba(255,255,255,0.8)"; 
+                    pCtx.lineWidth = 1; 
+                    pCtx.beginPath(); 
+                    pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                    pCtx.stroke(); 
+                } 
+                else { 
+                    pCtx.fillStyle = this.color; 
+                    pCtx.beginPath(); 
+                    pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                    pCtx.fill(); 
+                }
+            }
+        }
+
+        function initParticles() {
+            cancelAnimationFrame(pAnimationId); 
+            particles = []; 
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            
+            if (cfg.particles === 'none') { 
+                pCanvas.style.opacity = '0'; 
+                return; 
+            }
+            
+            pCanvas.style.opacity = '1';
+            let count = 100; 
+            if(window.innerWidth < 600) count = 50; // Менше частинок для телефонів
+            if(cfg.particles === 'matrix') count = 70; 
+            if(cfg.particles === 'bubbles') count = 40;
+            
+            for (let i = 0; i < count; i++) { 
+                particles.push(new Particle(cfg.particles)); 
+            }
+            
+            animateParticles();
+        }
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            particles.forEach(p => { 
+                p.update(); 
+                p.draw(); 
+            });
+            pAnimationId = requestAnimationFrame(animateParticles);
+        }
+
+        // =========================================
+        // 13. СТАРТ ДОДАТКУ
+        // =========================================
+        window.addEventListener('load', () => {
+            renderList(); 
+            renderHistory(); 
+            initParticles();
+        });
+
+        // Запасний виклик на випадок, якщо подія load вже відбулася
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            renderList(); 
+            renderHistory(); 
+            initParticles();
+        }
     </script>
-
 </body>
 </html>
