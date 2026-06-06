@@ -28,23 +28,9 @@
             --main-shadow-opacity: 0.6;
         }
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: 'Montserrat', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            color: white; 
-            user-select: none; 
-            overflow: hidden; 
-            background-color: var(--theme-bg-1); 
-            perspective: 1000px; 
-            transition: cursor 0.3s;
-            touch-action: pan-y;
-        }
+        body { color: white; user-select: none; overflow: hidden; background-color: var(--theme-bg-1); perspective: 1000px; transition: cursor 0.3s; touch-action: pan-y; }
 
         /* КУРСОР И */
         body.cursor-crosshair { cursor: crosshair; }
@@ -52,45 +38,27 @@
         body.cursor-wand { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2300f2fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="3" y2="21"></line><path d="M16 3l2 2"></path><path d="M3 16l2 2"></path></svg>') 2 2, auto; }
         body.cursor-kunai { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 10 12 14 9 10 12 2"></polygon><line x1="12" y1="14" x2="12" y2="22"></line><line x1="10" y1="18" x2="14" y2="18"></line></svg>') 12 2, auto; }
         body.cursor-rocket { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ff9500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.62 9.378h0A7 7 0 1 1 20 20v0a7 7 0 0 1-7-7v0a7 7 0 0 1-9-2.101h0z"></path><path d="M4 14.899L2 22l7.101-2"></path><path d="M10 10l4 4"></path></svg>') 12 12, auto; }
-        body.cursor-ghost { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><text y="24" font-size="24">👻</text></svg>') 14 14, auto; }
         body.cursor-pizza { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><text y="24" font-size="24">🍕</text></svg>') 14 14, auto; }
         body.cursor-crown { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><text y="24" font-size="24">👑</text></svg>') 14 14, auto; }
+        body.cursor-ghost { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><text y="24" font-size="24">👻</text></svg>') 14 14, auto; }
         body.cursor-pointer, body.cursor-pointer button, body.cursor-pointer input, body.cursor-pointer select { cursor: pointer; }
 
         #bg-layer { position: fixed; top: -10%; left: -10%; width: 120%; height: 120%; z-index: -3; will-change: transform; }
-        
-        .bg-gradient {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, var(--theme-bg-2) 0%, var(--theme-bg-1) 40%, var(--theme-bg-3) 100%);
-            transition: background 1s ease;
-        }
-        
+        .bg-gradient { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, var(--theme-bg-2) 0%, var(--theme-bg-1) 40%, var(--theme-bg-3) 100%); transition: background 1s ease; }
         .bg-spin { animation: bgSpin 40s linear infinite; transform-origin: center; }
         @keyframes bgSpin { 100% { transform: rotate(360deg) scale(1.5); } 0% { transform: rotate(0deg) scale(1.5); } }
-        
         canvas#particles-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; transition: opacity 0.5s; }
 
-        .lang-switcher {
-            position: absolute; top: clamp(15px, 3vw, 30px); right: clamp(15px, 3vw, 30px);
-            display: flex; gap: 5px; z-index: 100; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-        }
+        .lang-switcher { position: absolute; top: clamp(15px, 3vw, 30px); right: clamp(15px, 3vw, 30px); display: flex; gap: 5px; z-index: 100; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .lang-btn { background: transparent; border: none; color: rgba(255,255,255,0.5); font-weight: 800; padding: 8px 12px; border-radius: 8px; cursor: inherit; transition: 0.3s; font-size: 12px; }
         .lang-btn.active { background: var(--accent-2); color: white; box-shadow: 0 0 10px var(--wheel-shadow); }
 
-        .view {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.4s; 
-            transform: translateY(30px) scale(0.95);
-        }
+        .view { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.4s; transform: translateY(30px) scale(0.95); }
         .view.active { opacity: 1; pointer-events: all; visibility: visible; transform: translateY(0) scale(1); }
 
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,var(--main-shadow-opacity)), inset 0 1px 0 rgba(255,255,255,0.1); }
 
-        .btn-back {
-            position: absolute; top: clamp(15px, 3vw, 30px); left: clamp(15px, 3vw, 30px); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); 
-            padding: 12px 25px; border-radius: 14px; cursor: inherit; font-weight: 700; font-size: 14px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 50; display: flex; align-items: center; gap: 8px;
-        }
+        .btn-back { position: absolute; top: clamp(15px, 3vw, 30px); left: clamp(15px, 3vw, 30px); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); padding: 12px 25px; border-radius: 14px; cursor: inherit; font-weight: 700; font-size: 14px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 50; display: flex; align-items: center; gap: 8px; }
         .btn-back:hover { background: rgba(255,255,255,0.15); color: white; transform: translateX(-5px) scale(1.05); border-color: rgba(255,255,255,0.3); }
 
         .menu-title { font-size: clamp(35px, 6vw, 75px); font-weight: 900; margin-bottom: 5px; background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-1)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 40px var(--wheel-shadow); letter-spacing: 2px; text-align: center; background-size: 200% auto; animation: textShine 3s linear infinite; line-height: 1.1; }
@@ -103,27 +71,45 @@
         .btn-menu:hover::before { left: 150%; }
         .btn-menu:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); border-color: var(--accent-2); box-shadow: 0 15px 30px var(--wheel-shadow); color: var(--accent-1); }
 
-        .settings-title { font-size: clamp(26px, 5vw, 40px); font-weight: 900; margin-bottom: 25px; color: #fff; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        .settings-title { font-size: clamp(26px, 5vw, 40px); font-weight: 900; margin-bottom: 25px; margin-top: 20px; color: #fff; text-align: center; text-transform: uppercase; letter-spacing: 2px; flex-shrink: 0; }
         
-        .settings-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); max-width: 95vw; overflow-x: auto; }
-        .tab-btn { background: transparent; border: none; color: rgba(255,255,255,0.5); padding: 12px 20px; border-radius: 14px; font-weight: 700; cursor: inherit; transition: 0.3s; font-size: 13px; white-space: nowrap; }
-        .tab-btn.active { background: var(--accent-2); color: white; box-shadow: 0 5px 15px var(--wheel-shadow); }
+        /* ========================================================
+           НОВА СИСТЕМА НАЛАШТУВАНЬ (Вкладки + Акордеон)
+        ======================================================== */
+        .settings-wrapper { width: 100%; max-width: 1000px; display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 0 20px 20px 20px; }
+        .settings-sections-container { flex: 1; overflow-y: auto; padding-right: 5px; -webkit-overflow-scrolling: touch; }
         
-        .settings-content { display: none; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1000px; padding: 25px; width: 100%; animation: fadeIn 0.3s ease; }
-        .settings-content.active { display: flex; }
+        /* --- РЕЖИМ ВКЛАДОК (layout-tabs) --- */
+        .layout-tabs .settings-tabs-nav { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); max-width: 100%; overflow-x: auto; flex-shrink: 0; }
+        .layout-tabs .tab-btn { background: transparent; border: none; color: rgba(255,255,255,0.5); padding: 12px 20px; border-radius: 14px; font-weight: 700; cursor: inherit; transition: 0.3s; font-size: 13px; white-space: nowrap; }
+        .layout-tabs .tab-btn.active { background: var(--accent-2); color: white; box-shadow: 0 5px 15px var(--wheel-shadow); }
+        .layout-tabs .accordion-btn { display: none; }
+        .layout-tabs .settings-section { display: none; }
+        .layout-tabs .settings-section.active { display: block; animation: fadeIn 0.3s ease; }
+        .layout-tabs .settings-content { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; padding: 25px; background: rgba(20, 20, 25, 0.4); border-radius: 20px; border: 1px solid var(--accent-1); box-shadow: inset 0 10px 20px rgba(0,0,0,0.3); }
+
+        /* --- РЕЖИМ АКОРДЕОНА (layout-accordion) --- */
+        .layout-accordion .settings-tabs-nav { display: none; }
+        .layout-accordion .settings-section { margin-bottom: 15px; }
+        .layout-accordion .accordion-btn { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); padding: 20px 25px; border-radius: 20px; font-weight: 800; font-size: 16px; text-align: left; cursor: inherit; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px; text-transform: uppercase; }
+        .layout-accordion .accordion-btn::after { content: '▼'; font-size: 12px; transition: transform 0.3s ease; color: var(--accent-2); }
+        .layout-accordion .accordion-btn:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
+        .layout-accordion .accordion-btn.active { background: linear-gradient(90deg, rgba(123, 44, 191, 0.4), rgba(0,0,0,0.5)); color: white; border-color: var(--accent-1); box-shadow: 0 5px 20px var(--wheel-shadow); border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none; }
+        .layout-accordion .accordion-btn.active::after { transform: rotate(180deg); color: var(--accent-danger); }
+        .layout-accordion .settings-content { display: none; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; padding: 25px; background: rgba(20, 20, 25, 0.4); border: 1px solid var(--accent-1); border-top: none; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: inset 0 10px 20px rgba(0,0,0,0.3); transform-origin: top; }
+        .layout-accordion .settings-section.active .settings-content { display: flex; animation: slideDown 0.3s ease-out forwards; }
+        @keyframes slideDown { from { opacity: 0; transform: scaleY(0.95); } to { opacity: 1; transform: scaleY(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .settings-column { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 18px; padding: 5px; }
+        /* СПІЛЬНІ ЕЛЕМЕНТИ НАЛАШТУВАНЬ */
+        .settings-column { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 18px; padding: 5px; }
         .settings-row { display: flex; justify-content: space-between; align-items: center; }
         .settings-label { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 8px; font-weight: 700; }
-        
         .custom-select { width: 100%; padding: 14px; border-radius: 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 14px; font-weight: 700; outline: none; cursor: inherit; appearance: none; transition: 0.3s; }
         .custom-select:focus, .custom-select:hover { border-color: var(--accent-2); background: rgba(0,0,0,0.6); }
         .custom-select option { background: #1a1a24; color: white; padding: 10px; }
-        
         input[type=range] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.1); outline: none; transition: 0.2s; margin-bottom: 5px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-1); cursor: inherit; box-shadow: 0 0 10px var(--accent-2); border: 3px solid #fff; }
-        
         .slider-value { float: right; color: var(--accent-1); font-weight: 900; font-size: 14px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 6px; }
 
         .toggle-switch { position: relative; width: 56px; height: 28px; }
@@ -147,6 +133,7 @@
         .template-name { font-weight: 900; font-size: 16px; color: white; letter-spacing: 1px; }
         .template-desc { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; line-height: 1.4; }
 
+        /* ІНШІ СЕКЦІЇ */
         .authors-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; padding: 20px; }
         .author-card { padding: 30px 20px; border-radius: 24px; width: 260px; text-align: center; transition: all 0.3s ease; cursor: inherit; }
         .author-card:hover { transform: translateY(-10px); }
@@ -158,10 +145,8 @@
         .author-name { font-size: 26px; font-weight: 900; margin-bottom: 5px; }
         .author-role { font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* ОСНОВНИЙ ЛЕЙАУТ ГРИ */
         .game-layout { display: flex; gap: 30px; justify-content: center; align-items: stretch; width: 100%; max-width: 1400px; padding: 20px; height: 100vh; }
         .side-panel, .list-section { width: 100%; max-width: 300px; padding: 20px; display: flex; flex-direction: column; gap: 15px; height: clamp(500px, 80vh, 800px); align-self: center; }
-        
         .panel-title { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: var(--accent-2); text-transform: uppercase; letter-spacing: 2px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 5px; }
         
         .history-list, .items-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 5px; }
@@ -191,9 +176,9 @@
         .btn-spin:active { transform: scale(0.95); }
         .btn-spin:disabled { filter: grayscale(1); opacity: 0.5; box-shadow: none; }
 
-        /* Кнопка 3D перемикача тепер в панелі Історії */
-        .btn-3d-toggle { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; cursor: inherit; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; padding: 4px 10px; transition: 0.3s; z-index: 20; }
-        .btn-3d-toggle.active { background: var(--accent-2); border-color: var(--accent-1); box-shadow: 0 0 10px var(--wheel-shadow); }
+        .btn-3d-toggle { background: linear-gradient(45deg, rgba(123, 44, 191, 0.6), rgba(255, 65, 108, 0.6)); border: 1px solid rgba(255,255,255,0.4); color: white; border-radius: 12px; cursor: inherit; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; padding: 6px 14px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: 1px; animation: pulse3dBtn 2s infinite alternate; }
+        .btn-3d-toggle.active { background: linear-gradient(45deg, #00f2fe, #4facfe); border-color: #fff; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6), inset 0 0 10px rgba(255,255,255,0.5); transform: scale(1.05); animation: none; color: #000; }
+        @keyframes pulse3dBtn { 0% { box-shadow: 0 0 5px rgba(255, 65, 108, 0.3); } 100% { box-shadow: 0 0 15px rgba(255, 65, 108, 0.8); } }
 
         .add-item-box { display: flex; gap: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); }
         .add-item-box input { flex: 1; background: transparent; border: none; color: white; padding: 5px; font-size: 15px; outline: none; font-weight: 700; min-width: 0; }
@@ -212,7 +197,6 @@
         
         .item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.05); padding: 14px 18px; border-radius: 14px; font-weight: 800; border: 1px solid rgba(255,255,255,0.03); transition: 0.2s; font-size: 14px; position: relative; overflow: hidden; }
         .item.secret-active { border-left: 4px solid var(--accent-1); background: rgba(79, 172, 254, 0.15); box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);}
-        
         .delete-btn { background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 8px; font-size: 14px; cursor: inherit; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .delete-btn:active { background: var(--accent-danger); color: white; }
 
@@ -242,8 +226,10 @@
             .side-panel { order: 3; } 
             .btn-back { top: 15px; left: 15px; padding: 10px 15px; font-size: 12px; }
             .lang-switcher { top: 15px; right: 15px; }
-            .settings-content { padding: 70px 10px 20px 10px; height: 100vh; overflow-y: auto; align-content: flex-start; }
-            .settings-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 10px;}
+            
+            .settings-wrapper { padding: 10px; width: 95vw; max-height: calc(100vh - 100px); }
+            .accordion-btn { padding: 15px 20px; font-size: 14px; }
+            
             .authors-container { padding-top: 70px; }
             .modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; }
         }
@@ -259,6 +245,7 @@
         <button class="lang-btn btn-click" onclick="setLang('ru')">RU</button>
     </div>
 
+    <!-- МЕНЮ -->
     <div id="view-menu" class="view active">
         <h1 class="menu-title" data-i18n="menu_title">WHEEL OF FORTUNE</h1>
         <div class="menu-subtitle" data-i18n="menu_subtitle">FORTUNE EDITION</div>
@@ -270,6 +257,7 @@
         </div>
     </div>
 
+    <!-- АВТОРИ -->
     <div id="view-authors" class="view">
         <button class="btn-back btn-click" onclick="switchView('view-menu')"><span data-i18n="btn_back">← НАЗАД</span></button>
         <h1 class="settings-title" data-i18n="authors_title">ТВОРЦІ ШЕДЕВРУ</h1>
@@ -287,6 +275,7 @@
         </div>
     </div>
 
+    <!-- ГРА -->
     <div id="view-game" class="view">
         <button class="btn-back btn-click" onclick="switchView('view-menu')"><span data-i18n="btn_to_menu">← В МЕНЮ</span></button>
         <div class="game-layout">
@@ -329,225 +318,228 @@
         </div>
     </div>
 
+    <!-- НАЛАШТУВАННЯ -->
     <div id="view-settings" class="view">
         <button class="btn-back btn-click" onclick="switchView('view-menu')"><span data-i18n="btn_save">← ЗБЕРЕГТИ</span></button>
         <h1 class="settings-title" data-i18n="settings_title">НАЛАШТУВАННЯ</h1>
         
-        <div class="settings-tabs">
-            <button class="tab-btn active btn-click" onclick="switchTab('tab-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
-            <button class="tab-btn btn-click" onclick="switchTab('tab-game', this)" data-i18n="tab_game">🎮 Гра</button>
-            <button class="tab-btn btn-click" onclick="switchTab('tab-visuals', this)" data-i18n="tab_visuals">✨ Вигляд</button>
-            <button class="tab-btn btn-click" onclick="switchTab('tab-physics', this)" data-i18n="tab_physics">🌪 Фізика</button>
-            <button class="tab-btn btn-click" onclick="switchTab('tab-audio', this)" data-i18n="tab_audio">🔊 Звук</button>
-        </div>
-
-        <div class="settings-content glass-panel active" id="tab-templates">
-            <div class="templates-grid">
-                <div class="template-card btn-click" onclick="applyTemplate('space')">
-                    <div class="template-icon">🌌</div>
-                    <div class="template-name" data-i18n="tpl_space">Космос</div>
-                    <div class="template-desc" data-i18n="tpl_space_desc">Темна матерія, зірки та синтезатор</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('cyberpunk')">
-                    <div class="template-icon">🤖</div>
-                    <div class="template-name" data-i18n="tpl_cyberpunk">Кіберпанк</div>
-                    <div class="template-desc" data-i18n="tpl_cyberpunk_desc">Оригінальний неоновий дизайн</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('optimized')" style="border-color: #00ff41;">
-                    <div class="template-icon">⚡</div>
-                    <div class="template-name" data-i18n="tpl_opt">Оптимізований</div>
-                    <div class="template-desc" data-i18n="tpl_opt_desc">Без ефектів, високий FPS для слабких телефонів</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('nature')">
-                    <div class="template-icon">🌿</div>
-                    <div class="template-name" data-i18n="tpl_nature">Природа</div>
-                    <div class="template-desc" data-i18n="tpl_nature_desc">Спокійні лісові кольори та м'який звук</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('fire')">
-                    <div class="template-icon">🔥</div>
-                    <div class="template-name" data-i18n="tpl_fire">Вогонь</div>
-                    <div class="template-desc" data-i18n="tpl_fire_desc">Палаючі градієнти, бас та агресія</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('ice')">
-                    <div class="template-icon">❄️</div>
-                    <div class="template-name" data-i18n="tpl_ice">Лід</div>
-                    <div class="template-desc" data-i18n="tpl_ice_desc">Холодний неон, сніг та магічний звук</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('sunset')">
-                    <div class="template-icon">🌅</div>
-                    <div class="template-name" data-i18n="tpl_sunset">Захід Сонця</div>
-                    <div class="template-desc" data-i18n="tpl_sunset_desc">Теплі кольори, спокійний звук, без частинок</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('casino')">
-                    <div class="template-icon">🎰</div>
-                    <div class="template-name" data-i18n="tpl_casino">Казино</div>
-                    <div class="template-desc" data-i18n="tpl_casino_desc">Золото, класичний звук рулетки, флет стиль</div>
-                </div>
-                <div class="template-card btn-click" onclick="applyTemplate('matrix')">
-                    <div class="template-icon">💻</div>
-                    <div class="template-name" data-i18n="tpl_matrix">Хакер</div>
-                    <div class="template-desc" data-i18n="tpl_matrix_desc">Матриця, неоновий зелений, 8-bit звук</div>
-                </div>
+        <!-- Контейнер, який змінює клас layout-tabs на layout-accordion -->
+        <div id="settings-wrapper" class="settings-wrapper layout-tabs">
+            
+            <!-- Навігація для Вкладок -->
+            <div class="settings-tabs-nav">
+                <button class="tab-btn active btn-click" onclick="openTab('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
+                <button class="tab-btn btn-click" onclick="openTab('sec-game', this)" data-i18n="tab_game">🎮 Гра</button>
+                <button class="tab-btn btn-click" onclick="openTab('sec-visuals', this)" data-i18n="tab_visuals">✨ Вигляд</button>
+                <button class="tab-btn btn-click" onclick="openTab('sec-physics', this)" data-i18n="tab_physics">🌪 Фізика</button>
+                <button class="tab-btn btn-click" onclick="openTab('sec-audio', this)" data-i18n="tab_audio">🔊 Звук</button>
             </div>
-        </div>
 
-        <div class="settings-content glass-panel" id="tab-game">
-            <div class="settings-column" style="max-width: 500px;">
-                <div class="settings-row">
-                    <div>
-                        <span class="settings-label" data-i18n="set_elimination">Режим на вибування</span>
-                        <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_elimination_desc">Переможець видаляється зі списку</div>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="set-elimination" class="btn-click"><span class="slider-toggle"></span></label>
-                </div>
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
-                <div class="settings-row">
-                    <div>
-                        <span class="settings-label" data-i18n="set_mystery">Режим "Інтрига" (Mystery)</span>
-                        <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_mystery_desc">Скриває текст під час обертання</div>
-                    </div>
-                    <label class="toggle-switch"><input type="checkbox" id="set-mystery" class="btn-click"><span class="slider-toggle"></span></label>
-                </div>
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
-                <div>
-                    <span class="settings-label"><span data-i18n="set_time">Час обертання:</span> <span id="val-time" class="slider-value">5</span> <span data-i18n="sec">сек</span></span>
-                    <input type="range" id="set-time" min="2" max="15" value="5" step="1">
-                </div>
-            </div>
-        </div>
-
-        <div class="settings-content glass-panel" id="tab-visuals">
-            <div class="settings-column">
-                <div>
-                    <span class="settings-label" data-i18n="set_theme">Глобальна Тема:</span>
-                    <select id="set-theme" class="custom-select btn-click">
-                        <option value="darkmatter" data-i18n="opt_th_dark">Темна Матерія (Космос)</option>
-                        <option value="cyberpunk" data-i18n="opt_th_cyber">Кіберпанк (Неон)</option>
-                        <option value="matrix" data-i18n="opt_th_matrix">Матриця (Зелений)</option>
-                        <option value="sakura" data-i18n="opt_th_sakura">Сакура (Рожевий)</option>
-                        <option value="bloodmoon" data-i18n="opt_th_blood">Кривавий Місяць</option>
-                        <option value="ocean" data-i18n="opt_th_ocean">Океан (Синій)</option>
-                        <option value="gold" data-i18n="opt_th_gold">Золотий Люкс</option>
-                        <option value="vaporwave" data-i18n="opt_th_vapor">Vaporwave (80-ті)</option>
-                        <option value="sunset" data-i18n="opt_th_sunset">Захід Сонця</option>
-                        <option value="ice" data-i18n="opt_th_ice">Лід (Блакитний)</option>
-                        <option value="fire" data-i18n="opt_th_fire">Вогонь (Помаранчевий)</option>
-                        <option value="nature" data-i18n="opt_th_nature">Ліс (Зелений)</option>
-                        <option value="custom" data-i18n="opt_th_custom">🎨 СВІЙ ДИЗАЙН</option>
-                    </select>
-                    <div class="color-pickers-panel" id="custom-colors-panel">
-                        <div class="color-row"><span data-i18n="col_bg1">Фон (Центр)</span> <input type="color" id="col-bg1" value="#0a0a0f"></div>
-                        <div class="color-row"><span data-i18n="col_bg2">Фон (Краї)</span> <input type="color" id="col-bg2" value="#1f0033"></div>
-                        <div class="color-row"><span data-i18n="col_ac1">Акцент 1 (Колесо)</span> <input type="color" id="col-ac1" value="#00f2fe"></div>
-                        <div class="color-row"><span data-i18n="col_ac2">Акцент 2 (Кнопки)</span> <input type="color" id="col-ac2" value="#ff416c"></div>
+            <!-- Контейнер для секцій -->
+            <div class="settings-sections-container">
+                
+                <!-- 1. Шаблони -->
+                <div class="settings-section active" id="sec-templates">
+                    <button class="accordion-btn btn-click active" onclick="toggleAccordion('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
+                    <div class="settings-content">
+                        <div class="templates-grid">
+                            <div class="template-card btn-click" onclick="applyTemplate('space')"><div class="template-icon">🌌</div><div class="template-name" data-i18n="tpl_space">Космос</div><div class="template-desc" data-i18n="tpl_space_desc">Темна матерія та зірки</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('cyberpunk')"><div class="template-icon">🤖</div><div class="template-name" data-i18n="tpl_cyberpunk">Кіберпанк</div><div class="template-desc" data-i18n="tpl_cyberpunk_desc">Неоновий дизайн</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('optimized')" style="border-color: #00ff41;"><div class="template-icon">⚡</div><div class="template-name" data-i18n="tpl_opt">Оптимізований</div><div class="template-desc" data-i18n="tpl_opt_desc">Без ефектів, високий FPS</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('nature')"><div class="template-icon">🌿</div><div class="template-name" data-i18n="tpl_nature">Природа</div><div class="template-desc" data-i18n="tpl_nature_desc">Спокійні лісові кольори</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('fire')"><div class="template-icon">🔥</div><div class="template-name" data-i18n="tpl_fire">Вогонь</div><div class="template-desc" data-i18n="tpl_fire_desc">Палаючі градієнти</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('ice')"><div class="template-icon">❄️</div><div class="template-name" data-i18n="tpl_ice">Лід</div><div class="template-desc" data-i18n="tpl_ice_desc">Холодний неон та сніг</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('sunset')"><div class="template-icon">🌅</div><div class="template-name" data-i18n="tpl_sunset">Захід Сонця</div><div class="template-desc" data-i18n="tpl_sunset_desc">Теплі кольори</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('casino')"><div class="template-icon">🎰</div><div class="template-name" data-i18n="tpl_casino">Казино</div><div class="template-desc" data-i18n="tpl_casino_desc">Золото, флет стиль</div></div>
+                            <div class="template-card btn-click" onclick="applyTemplate('matrix')"><div class="template-icon">💻</div><div class="template-name" data-i18n="tpl_matrix">Хакер</div><div class="template-desc" data-i18n="tpl_matrix_desc">Матриця, неоновий зелений</div></div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <span class="settings-label" data-i18n="set_cursor">Курсор миші:</span>
-                    <select id="set-cursor" class="custom-select btn-click">
-                        <option value="default" data-i18n="opt_cur_def">Стандартний</option>
-                        <option value="crosshair" data-i18n="opt_cur_cross">Приціл</option>
-                        <option value="sword" data-i18n="opt_cur_sword">Неоновий Меч ⚔️</option>
-                        <option value="wand" data-i18n="opt_cur_wand">Магічна Паличка 🪄</option>
-                        <option value="kunai" data-i18n="opt_cur_kunai">Кунай 🗡️</option>
-                        <option value="rocket" data-i18n="opt_cur_rocket">Ракета 🚀</option>
-                        <option value="pizza" data-i18n="opt_cur_pizza">Піца 🍕</option>
-                        <option value="crown" data-i18n="opt_cur_crown">Корона 👑</option>
-                        <option value="ghost" data-i18n="opt_cur_ghost">Привид 👻</option>
-                    </select>
-                </div>
-                <div>
-                    <span class="settings-label" data-i18n="set_clickfx">Ефект кліку:</span>
-                    <select id="set-clickfx" class="custom-select btn-click">
-                        <option value="ripple" data-i18n="opt_fx_rip">Неоновий Пульс</option>
-                        <option value="sparkle" data-i18n="opt_fx_spark">Іскри</option>
-                        <option value="hearts" data-i18n="opt_fx_hearts">Сердечка 💖</option>
-                        <option value="skulls" data-i18n="opt_fx_skulls">Черепи 💀</option>
-                        <option value="money" data-i18n="opt_fx_money">Монетки 💰</option>
-                        <option value="none" data-i18n="opt_fx_none">Вимкнути</option>
-                    </select>
-                </div>
-            </div>
-            <div class="settings-column">
-                <div>
-                    <span class="settings-label" data-i18n="set_style">Стиль Колеса:</span>
-                    <select id="set-style" class="custom-select btn-click">
-                        <option value="neon" data-i18n="opt_st_neon">Неон (Градієнти)</option>
-                        <option value="flat" data-i18n="opt_st_flat">Флет (Мінімалізм)</option>
-                        <option value="dark" data-i18n="opt_st_dark">Дарк (Темний фон)</option>
-                    </select>
-                </div>
-                <div>
-                    <span class="settings-label"><span data-i18n="set_textsize">Розмір тексту:</span> <span id="val-text" class="slider-value">35</span> px</span>
-                    <input type="range" id="set-text" min="15" max="60" value="35" step="1">
-                </div>
-                <div>
-                    <span class="settings-label" data-i18n="set_particles">Частинки:</span>
-                    <select id="set-particles" class="custom-select btn-click">
-                        <option value="stars" data-i18n="opt_pt_stars">Космічні зорі</option>
-                        <option value="snow" data-i18n="opt_pt_snow">Сніг</option>
-                        <option value="matrix" data-i18n="opt_pt_matrix">Матриця (Цифри)</option>
-                        <option value="bubbles" data-i18n="opt_pt_bubbles">Бульбашки</option>
-                        <option value="none" data-i18n="opt_pt_none">Вимкнути</option>
-                    </select>
-                </div>
-                <div>
-                    <span class="settings-label" data-i18n="set_confetti">Стиль Конфеті:</span>
-                    <select id="set-confetti" class="custom-select btn-click">
-                        <option value="classic" data-i18n="opt_cf_classic">Класичне</option>
-                        <option value="stars" data-i18n="opt_cf_stars">Зірки</option>
-                        <option value="emoji" data-i18n="opt_cf_emoji">Емодзі (💰🎉)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <div class="settings-content glass-panel" id="tab-physics">
-            <div class="settings-column">
-                <div class="settings-row">
-                    <div>
-                        <span class="settings-label" data-i18n="set_parallax">3D Паралакс</span>
-                        <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_parallax_desc">Реагує на мишку/телефон</div>
+                <!-- 2. Гра -->
+                <div class="settings-section" id="sec-game">
+                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-game', this)" data-i18n="tab_game">🎮 Гра</button>
+                    <div class="settings-content">
+                        <div class="settings-column" style="max-width: 500px;">
+                            <div class="settings-row">
+                                <div>
+                                    <span class="settings-label" data-i18n="set_elimination">Режим на вибування</span>
+                                    <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_elimination_desc">Переможець видаляється зі списку</div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="set-elimination" class="btn-click"><span class="slider-toggle"></span></label>
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            <div class="settings-row">
+                                <div>
+                                    <span class="settings-label" data-i18n="set_mystery">Режим "Інтрига" (Mystery)</span>
+                                    <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_mystery_desc">Скриває текст під час обертання</div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="set-mystery" class="btn-click"><span class="slider-toggle"></span></label>
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_time">Час обертання:</span> <span id="val-time" class="slider-value">5</span> <span data-i18n="sec">сек</span></span>
+                                <input type="range" id="set-time" min="2" max="15" value="5" step="1">
+                            </div>
+                        </div>
                     </div>
-                    <label class="toggle-switch"><input type="checkbox" id="set-parallax" class="btn-click"><span class="slider-toggle"></span></label>
                 </div>
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
-                <div>
-                    <span class="settings-label" data-i18n="set_anim">Анімація крутіння:</span>
-                    <select id="set-anim" class="custom-select btn-click">
-                        <option value="smooth" data-i18n="opt_an_smooth">Плавна</option>
-                        <option value="elastic" data-i18n="opt_an_elastic">Еластична (Відскок)</option>
-                        <option value="linear" data-i18n="opt_an_linear">Рівномірна</option>
-                        <option value="crazy" data-i18n="opt_an_crazy">Шалена</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <div class="settings-content glass-panel" id="tab-audio">
-            <div class="settings-column" style="max-width: 500px;">
-                <div>
-                    <span class="settings-label"><span data-i18n="set_volume">Гучність:</span> <span id="val-volume" class="slider-value">50</span>%</span>
-                    <input type="range" id="set-volume" min="0" max="100" value="50" step="1">
+                <!-- 3. Вигляд -->
+                <div class="settings-section" id="sec-visuals">
+                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-visuals', this)" data-i18n="tab_visuals">✨ Вигляд</button>
+                    <div class="settings-content">
+                        <div class="settings-column">
+                            <div>
+                                <span class="settings-label" data-i18n="set_menu_layout">Стиль меню налаштувань:</span>
+                                <select id="set-menuLayout" class="custom-select btn-click" style="border-color: var(--accent-1);">
+                                    <option value="layout-tabs" data-i18n="opt_ml_tabs">Вкладки (Кнопки)</option>
+                                    <option value="layout-accordion" data-i18n="opt_ml_acc">Списки (Акордеон)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="settings-label" data-i18n="set_theme">Глобальна Тема:</span>
+                                <select id="set-theme" class="custom-select btn-click">
+                                    <option value="darkmatter" data-i18n="opt_th_dark">Темна Матерія (Космос)</option>
+                                    <option value="cyberpunk" data-i18n="opt_th_cyber">Кіберпанк (Неон)</option>
+                                    <option value="matrix" data-i18n="opt_th_matrix">Матриця (Зелений)</option>
+                                    <option value="sakura" data-i18n="opt_th_sakura">Сакура (Рожевий)</option>
+                                    <option value="bloodmoon" data-i18n="opt_th_blood">Кривавий Місяць</option>
+                                    <option value="ocean" data-i18n="opt_th_ocean">Океан (Синій)</option>
+                                    <option value="gold" data-i18n="opt_th_gold">Золотий Люкс</option>
+                                    <option value="vaporwave" data-i18n="opt_th_vapor">Vaporwave (80-ті)</option>
+                                    <option value="sunset" data-i18n="opt_th_sunset">Захід Сонця</option>
+                                    <option value="ice" data-i18n="opt_th_ice">Лід (Блакитний)</option>
+                                    <option value="fire" data-i18n="opt_th_fire">Вогонь (Помаранчевий)</option>
+                                    <option value="nature" data-i18n="opt_th_nature">Ліс (Зелений)</option>
+                                    <option value="custom" data-i18n="opt_th_custom">🎨 СВІЙ ДИЗАЙН</option>
+                                </select>
+                                <div class="color-pickers-panel" id="custom-colors-panel">
+                                    <div class="color-row"><span data-i18n="col_bg1">Фон (Центр)</span> <input type="color" id="col-bg1" value="#0a0a0f"></div>
+                                    <div class="color-row"><span data-i18n="col_bg2">Фон (Краї)</span> <input type="color" id="col-bg2" value="#1f0033"></div>
+                                    <div class="color-row"><span data-i18n="col_ac1">Акцент 1 (Колесо)</span> <input type="color" id="col-ac1" value="#00f2fe"></div>
+                                    <div class="color-row"><span data-i18n="col_ac2">Акцент 2 (Кнопки)</span> <input type="color" id="col-ac2" value="#ff416c"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="settings-label" data-i18n="set_cursor">Курсор миші:</span>
+                                <select id="set-cursor" class="custom-select btn-click">
+                                    <option value="default" data-i18n="opt_cur_def">Стандартний</option>
+                                    <option value="crosshair" data-i18n="opt_cur_cross">Приціл</option>
+                                    <option value="sword" data-i18n="opt_cur_sword">Неоновий Меч ⚔️</option>
+                                    <option value="wand" data-i18n="opt_cur_wand">Магічна Паличка 🪄</option>
+                                    <option value="kunai" data-i18n="opt_cur_kunai">Кунай 🗡️</option>
+                                    <option value="rocket" data-i18n="opt_cur_rocket">Ракета 🚀</option>
+                                    <option value="pizza" data-i18n="opt_cur_pizza">Піца 🍕</option>
+                                    <option value="crown" data-i18n="opt_cur_crown">Корона 👑</option>
+                                    <option value="ghost" data-i18n="opt_cur_ghost">Привид 👻</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="settings-column">
+                            <div>
+                                <span class="settings-label" data-i18n="set_clickfx">Ефект кліку:</span>
+                                <select id="set-clickfx" class="custom-select btn-click">
+                                    <option value="ripple" data-i18n="opt_fx_rip">Неоновий Пульс</option>
+                                    <option value="sparkle" data-i18n="opt_fx_spark">Іскри</option>
+                                    <option value="hearts" data-i18n="opt_fx_hearts">Сердечка 💖</option>
+                                    <option value="skulls" data-i18n="opt_fx_skulls">Черепи 💀</option>
+                                    <option value="money" data-i18n="opt_fx_money">Монетки 💰</option>
+                                    <option value="none" data-i18n="opt_fx_none">Вимкнути</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="settings-label" data-i18n="set_style">Стиль Колеса:</span>
+                                <select id="set-style" class="custom-select btn-click">
+                                    <option value="neon" data-i18n="opt_st_neon">Неон (Градієнти)</option>
+                                    <option value="flat" data-i18n="opt_st_flat">Флет (Мінімалізм)</option>
+                                    <option value="dark" data-i18n="opt_st_dark">Дарк (Темний фон)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_textsize">Розмір тексту:</span> <span id="val-text" class="slider-value">35</span> px</span>
+                                <input type="range" id="set-text" min="15" max="60" value="35" step="1">
+                            </div>
+                            <div>
+                                <span class="settings-label" data-i18n="set_particles">Частинки:</span>
+                                <select id="set-particles" class="custom-select btn-click">
+                                    <option value="stars" data-i18n="opt_pt_stars">Космічні зорі</option>
+                                    <option value="snow" data-i18n="opt_pt_snow">Сніг</option>
+                                    <option value="matrix" data-i18n="opt_pt_matrix">Матриця (Цифри)</option>
+                                    <option value="bubbles" data-i18n="opt_pt_bubbles">Бульбашки</option>
+                                    <option value="none" data-i18n="opt_pt_none">Вимкнути</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="settings-label" data-i18n="set_confetti">Стиль Конфеті:</span>
+                                <select id="set-confetti" class="custom-select btn-click">
+                                    <option value="classic" data-i18n="opt_cf_classic">Класичне</option>
+                                    <option value="stars" data-i18n="opt_cf_stars">Зірки</option>
+                                    <option value="emoji" data-i18n="opt_cf_emoji">Емодзі (💰🎉)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
-                <div>
-                    <span class="settings-label" data-i18n="set_sound">Звуковий пакет:</span>
-                    <select id="set-sound" class="custom-select btn-click">
-                        <option value="classic" data-i18n="opt_sd_classic">Класика (Пік-пік)</option>
-                        <option value="arcade" data-i18n="opt_sd_arcade">Аркада (8-bit)</option>
-                        <option value="soft" data-i18n="opt_sd_soft">М'який (Chill)</option>
-                        <option value="casino" data-i18n="opt_sd_casino">Казино (Тріскачка)</option>
-                        <option value="cyberpunk" data-i18n="opt_sd_cyber">Кіберпанк (Синт)</option>
-                        <option value="magic" data-i18n="opt_sd_magic">Магія (Дзвін)</option>
-                        <option value="drum" data-i18n="opt_sd_drum">Барабан</option>
-                        <option value="bass" data-i18n="opt_sd_bass">Глибокий Бас</option>
-                    </select>
+
+                <!-- 4. Фізика -->
+                <div class="settings-section" id="sec-physics">
+                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-physics', this)" data-i18n="tab_physics">🌪 Фізика</button>
+                    <div class="settings-content">
+                        <div class="settings-column">
+                            <div class="settings-row">
+                                <div>
+                                    <span class="settings-label" data-i18n="set_parallax">3D Паралакс</span>
+                                    <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_parallax_desc">Реагує на мишку/телефон</div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="set-parallax" class="btn-click"><span class="slider-toggle"></span></label>
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            <div>
+                                <span class="settings-label" data-i18n="set_anim">Анімація крутіння:</span>
+                                <select id="set-anim" class="custom-select btn-click">
+                                    <option value="smooth" data-i18n="opt_an_smooth">Плавна</option>
+                                    <option value="elastic" data-i18n="opt_an_elastic">Еластична (Відскок)</option>
+                                    <option value="linear" data-i18n="opt_an_linear">Рівномірна</option>
+                                    <option value="crazy" data-i18n="opt_an_crazy">Шалена</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <!-- 5. Звук -->
+                <div class="settings-section" id="sec-audio">
+                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-audio', this)" data-i18n="tab_audio">🔊 Звук</button>
+                    <div class="settings-content">
+                        <div class="settings-column" style="max-width: 500px;">
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_volume">Гучність:</span> <span id="val-volume" class="slider-value">50</span>%</span>
+                                <input type="range" id="set-volume" min="0" max="100" value="50" step="1">
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            <div>
+                                <span class="settings-label" data-i18n="set_sound">Звуковий пакет:</span>
+                                <select id="set-sound" class="custom-select btn-click">
+                                    <option value="classic" data-i18n="opt_sd_classic">Класика (Пік-пік)</option>
+                                    <option value="arcade" data-i18n="opt_sd_arcade">Аркада (8-bit)</option>
+                                    <option value="soft" data-i18n="opt_sd_soft">М'який (Chill)</option>
+                                    <option value="casino" data-i18n="opt_sd_casino">Казино (Тріскачка)</option>
+                                    <option value="cyberpunk" data-i18n="opt_sd_cyber">Кіберпанк (Синт)</option>
+                                    <option value="magic" data-i18n="opt_sd_magic">Магія (Дзвін)</option>
+                                    <option value="drum" data-i18n="opt_sd_drum">Барабан</option>
+                                    <option value="bass" data-i18n="opt_sd_bass">Глибокий Бас</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- кінець container -->
+        </div> <!-- кінець wrapper -->
     </div>
 
+    <!-- Модалка Переможця -->
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
             <div class="modal-title" id="modal-title" data-i18n="modal_win">ПЕРЕМОЖЕЦЬ</div>
@@ -559,13 +551,14 @@
     <script>
         const dict = {
             uk: {
-                menu_title: "WHEEL OF FORTUNE", menu_subtitle: "FORTUNE EDITION", btn_start: "🚀 ПОЧАТЬ ГРУ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ",
+                menu_title: "WHEEL OF FORTUNE", menu_subtitle: "FORTUNE EDITION", btn_start: "🚀 ПОЧАТИ ГРУ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 Історія", btn_spin: "КРУТИТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
                 btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Гра", tab_visuals: "✨ Вигляд", tab_physics: "🌪 Фізика", tab_audio: "🔊 Звук",
-                tpl_space: "Космос", tpl_space_desc: "Темна матерія, зірки та синтезатор", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори, спокійний звук", tpl_casino: "Казино", tpl_casino_desc: "Золото, класичний звук рулетки, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, неоновий зелений, 8-bit", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
-                tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори та м'який звук", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти, бас та агресія", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон, сніг та магічний звук",
+                tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
+                tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Скриває текст під час обертання", set_time: "Час обертання:", sec: "сек",
+                set_menu_layout: "Стиль меню налаштувань:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Акордеон)",
                 set_theme: "Глобальна Тема:", opt_th_cyber: "Кіберпанк (Неон)", opt_th_matrix: "Матриця (Зелений)", opt_th_sakura: "Сакура (Рожевий)", opt_th_blood: "Кривавий Місяць", opt_th_ocean: "Океан (Синій)", opt_th_gold: "Золотий Люкс", opt_th_vapor: "Vaporwave (80-ті)", opt_th_dark: "Темна Матерія", opt_th_sunset: "Захід Сонця", opt_th_ice: "Лід (Блакитний)", opt_th_fire: "Вогонь (Помаранчевий)", opt_th_nature: "Ліс (Зелений)", opt_th_custom: "🎨 СВІЙ ДИЗАЙН",
                 col_bg1: "Фон (Центр)", col_bg2: "Фон (Краї)", col_ac1: "Акцент 1 (Колесо)", col_ac2: "Акцент 2 (Кнопки)",
                 set_cursor: "Курсор миші:", opt_cur_def: "Стандартний", opt_cur_cross: "Приціл", opt_cur_sword: "Неоновий Меч ⚔️", opt_cur_wand: "Магічна Паличка 🪄", opt_cur_kunai: "Кунай 🗡️", opt_cur_rocket: "Ракета 🚀", opt_cur_pizza: "Піца 🍕", opt_cur_crown: "Корона 👑", opt_cur_ghost: "Привид 👻",
@@ -584,9 +577,10 @@
                 btn_back: "← BACK", authors_title: "MASTERMINDS", author_role_finx: "Lead Dev & Ideologist", author_role_gemini: "AI Assistant by Google",
                 btn_to_menu: "← TO MENU", panel_history: "📜 History", btn_spin: "SPIN", panel_items: "🎯 Items", placeholder_new: "New option...",
                 btn_save: "← SAVE", settings_title: "SETTINGS", tab_templates: "🎨 Templates", tab_game: "🎮 Game", tab_visuals: "✨ Visuals", tab_physics: "🌪 Physics", tab_audio: "🔊 Audio",
-                tpl_space: "Space", tpl_space_desc: "Dark matter, stars and synth", tpl_sunset: "Sunset", tpl_sunset_desc: "Warm colors, calm sound", tpl_casino: "Casino", tpl_casino_desc: "Gold, classic roulette sound", tpl_matrix: "Hacker", tpl_matrix_desc: "Matrix green, 8-bit sound", tpl_sakura: "Sakura", tpl_sakura_desc: "Anime style, pink color", tpl_cyberpunk: "Cyberpunk", tpl_cyberpunk_desc: "Original neon design", tpl_opt: "Optimized", tpl_opt_desc: "No effects, High FPS",
-                tpl_nature: "Nature", tpl_nature_desc: "Calm forest colors & soft sound", tpl_fire: "Fire", tpl_fire_desc: "Burning gradients, bass & aggression", tpl_ice: "Ice", tpl_ice_desc: "Cold neon, snow & magic sound",
+                tpl_space: "Space", tpl_space_desc: "Dark matter and stars", tpl_sunset: "Sunset", tpl_sunset_desc: "Warm colors", tpl_casino: "Casino", tpl_casino_desc: "Gold, flat style", tpl_matrix: "Hacker", tpl_matrix_desc: "Matrix green, neon style", tpl_sakura: "Sakura", tpl_sakura_desc: "Anime style, pink color", tpl_cyberpunk: "Cyberpunk", tpl_cyberpunk_desc: "Original neon design", tpl_opt: "Optimized", tpl_opt_desc: "No effects, High FPS",
+                tpl_nature: "Nature", tpl_nature_desc: "Calm forest colors", tpl_fire: "Fire", tpl_fire_desc: "Burning gradients", tpl_ice: "Ice", tpl_ice_desc: "Cold neon & snow",
                 set_elimination: "Elimination Mode", set_elimination_desc: "Winner is removed from the list", set_mystery: "Mystery Mode", set_mystery_desc: "Hides text while spinning", set_time: "Spin Time:", sec: "sec",
+                set_menu_layout: "Settings Menu Style:", opt_ml_tabs: "Tabs (Buttons)", opt_ml_acc: "Lists (Accordion)",
                 set_theme: "Global Theme:", opt_th_cyber: "Cyberpunk (Neon)", opt_th_matrix: "Matrix (Green)", opt_th_sakura: "Sakura (Pink)", opt_th_blood: "Blood Moon", opt_th_ocean: "Ocean (Blue)", opt_th_gold: "Gold Luxury", opt_th_vapor: "Vaporwave (80s)", opt_th_dark: "Dark Matter", opt_th_sunset: "Sunset", opt_th_ice: "Ice (Blue)", opt_th_fire: "Fire (Orange)", opt_th_nature: "Forest (Green)", opt_th_custom: "🎨 CUSTOM DESIGN",
                 col_bg1: "Bg (Center)", col_bg2: "Bg (Edges)", col_ac1: "Accent 1 (Wheel)", col_ac2: "Accent 2 (Buttons)",
                 set_cursor: "Mouse Cursor:", opt_cur_def: "Default", opt_cur_cross: "Crosshair", opt_cur_sword: "Neon Sword ⚔️", opt_cur_wand: "Magic Wand 🪄", opt_cur_kunai: "Kunai 🗡️", opt_cur_rocket: "Rocket 🚀", opt_cur_pizza: "Pizza 🍕", opt_cur_crown: "Crown 👑", opt_cur_ghost: "Ghost 👻",
@@ -605,9 +599,10 @@
                 btn_back: "← НАЗАД", authors_title: "СОЗДАТЕЛИ", author_role_finx: "Главный разработчик", author_role_gemini: "AI Ассистент от Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 История", btn_spin: "КРУТИТЬ", panel_items: "🎯 Элементы", placeholder_new: "Новый вариант...",
                 btn_save: "← СОХРАНИТЬ", settings_title: "НАСТРОЙКИ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Игра", tab_visuals: "✨ Вид", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук",
-                tpl_space: "Космос", tpl_space_desc: "Темная материя, звезды и синт", tpl_sunset: "Закат", tpl_sunset_desc: "Теплые цвета, спокойный звук", tpl_casino: "Казино", tpl_casino_desc: "Золото, звук рулетки, флэт", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зеленый, 8-bit звук", tpl_sakura: "Сакура", tpl_sakura_desc: "Аниме стиль, розовый", tpl_cyberpunk: "Киберпанк", tpl_cyberpunk_desc: "Оригинальный неоновый дизайн", tpl_opt: "Оптимизированный", tpl_opt_desc: "Без эффектов, высокий FPS",
-                tpl_nature: "Природа", tpl_nature_desc: "Лесные цвета и спокойный звук", tpl_fire: "Огонь", tpl_fire_desc: "Пылающие градиенты, бас и агрессия", tpl_ice: "Лед", tpl_ice_desc: "Холодный неон, снег и магия",
+                tpl_space: "Космос", tpl_space_desc: "Темная материя и звезды", tpl_sunset: "Закат", tpl_sunset_desc: "Теплые цвета", tpl_casino: "Казино", tpl_casino_desc: "Золото, флэт стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зеленый неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аниме стиль, розовый", tpl_cyberpunk: "Киберпанк", tpl_cyberpunk_desc: "Оригинальный неоновый дизайн", tpl_opt: "Оптимизированный", tpl_opt_desc: "Без эффектов, высокий FPS",
+                tpl_nature: "Природа", tpl_nature_desc: "Лесные цвета", tpl_fire: "Огонь", tpl_fire_desc: "Пылающие градиенты", tpl_ice: "Лед", tpl_ice_desc: "Холодный неон и снег",
                 set_elimination: "Режим на выбывание", set_elimination_desc: "Победитель удаляется из списка", set_mystery: "Режим 'Интрига' (Mystery)", set_mystery_desc: "Скрывает текст во время вращения", set_time: "Время вращения:", sec: "сек",
+                set_menu_layout: "Стиль меню настроек:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Аккордеон)",
                 set_theme: "Глобальная Тема:", opt_th_cyber: "Киберпанк (Неон)", opt_th_matrix: "Матрица (Зеленый)", opt_th_sakura: "Сакура (Розовый)", opt_th_blood: "Кровавая Луна", opt_th_ocean: "Океан (Синий)", opt_th_gold: "Золотой Люкс", opt_th_vapor: "Vaporwave (80-е)", opt_th_dark: "Темная Материя", opt_th_sunset: "Закат", opt_th_ice: "Лед (Голубой)", opt_th_fire: "Огонь (Оранжевый)", opt_th_nature: "Лес (Зеленый)", opt_th_custom: "🎨 СВОЙ ДИЗАЙН",
                 col_bg1: "Фон (Центр)", col_bg2: "Фон (Края)", col_ac1: "Акцент 1 (Колесо)", col_ac2: "Акцент 2 (Кнопки)",
                 set_cursor: "Курсор мыши:", opt_cur_def: "Стандартний", opt_cur_cross: "Прицел", opt_cur_sword: "Неоновый Меч ⚔️", opt_cur_wand: "Магическая Палочка 🪄", opt_cur_kunai: "Кунай 🗡️", opt_cur_rocket: "Ракета 🚀", opt_cur_pizza: "Пицца 🍕", opt_cur_crown: "Корона 👑", opt_cur_ghost: "Призрак 👻",
@@ -641,17 +636,18 @@
             renderHistory();
         }
 
-        // КОСМОС І ВИМКНЕНЕ 3D ЗА ЗАМОВЧУВАННЯМ
+        // КОНФІГ ЗА ЗАМОВЧУВАННЯМ
         let cfg = {
-            time: 6, anim: 'smooth', sound: 'cyberpunk', volume: 50,
+            time: 6, anim: 'smooth', sound: 'classic', volume: 50,
             style: 'neon', textSize: 35, theme: 'darkmatter', particles: 'stars', confetti: 'classic',
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
+            menuLayout: 'layout-tabs', /* <-- НОВЕ НАЛАШТУВАННЯ ІНТЕРФЕЙСУ */
             customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' }
         };
 
-        const savedCfg = localStorage.getItem('megaWheelCfgV3_1');
+        const savedCfg = localStorage.getItem('megaWheelCfgV4');
         if (savedCfg) { cfg = { ...cfg, ...JSON.parse(savedCfg) }; }
-        function saveCfg() { localStorage.setItem('megaWheelCfgV3_1', JSON.stringify(cfg)); }
+        function saveCfg() { localStorage.setItem('megaWheelCfgV4', JSON.stringify(cfg)); }
 
         let items = JSON.parse(localStorage.getItem('megaWheelItems')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
         let history = JSON.parse(localStorage.getItem('megaWheelHistory')) || [];
@@ -671,13 +667,32 @@
             }
         }
 
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.settings-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
+        /* -------------------------------------
+           ЛОГІКА НОВОГО МЕНЮ (Вкладки/Акордеон)
+        ---------------------------------------- */
+        window.openTab = function(secId, btn) {
+            if(cfg.menuLayout !== 'layout-tabs') return;
             playUIBeat();
-        }
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(secId).classList.add('active');
+        };
+
+        window.toggleAccordion = function(secId, btn) {
+            if(cfg.menuLayout !== 'layout-accordion') return;
+            playUIBeat();
+            const section = document.getElementById(secId);
+            const isActive = section.classList.contains('active');
+            
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.accordion-btn').forEach(b => b.classList.remove('active'));
+
+            if (!isActive) {
+                section.classList.add('active');
+                btn.classList.add('active');
+            }
+        };
 
         function toggle3D() {
             cfg.parallax = !cfg.parallax;
@@ -701,24 +716,22 @@
         }
 
         const templates = {
-            space: { theme: 'darkmatter', particles: 'stars', sound: 'cyberpunk', style: 'neon', clickfx: 'ripple' },
-            sunset: { theme: 'sunset', particles: 'none', sound: 'soft', style: 'flat', clickfx: 'sparkle' },
-            casino: { theme: 'gold', particles: 'none', sound: 'casino', style: 'flat', clickfx: 'money' },
-            matrix: { theme: 'matrix', particles: 'matrix', sound: 'arcade', style: 'neon', clickfx: 'none' },
+            space: { theme: 'darkmatter', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'ripple' },
+            sunset: { theme: 'sunset', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'sparkle' },
+            casino: { theme: 'gold', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'money' },
+            matrix: { theme: 'matrix', particles: 'matrix', sound: 'classic', style: 'neon', clickfx: 'none' },
             cyberpunk: { theme: 'cyberpunk', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'ripple' },
             optimized: { theme: 'cyberpunk', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'none', parallax: false, anim: 'smooth' },
-            nature: { theme: 'nature', particles: 'bubbles', sound: 'soft', style: 'flat', clickfx: 'none' },
-            fire: { theme: 'fire', particles: 'stars', sound: 'bass', style: 'neon', clickfx: 'sparkle' },
-            ice: { theme: 'ice', particles: 'snow', sound: 'magic', style: 'neon', clickfx: 'sparkle' }
+            nature: { theme: 'nature', particles: 'bubbles', sound: 'classic', style: 'flat', clickfx: 'none' },
+            fire: { theme: 'fire', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'sparkle' },
+            ice: { theme: 'ice', particles: 'snow', sound: 'classic', style: 'neon', clickfx: 'sparkle' }
         };
 
         function applyTemplate(id) {
             const t = templates[id];
             cfg.theme = t.theme; cfg.particles = t.particles; cfg.sound = t.sound; cfg.style = t.style;
             if(t.clickfx) cfg.clickfx = t.clickfx;
-            if(t.parallax !== undefined) {
-                cfg.parallax = !t.parallax; toggle3D(); // toggle back to match
-            }
+            if(t.parallax !== undefined) { cfg.parallax = !t.parallax; toggle3D(); }
             if(t.anim) cfg.anim = t.anim;
             
             ['theme', 'particles', 'sound', 'style', 'clickfx', 'anim'].forEach(key => {
@@ -804,6 +817,21 @@
         ['bg1', 'bg2', 'ac1', 'ac2'].forEach(k => {
             const el = document.getElementById('col-'+k); el.value = cfg.customColors[k];
             el.addEventListener('input', (e) => { cfg.customColors[k] = e.target.value; saveCfg(); applyTheme(); });
+        });
+
+        // Інтеграція нового селекту стилю меню
+        bindInput('set-menuLayout', 'menuLayout', null, 'select', () => {
+            const wrapper = document.getElementById('settings-wrapper');
+            wrapper.className = `settings-wrapper ${cfg.menuLayout}`;
+            
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.accordion-btn').forEach(b => b.classList.remove('active'));
+
+            if(cfg.menuLayout === 'layout-tabs') {
+                document.getElementById('sec-templates').classList.add('active');
+                document.querySelector('.tab-btn[onclick*="sec-templates"]').classList.add('active');
+            }
         });
 
         bindInput('set-time', 'time', 'val-time', 'slider'); bindInput('set-text', 'textSize', 'val-text', 'slider', drawWheel);
@@ -1194,6 +1222,14 @@
             setLang(currentLang);
             applyTheme(); applyCursor(); document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel';
             
+            // Відновлюємо UI налаштування (Вкладки або Акордеон)
+            document.getElementById('settings-wrapper').className = `settings-wrapper ${cfg.menuLayout}`;
+            document.getElementById('set-menuLayout').value = cfg.menuLayout;
+            if(cfg.menuLayout === 'layout-tabs') {
+                document.getElementById('sec-templates').classList.add('active');
+                document.querySelector('.tab-btn[onclick*="sec-templates"]').classList.add('active');
+            }
+
             document.getElementById('btn-3d').classList.toggle('active', cfg.parallax);
             document.getElementById('btn-3d').innerText = cfg.parallax ? '3D: ON' : '3D: OFF';
 
