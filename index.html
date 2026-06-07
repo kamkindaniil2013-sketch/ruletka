@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wheel & Dice FORTUNE EDITION</title>
+    <!-- ФЕЙКОВИЙ КОД ДЛЯ ВІДВОЛІКАННЯ УВАГИ (Видно тільки при View Source) -->
+    <!-- 
+        const _0x5f3a=['\x53\x54\x4f\x50','\x68\x61\x63\x6b\x65\x72','\x64\x65\x6e\x69\x65\x64'];
+        function fakeInit(){console.log('System initialized...');}
+        // Protected by Fortune Security v6.0
+    -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=JetBrains+Mono:wght@700&display=swap');
@@ -107,19 +113,9 @@
 
         .settings-title { font-size: clamp(26px, 5vw, 40px); font-weight: 900; margin-bottom: 25px; margin-top: 20px; color: #fff; text-align: center; text-transform: uppercase; letter-spacing: 2px; flex-shrink: 0; }
         
-        /* Секретний тригер (Остання літера в слові "НАЛАШТУВАННЯ") */
-        #secret-trigger {
-            cursor: pointer;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-        #secret-trigger:hover {
-            color: var(--accent-danger);
-            text-shadow: 0 0 15px var(--accent-danger);
-        }
+        #secret-trigger { cursor: pointer; transition: color 0.3s ease, text-shadow 0.3s ease; }
+        #secret-trigger:hover { color: var(--accent-danger); text-shadow: 0 0 15px var(--accent-danger); }
 
-        /* ========================================================
-           СИСТЕМА НАЛАШТУВАНЬ
-        ======================================================== */
         .settings-wrapper { width: 100%; max-width: 1000px; display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 0 20px 20px 20px; }
         .settings-sections-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; -webkit-overflow-scrolling: touch; padding-bottom: 30px; }
         
@@ -181,7 +177,6 @@
         .template-name { font-weight: 900; font-size: 16px; color: white; letter-spacing: 1px; }
         .template-desc { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; line-height: 1.4; }
 
-        /* ІНШІ СЕКЦІЇ */
         .authors-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; padding: 20px; }
         .author-card { padding: 30px 20px; border-radius: 24px; width: 260px; text-align: center; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: inherit; will-change: transform; }
         .author-card:hover { transform: scale(1.05); }
@@ -193,7 +188,7 @@
         .author-name { font-size: 26px; font-weight: 900; margin-bottom: 5px; }
         .author-role { font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* СПІЛЬНИЙ ЛЕЙАУТ ДЛЯ ІГОР (Колесо та Кубики) */
+        /* СПІЛЬНИЙ ЛЕЙАУТ ДЛЯ ІГОР */
         .game-layout { display: flex; gap: 30px; justify-content: center; align-items: stretch; width: 100%; max-width: 1400px; padding: 20px; height: 100vh; }
         .side-panel, .list-section { width: 100%; max-width: 300px; padding: 20px; display: flex; flex-direction: column; gap: 15px; height: clamp(500px, 80vh, 800px); align-self: center; }
         .panel-title { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: var(--accent-2); text-transform: uppercase; letter-spacing: 2px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 5px; }
@@ -204,9 +199,7 @@
 
         .center-section { flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; perspective: 1500px; z-index: 10; }
         
-        /* -------------------------------------
-           ЕЛЕМЕНТИ КОЛЕСА
-        ---------------------------------------- */
+        /* ЕЛЕМЕНТИ КОЛЕСА */
         .wheel-3d-wrapper { position: relative; width: min(480px, 85vw); height: min(480px, 85vw); margin-bottom: 40px; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, var(--main-shadow-opacity))); transform-style: preserve-3d; transition: transform 0.1s linear; }
         .pointer-container { position: absolute; top: -20px; left: 50%; transform: translateX(-50%) translateZ(40px); z-index: 10; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); transform-origin: top center; }
         .pointer-container.hit { animation: pointerBump 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -224,9 +217,7 @@
 
         canvas#wheelCanvas { width: 100%; height: 100%; display: block; image-rendering: -webkit-optimize-contrast; }
         
-        /* -------------------------------------
-           ЕЛЕМЕНТИ КУБИКІВ 3D
-        ---------------------------------------- */
+        /* ЕЛЕМЕНТИ КУБИКІВ 3D */
         .dice-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 100%; max-width: 600px; margin-bottom: 40px; perspective: 1200px; }
         .scene { width: 100px; height: 100px; perspective: 800px; }
         @media(max-width: 600px){ .scene { width: 70px; height: 70px; } }
@@ -234,19 +225,9 @@
         .cube__face { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); border: 3px solid #fff; border-radius: 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 0 15px rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: 900; color: #111; backface-visibility: hidden; }
         @media(max-width: 600px){ .cube__face { border-radius: 10px; font-size: 30px; } }
         
-        /* КРАПКА НА КУБИКУ (КРУГ) */
-        .dice-dot {
-            width: 25px;
-            height: 25px;
-            background-color: #fff;
-            border-radius: 50%;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4), 0 0 10px rgba(255,255,255,0.8);
-        }
-        @media(max-width: 600px){
-            .dice-dot { width: 18px; height: 18px; }
-        }
+        .dice-dot { width: 25px; height: 25px; background-color: #fff; border-radius: 50%; box-shadow: inset 0 2px 5px rgba(0,0,0,0.4), 0 0 10px rgba(255,255,255,0.8); }
+        @media(max-width: 600px){ .dice-dot { width: 18px; height: 18px; } }
         
-        /* Грані: 1 на всіх, але різні кольори */
         .cube__face--front  { transform: rotateY(  0deg) translateZ(50px); background: var(--dice-red); box-shadow: 0 0 20px var(--dice-red), inset 0 0 10px rgba(0,0,0,0.3); }
         .cube__face--right  { transform: rotateY( 90deg) translateZ(50px); background: var(--dice-orange); box-shadow: 0 0 20px var(--dice-orange), inset 0 0 10px rgba(0,0,0,0.3); }
         .cube__face--back   { transform: rotateY(180deg) translateZ(50px); background: var(--dice-yellow); box-shadow: 0 0 20px var(--dice-yellow), inset 0 0 10px rgba(0,0,0,0.3); }
@@ -266,32 +247,11 @@
         .cube.rolling { animation: cubeSpin 0.5s linear infinite; }
         @keyframes cubeSpin { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); } }
 
-        /* СЕКРЕТНА ПАНЕЛЬ КУБИКІВ (Ізгой) */
-        .secret-dice-palette {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .secret-dice-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
-            position: relative;
-        }
+        .secret-dice-palette { display: flex; justify-content: center; gap: 12px; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .secret-dice-dot { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 5px rgba(0,0,0,0.5); position: relative; }
         .secret-dice-dot:hover { transform: scale(1.3); }
-        /* Прибираємо будь-які візуальні відзнаки "ізгоя" для скритності, як просили */
 
-        /* -------------------------------------
-           КНОПКИ ТА ЕЛЕМЕНТИ УПРАВЛІННЯ
-        ---------------------------------------- */
+        /* КНОПКИ ТА ЕЛЕМЕНТИ УПРАВЛІННЯ */
         .btn-action { background: linear-gradient(135deg, var(--accent-danger), #ff4b2b); border: none; color: white; font-size: 22px; font-weight: 900; padding: 18px 70px; border-radius: 50px; cursor: inherit; text-transform: uppercase; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); letter-spacing: 2px; position: relative; overflow: hidden; z-index: 20; will-change: transform; }
         .btn-action:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 15px 35px rgba(255, 65, 108, 0.6); }
         .btn-action:active { transform: scale(0.95); }
@@ -323,9 +283,7 @@
         .delete-btn { background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 8px; font-size: 14px; cursor: inherit; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .delete-btn:active { background: var(--accent-danger); color: white; }
 
-        /* -------------------------------------
-           МОДАЛЬНІ ВІКНА
-        ---------------------------------------- */
+        /* МОДАЛЬНІ ВІКНА */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { background: #13131a; padding: 50px 30px; border-radius: 30px; text-align: center; max-width: 90vw; width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: scale(0.8) translateY(20px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; }
@@ -427,7 +385,6 @@
                         <canvas id="wheelCanvas" width="800" height="800"></canvas>
                     </div>
                 </div>
-                <!-- Кнопка "КРУТИТИ": лівий клік = рандом, правий клік = секрет -->
                 <button class="btn-action" id="spin-btn" data-i18n="btn_spin">КРУТИТИ</button>
             </div>
             <div class="list-section glass-panel">
@@ -461,15 +418,9 @@
                 <div class="history-list" id="history-list-dice"></div>
             </div>
             <div class="center-section">
-                <div class="dice-container" id="dice-container">
-                    <!-- Кубики генеруються через JS -->
-                </div>
+                <div class="dice-container" id="dice-container"></div>
                 <button class="btn-action btn-roll btn-click" id="roll-btn" data-i18n="btn_roll">КИДАТИ</button>
-                
-                <!-- Секретна палітра (Ізгой) -->
-                <div class="secret-dice-palette" id="secret-dice-palette">
-                    <!-- Буде згенеровано JS -->
-                </div>
+                <div class="secret-dice-palette" id="secret-dice-palette"></div>
             </div>
             <div class="list-section glass-panel">
                 <div class="panel-title" data-i18n="panel_dice_settings">⚙️ Налаштування Кубиків</div>
@@ -491,20 +442,16 @@
         <h1 class="settings-title" id="settings-title" data-i18n="settings_title">НАЛАШТУВАННЯ</h1>
         
         <div id="settings-wrapper" class="settings-wrapper layout-tabs">
-            
             <div class="settings-tabs-nav" id="settings-tabs-nav">
                 <button class="tab-btn active btn-click" onclick="openTab('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-game', this)" data-i18n="tab_game">🎮 Колесо</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-visuals', this)" data-i18n="tab_visuals">✨ Вигляд</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-physics', this)" data-i18n="tab_physics">🌪 Фізика</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-audio', this)" data-i18n="tab_audio">🔊 Звук</button>
-                
-                <!-- Приховані адмін-вкладки -->
                 <button class="tab-btn btn-click admin-tab" id="tab-nav-protect" style="display: none; color: var(--accent-danger);" onclick="openTab('sec-protect', this)">🔒 Захист</button>
             </div>
 
             <div class="settings-sections-container" id="settings-sections-container">
-                
                 <!-- 1. Шаблони -->
                 <div class="settings-section active" id="sec-templates">
                     <button class="accordion-btn btn-click active" onclick="toggleAccordion('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
@@ -734,8 +681,8 @@
                     </div>
                 </div>
 
-            </div> <!-- кінець container -->
-        </div> <!-- кінець wrapper -->
+            </div>
+        </div>
     </div>
 
     <!-- Модалка Переможця -->
@@ -761,6 +708,42 @@
     </div>
 
     <script>
+        // АКТИВНИЙ ЗАХИСТ І ПОПЕРЕДЖЕННЯ В КОНСОЛЬ
+        (function() {
+            // Зелене попередження для тих, хто відкриває DevTools
+            console.log(
+                "%cЗУПИНИСЬ! Цей код захищено.\n%cБудь-які спроби копіювання чи модифікації фіксуються та призведуть до блокування доступу.",
+                "color: #00ff41; font-size: 35px; font-weight: 900; text-shadow: 2px 2px 0 #000;",
+                "color: white; font-size: 18px; background: #ff416c; padding: 5px 10px; border-radius: 5px;"
+            );
+
+            // Функція для очищення консолі (заважає читати логи)
+            setInterval(() => {
+                if (window.cfg && window.cfg.protect && window.cfg.devtoolsBlock) {
+                    console.clear();
+                    console.log(
+                        "%cЗУПИНИСЬ! Цей код захищено.\n%cБудь-які спроби копіювання чи модифікації фіксуються та призведуть до блокування доступу.",
+                        "color: #00ff41; font-size: 35px; font-weight: 900; text-shadow: 2px 2px 0 #000;",
+                        "color: white; font-size: 18px; background: #ff416c; padding: 5px 10px; border-radius: 5px;"
+                    );
+                }
+            }, 3000);
+
+            // Агресивна пастка Debugger
+            const _debugProtection = function() {
+                if (window.cfg && window.cfg.protect && window.cfg.devtoolsBlock) {
+                    const before = new Date().getTime();
+                    debugger;
+                    const after = new Date().getTime();
+                    if (after - before > 100) {
+                        document.body.innerHTML = "<div style='color:red; background:black; font-family:monospace; padding:50px; text-align:center; font-size:24px;'>ACCESS DENIED: DEVTOOLS DETECTED</div>";
+                    }
+                }
+                setTimeout(_debugProtection, 500);
+            };
+            _debugProtection();
+        })();
+
         // =========================================================================
         // ЛОКАЛІЗАЦІЯ
         // =========================================================================
@@ -873,25 +856,25 @@
             applySecretTrigger();
             renderHistory('wheel');
             renderHistory('dice');
-            renderDicePalette(); // Оновлюємо підказки
+            renderDicePalette();
         }
 
         // =========================================================================
         // КОНФІГ ТА СТАН ДОДАТКА
         // =========================================================================
-        let cfg = {
+        window.cfg = {
             time: 6, anim: 'smooth', sound: 'classic', volume: 50,
             style: 'neon', textSize: 35, theme: 'darkmatter', particles: 'stars', confetti: 'classic',
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
             menuLayout: 'layout-tabs', currentTemplate: 'space',
             protect: true, contextBlock: true, devtoolsBlock: true,
             customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' },
-            diceCount: 3, cheatDiceBanColor: 'none' // Нові налаштування
+            diceCount: 3, cheatDiceBanColor: 'none'
         };
 
         const savedCfg = localStorage.getItem('megaWheelCfg_V6');
-        if (savedCfg) { cfg = { ...cfg, ...JSON.parse(savedCfg) }; }
-        function saveCfg() { localStorage.setItem('megaWheelCfg_V6', JSON.stringify(cfg)); }
+        if (savedCfg) { window.cfg = { ...window.cfg, ...JSON.parse(savedCfg) }; }
+        function saveCfg() { localStorage.setItem('megaWheelCfg_V6', JSON.stringify(window.cfg)); }
 
         let wheelItems = JSON.parse(localStorage.getItem('megaWheelItems_V6')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
         let wheelHistory = JSON.parse(localStorage.getItem('megaWheelHistory_V6')) || [];
@@ -900,11 +883,10 @@
         let isSpinning = false;
         let isAudioInit = false;
         let secretTargetIndex = -1;
-        let blinkingSectorIndex = -1; // Для анімації секретного кліку по колесу
+        let blinkingSectorIndex = -1; 
         let winnerIndexGlobal = -1; 
         let isProtectTabUnlocked = localStorage.getItem('admin_protect_unlocked') === 'true';
 
-        // Кольори для кубиків
         const diceColors = [
             { id: 'red', hex: 'var(--dice-red)', name: 'red' },
             { id: 'orange', hex: 'var(--dice-orange)', name: 'orange' },
@@ -976,7 +958,6 @@
             playUIBeat();
         }
 
-        // Шаблони тем
         const templates = {
             space: { theme: 'darkmatter', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'ripple' },
             sunset: { theme: 'sunset', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'sparkle' },
@@ -1172,7 +1153,6 @@
 
                 ctx.moveTo(radius, radius); ctx.arc(radius, radius, radius, angle, angle + arc); ctx.fill();
                 
-                // Слабке блимання секрету 1 раз
                 if (i === blinkingSectorIndex) {
                     ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
                     ctx.fill();
@@ -1205,12 +1185,10 @@
             });
         }
 
-        // Обробка правого кліку по самому колесу (Вибір секретного переможця)
         document.getElementById('wheel').addEventListener('contextmenu', (e) => {
             e.preventDefault(); e.stopPropagation();
             if(isSpinning || wheelItems.length === 0) return;
 
-            // Визначаємо координати центру колеса
             const rect = document.getElementById('wheel').getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
@@ -1218,22 +1196,18 @@
             const dx = e.clientX - centerX;
             const dy = e.clientY - centerY;
             
-            // Вираховуємо кут кліку
             let clickAngle = Math.atan2(dy, dx) * (180 / Math.PI);
             if (clickAngle < 0) clickAngle += 360;
             
-            // Коригуємо кут з урахуванням поточного обертання колеса
             let canvasAngle = (clickAngle - currentRotation) % 360;
             if (canvasAngle < 0) canvasAngle += 360;
             
             const arcDegrees = 360 / wheelItems.length;
             const index = Math.floor(canvasAngle / arcDegrees);
             
-            // Активуємо секрет
             const itemsListElements = document.querySelectorAll('.item');
             activateSecret(index, itemsListElements[index]);
             
-            // Анімація блимання обраного сектора (слабо, 1 раз)
             blinkingSectorIndex = index; drawWheel();
             setTimeout(() => { blinkingSectorIndex = -1; drawWheel(); }, 150);
         });
@@ -1244,8 +1218,6 @@
 
         function activateSecret(index, el = null) {
             secretTargetIndex = index;
-            // Більше не показуємо візуально в списку, повна скритність
-            // Залишаємо лише тихий звуковий сигнал/вібрацію для розуміння, що клік пройшов
             playTickSound();
             if(navigator.vibrate) navigator.vibrate(50); 
         }
@@ -1342,7 +1314,6 @@
 
             let targetIndex = Math.floor(Math.random() * wheelItems.length);
             
-            // СЕКРЕТНИЙ СПІН
             if (useSecret && secretTargetIndex >= 0 && secretTargetIndex < wheelItems.length) { 
                 targetIndex = secretTargetIndex; 
             }
@@ -1384,8 +1355,6 @@
                     const winnerName = wheelItems[targetIndex].toUpperCase();
                     modalPendingDeleteIndex = targetIndex; 
                     addToHistory('wheel', winnerName); openWinModal(winnerName);
-                    
-                    // Секрет зберігається "до бескінечності" - ми НЕ скидаємо secretTargetIndex!
                 }
             }
             animationFrameId = requestAnimationFrame(animateSpin);
@@ -1396,9 +1365,8 @@
         });
 
         // =========================================================================
-        // ЛОГІКА КУБИКІВ (DICE) ТА СЕКРЕТІВ
+        // ЛОГІКА КУБИКІВ (DICE)
         // =========================================================================
-
         function getFaceRotation(colorId) {
             switch(colorId) {
                 case 'red': return {x:0, y:0};
@@ -1420,7 +1388,7 @@
                 
                 ['front','right','back','left','top','bottom'].forEach(f => {
                     const face = document.createElement('div'); face.className = `cube__face cube__face--${f}`;
-                    face.innerHTML = '<div class="dice-dot"></div>'; // КРУГЛИЙ МАРКЕР
+                    face.innerHTML = '<div class="dice-dot"></div>'; 
                     cube.appendChild(face);
                 });
                 scene.appendChild(cube); cont.appendChild(scene);
@@ -1447,9 +1415,8 @@
                 setTimeout(() => {
                     cube.classList.remove('rolling');
                     
-                    // ЧІТ КУБИКІВ: Видаляємо "Ізгоя" з масиву доступних кольорів
                     let availableColors = diceColors.filter(c => c.id !== cfg.cheatDiceBanColor);
-                    if(availableColors.length === 0) availableColors = diceColors; // Запобіжник
+                    if(availableColors.length === 0) availableColors = diceColors; 
                     
                     const resultColor = availableColors[Math.floor(Math.random() * availableColors.length)];
                     results.push(resultColor);
@@ -1469,7 +1436,6 @@
                             document.getElementById('roll-btn').disabled = false;
                             playWinSound();
                             
-                            // Формування результату (Красиві кубики)
                             const resText = results.map(r => `
                                 <div style="width: 50px; height: 50px; background: ${r.hex}; border-radius: 12px; display: inline-flex; justify-content: center; align-items: center; border: 2px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.4); margin: 0 5px;">
                                     <div style="width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);"></div>
@@ -1478,7 +1444,6 @@
                             const resNames = results.map(r => `<span style="color:${r.hex}">${dict[currentLang].colors[r.name]}</span>`).join(', ');
                             addToHistory('dice', resNames);
                             
-                            // Відкриваємо модалку
                             document.getElementById('modal-title').innerText = dict[currentLang]['modal_win'];
                             document.getElementById('modal-title').style.color = "var(--accent-1)";
                             const mText = document.getElementById('modal-text'); 
@@ -1495,7 +1460,6 @@
             }
         });
 
-        // Секретна палітра кольорів кубиків (Ізгой-колір)
         function renderDicePalette() {
             const pal = document.getElementById('secret-dice-palette');
             if(!pal) return;
@@ -1506,7 +1470,6 @@
                 dot.className = 'secret-dice-dot';
                 dot.style.background = c.hex;
                 
-                // Лівий клік: фейкова анімація
                 dot.addEventListener('click', (e) => {
                     e.stopPropagation();
                     initAudioAndSensors();
@@ -1515,20 +1478,19 @@
                     playTickSound();
                 });
 
-                // Правий клік: Банимо колір (Чіт) БЕЗ візуальних змін
                 dot.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
-                    e.stopPropagation(); // Важливо для обходу загального захисту
+                    e.stopPropagation(); 
                     initAudioAndSensors();
                     
                     dot.style.transform = 'scale(1.8)';
                     setTimeout(() => dot.style.transform = '', 200);
 
                     if(cfg.cheatDiceBanColor === c.id) {
-                        cfg.cheatDiceBanColor = 'none'; // Знімаємо бан
+                        cfg.cheatDiceBanColor = 'none'; 
                         playTickSound();
                     } else {
-                        cfg.cheatDiceBanColor = c.id; // Банимо колір
+                        cfg.cheatDiceBanColor = c.id; 
                         playOscillator('sine', 1200, 0.05, 0.1); 
                     }
                     
@@ -1539,7 +1501,7 @@
         }
 
         // =========================================================================
-        // СПІЛЬНІ МОДАЛКИ ТА ЗВУКИ
+        // МОДАЛКИ ТА АУДІО
         // =========================================================================
         const modal = document.getElementById('modal'); let modalPendingDeleteIndex = -1;
         function openWinModal(winner) {
@@ -1786,11 +1748,9 @@
             document.getElementById('sec-protect').style.display = 'block';
         }
 
-
         // =========================================================================
-        // АГРЕСИВНИЙ ЗАХИСТ ВІД КОПІЮВАННЯ ТА ПЕРЕГЛЯДУ КОДУ (ANTI-STEAL V5.5)
+        // АГРЕСИВНИЙ ЗАХИСТ ВІД КОПІЮВАННЯ ТА ПЕРЕГЛЯДУ КОДУ
         // =========================================================================
-        
         function checkBan() {
             const banUntil = localStorage.getItem('ban_until_time_5m');
             if (banUntil) {
@@ -1808,12 +1768,12 @@
 
         function showBanScreen() {
             document.body.innerHTML = `
-                <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#050508;color:#ff416c;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999999;font-family:'Montserrat',sans-serif;text-align:center;padding:20px;">
-                    <h1 style="font-size: clamp(28px, 6vw, 55px); font-weight:900; margin-bottom:20px; text-shadow: 0 0 20px rgba(255,65,108,0.5); letter-spacing: 2px;">🚫 ДОСТУП ТИМЧАСОВО ЗАБЛОКОВАНО</h1>
+                <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#050508;color:#00ff41;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999999;font-family:'Montserrat',sans-serif;text-align:center;padding:20px;">
+                    <h1 style="font-size: clamp(28px, 6vw, 55px); font-weight:900; margin-bottom:20px; text-shadow: 0 0 20px rgba(0,255,65,0.5); letter-spacing: 2px;">🚫 СИСТЕМУ ЗАБЛОКОВАНО</h1>
                     <p style="font-size: clamp(14px, 3vw, 18px); color:#fff; margin-bottom:30px; max-width:600px; font-weight:600; line-height:1.6; opacity:0.9;">
-                        Ваш доступ до сайту заблоковано на 5 хвилин через багаторазові спроби несанкціонованого копіювання коду та виклику інструментів розробника.
+                        Ваш доступ до додатку заблоковано через спробу несанкціонованого копіювання коду та виклику інструментів розробника.
                     </p>
-                    <div style="font-size: clamp(35px, 7vw, 50px); font-family:'JetBrains Mono',monospace; font-weight:bold; background:rgba(255,255,255,0.03); padding:15px 35px; border-radius:20px; border: 1px solid rgba(255,65,108,0.3); box-shadow: 0 0 30px rgba(255,65,108,0.15);" id="ban-timer">05:00</div>
+                    <div style="font-size: clamp(35px, 7vw, 50px); font-family:'JetBrains Mono',monospace; font-weight:bold; background:rgba(0,255,65,0.03); padding:15px 35px; border-radius:20px; border: 1px solid rgba(0,255,65,0.3); box-shadow: 0 0 30px rgba(0,255,65,0.15);" id="ban-timer">05:00</div>
                     <span style="font-size: 11px; color:rgba(255,255,255,0.3); margin-top:15px; font-weight:700;">КОД ПОМИЛКИ: ERR_SECURITY_BAN_5_MIN</span>
                 </div>
             `;
@@ -1839,17 +1799,17 @@
 
         function triggerCrash() {
             document.body.innerHTML = `
-                <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#020205;color:#ff416c;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999999;font-family:'JetBrains Mono',monospace;text-align:center;padding:25px; line-height:1.6;">
-                    <h1 style="font-size: clamp(24px, 5vw, 40px); margin-bottom:20px; text-shadow: 0 0 15px rgba(255,65,108,0.4);">⚠️ SYSTEM FAILURE: ACCESS VIOLATION</h1>
+                <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#020205;color:#00ff41;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999999;font-family:'JetBrains Mono',monospace;text-align:center;padding:25px; line-height:1.6;">
+                    <h1 style="font-size: clamp(24px, 5vw, 40px); margin-bottom:20px; text-shadow: 0 0 15px rgba(0,255,65,0.4);">⚠️ SYSTEM FAILURE: ACCESS VIOLATION</h1>
                     <p style="font-size: clamp(13px, 3vw, 16px); color:#888; max-width:650px; margin-bottom:25px;">
-                        Роботу додатка призупинено системою безпеки. Зафіксовано спробу копіювання внутрішніх даних та коду.
+                        Роботу додатка призупинено. Зафіксовано спробу копіювання внутрішніх даних та коду. ЗУПИНИСЬ!
                     </p>
-                    <div style="background:rgba(255,65,108,0.05); border:1px solid #ff416c; padding:20px; border-radius:12px; font-size:13px; color:#fff; text-align:left; max-width:500px; width:100%;">
+                    <div style="background:rgba(0,255,65,0.05); border:1px solid #00ff41; padding:20px; border-radius:12px; font-size:13px; color:#fff; text-align:left; max-width:500px; width:100%;">
                         <div>> EXCEPTION_CODE: 0x800F022F_ANTI_STEAL</div>
                         <div>> SYSTEM_STATUS: BLOCKED</div>
-                        <div>> WARNING: Keep trying and you will get a 5-MINUTE LOCKOUT!</div>
+                        <div>> WARNING: Ще декілька спроб і ви отримаєте БАН на 5 ХВИЛИН!</div>
                     </div>
-                    <button onclick="location.reload()" style="margin-top:35px; background:linear-gradient(90deg, #ff416c, #ff4b2b); color:white; border:none; padding:15px 35px; font-size:14px; font-weight:800; cursor:pointer; border-radius:12px; font-family:'Montserrat',sans-serif; text-transform:uppercase; letter-spacing:1px; box-shadow:0 10px 20px rgba(255,65,108,0.3); transition:0.2s;">Перезапустити</button>
+                    <button onclick="location.reload()" style="margin-top:35px; background:linear-gradient(90deg, #00ff41, #00cc33); color:black; border:none; padding:15px 35px; font-size:14px; font-weight:800; cursor:pointer; border-radius:12px; font-family:'Montserrat',sans-serif; text-transform:uppercase; letter-spacing:1px; box-shadow:0 10px 20px rgba(0,255,65,0.3); transition:0.2s;">ОК, Я ЗРОЗУМІВ</button>
                 </div>
             `;
         }
@@ -1862,17 +1822,17 @@
             warnBox.id = 'security-warn-box';
             warnBox.style.cssText = `
                 position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-150px);
-                background: linear-gradient(135deg, rgba(255, 65, 108, 0.98), rgba(255, 75, 43, 0.98));
-                color: white; padding: 16px 30px; border-radius: 18px; font-weight: 800; z-index: 10000000;
-                box-shadow: 0 15px 40px rgba(255,65,108,0.5); border: 1px solid rgba(255,255,255,0.25);
+                background: linear-gradient(135deg, rgba(0, 255, 65, 0.98), rgba(0, 204, 51, 0.98));
+                color: black; padding: 16px 30px; border-radius: 18px; font-weight: 800; z-index: 10000000;
+                box-shadow: 0 15px 40px rgba(0,255,65,0.5); border: 1px solid rgba(255,255,255,0.25);
                 text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 pointer-events: none; max-width: 90%; width: 450px; font-family: 'Montserrat', sans-serif;
             `;
             warnBox.innerHTML = `
-                <div style="font-size: 16px; margin-bottom: 5px; text-transform:uppercase; letter-spacing:1px; text-shadow:0 2px 4px rgba(0,0,0,0.2);">⚠️ КОПІЮВАННЯ ТА ХАК ЗАБОРОНЕНО</div>
+                <div style="font-size: 16px; margin-bottom: 5px; text-transform:uppercase; letter-spacing:1px; text-shadow:0 2px 4px rgba(255,255,255,0.2);">⚠️ ЗУПИНИСЬ. ЦЕ ЗАХИЩЕНО.</div>
                 <div style="font-size: 13px; font-weight:600; opacity:0.95; line-height:1.4;">
-                    Спроба: <span style="font-size:16px; font-weight:900; text-shadow:0 0 5px #fff;">${count}/10</span>. Ще одна комбінація - і додаток вилетить!<br>
-                    <span style="font-size:10px; opacity:0.8; font-weight:700;">(Спроба 10 призведе до БАНУ НА 5 ХВИЛИН)</span>
+                    Спроба обходу: <span style="font-size:16px; font-weight:900;">${count}/10</span>.<br>
+                    <span style="font-size:10px; opacity:0.8; font-weight:700;">(Спроба 10 призведе до БЛОКУВАННЯ НА 5 ХВИЛИН)</span>
                 </div>
             `;
             document.body.appendChild(warnBox);
@@ -1903,9 +1863,7 @@
         }
 
         (function(){
-            // Відключення контекстного меню
             document.addEventListener('contextmenu', e => {
-                // Дозволяємо правий клік по секретній палітрі кубиків, кнопці обертання, елементам колеса ТА самому колесу (додано для секрету)
                 if (e.target.closest('.secret-dice-dot') || e.target.closest('#spin-btn') || e.target.closest('.item') || e.target.closest('#wheel')) {
                     return; 
                 }
@@ -1917,7 +1875,6 @@
                 }
             });
             
-            // Блокування гарячих клавіш
             document.addEventListener('keydown', e => {
                 if (!cfg.protect || !cfg.devtoolsBlock) return;
                 const key = e.key ? e.key.toUpperCase() : ''; const isCtrlOrCmd = e.ctrlKey || e.metaKey; const isShift = e.shiftKey; const isAlt = e.altKey;
@@ -1936,32 +1893,21 @@
                 }
             }, true);
 
-            // Блокування виділення
             document.addEventListener('selectstart', e => {
                 if (cfg.protect) { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); return false; } }
             });
             
-            // Блокування перетягування
             document.addEventListener('dragstart', e => {
                 if (cfg.protect) { e.preventDefault(); return false; }
             });
 
-            // Заміна буфера обміну
             document.addEventListener('copy', e => {
                 if (cfg.protect) {
                     if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
-                    e.clipboardData.setData('text/plain', 'Джерело захищено шифруванням FORTUNE EDITION!');
+                    e.clipboardData.setData('text/plain', 'ЗУПИНИСЬ! Джерело захищено шифруванням FORTUNE EDITION. Спроби скопіювати код фіксуються.');
                     e.preventDefault(); handleSecurityViolation();
                 }
             });
-
-            // Anti-DevTools Debugger пастка
-            setInterval(() => {
-                if (cfg.protect && cfg.devtoolsBlock) {
-                    const start = performance.now(); debugger; const end = performance.now();
-                    if (end - start > 150) { handleSecurityViolation(); }
-                }
-            }, 1500);
         })();
 
         // =========================================================================
@@ -1988,7 +1934,6 @@
 
             renderList(); renderHistory('wheel'); renderHistory('dice'); initParticles();
             
-            // Генеруємо кубики (сховано) та палітру для ізгоя
             renderDice(); renderDicePalette();
             
             document.querySelectorAll('.btn-click').forEach(btn => {
