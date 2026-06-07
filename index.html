@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Колесо Фортуни FORTUNE EDITION</title>
+    <title>Wheel & Dice FORTUNE EDITION</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=JetBrains+Mono:wght@700&display=swap');
@@ -26,6 +26,14 @@
             --glass-blur: 30px;
             --wheel-shadow-size: 80px;
             --main-shadow-opacity: 0.6;
+
+            /* Кольори кубиків */
+            --dice-red: #ff416c;
+            --dice-orange: #ffaa00;
+            --dice-yellow: #ffd700;
+            --dice-green: #00ff41;
+            --dice-blue: #00f2fe;
+            --dice-purple: #b100e8;
         }
 
         /* Захист від виділення та перетягування */
@@ -33,7 +41,7 @@
             box-sizing: border-box; margin: 0; padding: 0; 
             font-family: 'Montserrat', sans-serif; 
             -webkit-tap-highlight-color: transparent; 
-            -webkit-user-drag: none; /* Заборона drag and drop */
+            -webkit-user-drag: none; 
         }
         
         body { 
@@ -95,26 +103,27 @@
         .btn-menu { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.08); color: white; font-size: 16px; font-weight: 800; padding: 18px; border-radius: 20px; cursor: inherit; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 20px rgba(0,0,0,0.3); position: relative; overflow: hidden; letter-spacing: 1px; will-change: transform; }
         .btn-menu::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.7s ease; transform: skewX(-20deg); pointer-events: none; }
         .btn-menu:hover::before { left: 150%; }
-        .btn-menu:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent-2); box-shadow: 0 15px 30px var(--wheel-shadow); color: var(--accent-1); transform: scale(1.05); }
+        .btn-menu:hover { background: rgba(255, 255, 255, 0.1); box-shadow: 0 15px 30px var(--wheel-shadow); transform: scale(1.05); }
 
         .settings-title { font-size: clamp(26px, 5vw, 40px); font-weight: 900; margin-bottom: 25px; margin-top: 20px; color: #fff; text-align: center; text-transform: uppercase; letter-spacing: 2px; flex-shrink: 0; }
         
-        /* Секретна літера «Я» */
+        /* Секретний тригер (Остання літера в слові "НАЛАШТУВАННЯ") */
         #secret-trigger {
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
         #secret-trigger:hover {
             color: var(--accent-danger);
+            text-shadow: 0 0 15px var(--accent-danger);
         }
 
         /* ========================================================
-           СИСТЕМА НАЛАШТУВАНЬ (Вкладки + Акордеон)
+           СИСТЕМА НАЛАШТУВАНЬ
         ======================================================== */
         .settings-wrapper { width: 100%; max-width: 1000px; display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 0 20px 20px 20px; }
         .settings-sections-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; -webkit-overflow-scrolling: touch; padding-bottom: 30px; }
         
-        /* --- РЕЖИМ ВКЛАДОК (layout-tabs) --- */
+        /* РЕЖИМ ВКЛАДОК */
         .layout-tabs .settings-tabs-nav { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); max-width: 100%; overflow-x: auto; flex-shrink: 0; }
         .layout-tabs .tab-btn { background: transparent; border: none; color: rgba(255,255,255,0.5); padding: 12px 20px; border-radius: 14px; font-weight: 700; cursor: inherit; transition: color 0.2s, background-color 0.2s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 13px; white-space: nowrap; will-change: transform; }
         .layout-tabs .tab-btn:hover { color: white; background: rgba(255,255,255,0.05); transform: scale(1.05); }
@@ -124,7 +133,7 @@
         .layout-tabs .settings-section.active { display: block; animation: fadeIn 0.3s ease; }
         .layout-tabs .settings-content { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; padding: 25px; background: rgba(20, 20, 25, 0.4); border-radius: 20px; border: 1px solid var(--accent-1); box-shadow: inset 0 10px 20px rgba(0,0,0,0.3); }
 
-        /* --- РЕЖИМ АКОРДЕОНА (layout-accordion) --- */
+        /* РЕЖИМ АКОРДЕОНА */
         .layout-accordion .settings-tabs-nav { display: none; }
         .layout-accordion .settings-section { margin-bottom: 15px; }
         .layout-accordion .accordion-btn { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); padding: 20px 25px; border-radius: 20px; font-weight: 800; font-size: 16px; text-align: left; cursor: inherit; transition: background-color 0.2s, border-color 0.2s, color 0.2s; display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px; text-transform: uppercase; }
@@ -142,7 +151,6 @@
         .settings-row { display: flex; justify-content: space-between; align-items: center; }
         .settings-label { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 8px; font-weight: 700; }
         
-        /* ФІКС МЕРЕХТІННЯ: Стабільний розмір, плавний перехід без перерахунку макета */
         .custom-select { width: 100%; padding: 14px; border-radius: 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 14px; font-weight: 700; outline: none; cursor: inherit; appearance: none; transition: border-color 0.2s, background-color 0.2s; }
         .custom-select:focus, .custom-select:hover { border-color: var(--accent-2); background: rgba(0,0,0,0.6); }
         .custom-select option { background: #1a1a24; color: white; padding: 10px; }
@@ -185,6 +193,7 @@
         .author-name { font-size: 26px; font-weight: 900; margin-bottom: 5px; }
         .author-role { font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
 
+        /* СПІЛЬНИЙ ЛЕЙАУТ ДЛЯ ІГОР (Колесо та Кубики) */
         .game-layout { display: flex; gap: 30px; justify-content: center; align-items: stretch; width: 100%; max-width: 1400px; padding: 20px; height: 100vh; }
         .side-panel, .list-section { width: 100%; max-width: 300px; padding: 20px; display: flex; flex-direction: column; gap: 15px; height: clamp(500px, 80vh, 800px); align-self: center; }
         .panel-title { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: var(--accent-2); text-transform: uppercase; letter-spacing: 2px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 5px; }
@@ -193,9 +202,12 @@
         .history-item { background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 12px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 10px; border-left: 3px solid var(--accent-1); }
         .history-item .time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.4); }
 
-        .wheel-section { flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; perspective: 1500px; z-index: 10; }
-        .wheel-3d-wrapper { position: relative; width: min(480px, 85vw); height: min(480px, 85vw); margin-bottom: 40px; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, var(--main-shadow-opacity))); transform-style: preserve-3d; transition: transform 0.1s linear; }
+        .center-section { flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; perspective: 1500px; z-index: 10; }
         
+        /* -------------------------------------
+           ЕЛЕМЕНТИ КОЛЕСА
+        ---------------------------------------- */
+        .wheel-3d-wrapper { position: relative; width: min(480px, 85vw); height: min(480px, 85vw); margin-bottom: 40px; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, var(--main-shadow-opacity))); transform-style: preserve-3d; transition: transform 0.1s linear; }
         .pointer-container { position: absolute; top: -20px; left: 50%; transform: translateX(-50%) translateZ(40px); z-index: 10; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); transform-origin: top center; }
         .pointer-container.hit { animation: pointerBump 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pointerBump { 40% { transform: translateX(-50%) translateZ(40px) rotate(18deg) scale(1.1); } 100% { transform: translateX(-50%) translateZ(40px) rotate(0deg); } }
@@ -212,16 +224,87 @@
 
         canvas#wheelCanvas { width: 100%; height: 100%; display: block; image-rendering: -webkit-optimize-contrast; }
         
-        .btn-spin { background: linear-gradient(135deg, var(--accent-danger), #ff4b2b); border: none; color: white; font-size: 22px; font-weight: 900; padding: 18px 70px; border-radius: 50px; cursor: inherit; text-transform: uppercase; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); letter-spacing: 2px; position: relative; overflow: hidden; z-index: 20; will-change: transform; }
-        .btn-spin:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 15px 35px rgba(255, 65, 108, 0.6); }
-        .btn-spin:active { transform: scale(0.95); }
-        .btn-spin:disabled { filter: grayscale(1); opacity: 0.5; box-shadow: none; }
+        /* -------------------------------------
+           ЕЛЕМЕНТИ КУБИКІВ 3D
+        ---------------------------------------- */
+        .dice-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 100%; max-width: 600px; margin-bottom: 40px; perspective: 1200px; }
+        .scene { width: 100px; height: 100px; perspective: 800px; }
+        @media(max-width: 600px){ .scene { width: 70px; height: 70px; } }
+        .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1); transform: rotateX(-20deg) rotateY(-20deg); }
+        .cube__face { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); border: 3px solid #fff; border-radius: 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 0 15px rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: 900; color: #111; backface-visibility: hidden; }
+        @media(max-width: 600px){ .cube__face { border-radius: 10px; font-size: 30px; } }
+        
+        /* КРАПКА НА КУБИКУ (КРУГ) */
+        .dice-dot {
+            width: 25px;
+            height: 25px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4), 0 0 10px rgba(255,255,255,0.8);
+        }
+        @media(max-width: 600px){
+            .dice-dot { width: 18px; height: 18px; }
+        }
+        
+        /* Грані: 1 на всіх, але різні кольори */
+        .cube__face--front  { transform: rotateY(  0deg) translateZ(50px); background: var(--dice-red); box-shadow: 0 0 20px var(--dice-red), inset 0 0 10px rgba(0,0,0,0.3); }
+        .cube__face--right  { transform: rotateY( 90deg) translateZ(50px); background: var(--dice-orange); box-shadow: 0 0 20px var(--dice-orange), inset 0 0 10px rgba(0,0,0,0.3); }
+        .cube__face--back   { transform: rotateY(180deg) translateZ(50px); background: var(--dice-yellow); box-shadow: 0 0 20px var(--dice-yellow), inset 0 0 10px rgba(0,0,0,0.3); }
+        .cube__face--left   { transform: rotateY(-90deg) translateZ(50px); background: var(--dice-green); box-shadow: 0 0 20px var(--dice-green), inset 0 0 10px rgba(0,0,0,0.3); }
+        .cube__face--top    { transform: rotateX( 90deg) translateZ(50px); background: var(--dice-blue); box-shadow: 0 0 20px var(--dice-blue), inset 0 0 10px rgba(0,0,0,0.3); }
+        .cube__face--bottom { transform: rotateX(-90deg) translateZ(50px); background: var(--dice-purple); box-shadow: 0 0 20px var(--dice-purple), inset 0 0 10px rgba(0,0,0,0.3); }
+
+        @media(max-width: 600px){
+            .cube__face--front  { transform: rotateY(  0deg) translateZ(35px); }
+            .cube__face--right  { transform: rotateY( 90deg) translateZ(35px); }
+            .cube__face--back   { transform: rotateY(180deg) translateZ(35px); }
+            .cube__face--left   { transform: rotateY(-90deg) translateZ(35px); }
+            .cube__face--top    { transform: rotateX( 90deg) translateZ(35px); }
+            .cube__face--bottom { transform: rotateX(-90deg) translateZ(35px); }
+        }
+
+        .cube.rolling { animation: cubeSpin 0.5s linear infinite; }
+        @keyframes cubeSpin { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); } }
+
+        /* СЕКРЕТНА ПАНЕЛЬ КУБИКІВ (Ізгой) */
+        .secret-dice-palette {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .secret-dice-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .secret-dice-dot:hover { transform: scale(1.3); }
+        /* Прибираємо будь-які візуальні відзнаки "ізгоя" для скритності, як просили */
+
+        /* -------------------------------------
+           КНОПКИ ТА ЕЛЕМЕНТИ УПРАВЛІННЯ
+        ---------------------------------------- */
+        .btn-action { background: linear-gradient(135deg, var(--accent-danger), #ff4b2b); border: none; color: white; font-size: 22px; font-weight: 900; padding: 18px 70px; border-radius: 50px; cursor: inherit; text-transform: uppercase; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); letter-spacing: 2px; position: relative; overflow: hidden; z-index: 20; will-change: transform; }
+        .btn-action:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 15px 35px rgba(255, 65, 108, 0.6); }
+        .btn-action:active { transform: scale(0.95); }
+        .btn-action:disabled { filter: grayscale(1); opacity: 0.5; box-shadow: none; }
+
+        .btn-roll { background: linear-gradient(135deg, #00f2fe, #4facfe); box-shadow: 0 10px 25px rgba(0, 242, 254, 0.4); }
+        .btn-roll:hover:not(:disabled) { box-shadow: 0 15px 35px rgba(0, 242, 254, 0.6); }
 
         .btn-3d-toggle { background: linear-gradient(45deg, rgba(123, 44, 191, 0.6), rgba(255, 65, 108, 0.6)); border: 1px solid rgba(255,255,255,0.4); color: white; border-radius: 12px; cursor: inherit; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; padding: 6px 14px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: 1px; animation: pulse3dBtn 2s infinite alternate; }
         .btn-3d-toggle.active { background: linear-gradient(45deg, #00f2fe, #4facfe); border-color: #fff; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6), inset 0 0 10px rgba(255,255,255,0.5); transform: scale(1.05); animation: none; color: #000; }
         @keyframes pulse3dBtn { 0% { box-shadow: 0 0 5px rgba(255, 65, 108, 0.3); } 100% { box-shadow: 0 0 15px rgba(255, 65, 108, 0.8); } }
 
-        .add-item-box { display: flex; gap: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); }
+        .add-item-box { display: flex; gap: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 5px;}
         .add-item-box input { flex: 1; background: transparent; border: none; color: white; padding: 5px; font-size: 15px; outline: none; font-weight: 700; min-width: 0; }
         .add-btn { background: var(--accent-2); border: none; color: white; width: 40px; height: 40px; border-radius: 12px; cursor: inherit; font-weight: bold; font-size: 24px; transition: 0.3s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .add-btn:hover { background: var(--accent-1); transform: rotate(90deg) scale(1.1); }
@@ -241,6 +324,9 @@
         .delete-btn { background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 8px; font-size: 14px; cursor: inherit; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .delete-btn:active { background: var(--accent-danger); color: white; }
 
+        /* -------------------------------------
+           МОДАЛЬНІ ВІКНА
+        ---------------------------------------- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { background: #13131a; padding: 50px 30px; border-radius: 30px; text-align: center; max-width: 90vw; width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: scale(0.8) translateY(20px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; }
@@ -256,14 +342,16 @@
         @keyframes rippleAnim { 0% { width: 0; height: 0; opacity: 1; border-width: 4px; } 100% { width: 100px; height: 100px; opacity: 0; border-width: 1px; } }
         .fx-emoji { font-size: 24px; animation: floatUp 0.8s ease-out forwards; }
         @keyframes floatUp { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-50%, -100px) scale(1.5); opacity: 0; } }
+        .fx-spark { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-2); animation: sparkAnim 0.5s ease-out forwards; }
+        @keyframes sparkAnim { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; } }
 
         @media (max-width: 900px) {
             :root { --glass-blur: 15px; --wheel-shadow-size: 30px; --main-shadow-opacity: 0.3; }
             body { perspective: none; }
             .game-layout { flex-direction: column; align-items: center; padding: 70px 15px 20px 15px; overflow-y: auto; height: 100vh; justify-content: flex-start; gap: 20px; }
-            .wheel-section { order: 1; min-height: auto; width: 100%; margin-top: 10px; perspective: none; }
+            .center-section { order: 1; min-height: auto; width: 100%; margin-top: 10px; perspective: none; }
             .wheel-3d-wrapper { filter: none; width: min(340px, 90vw); height: min(340px, 90vw); margin-bottom: 25px; }
-            .btn-spin { padding: 15px 50px; font-size: 18px; width: 100%; max-width: 300px; }
+            .btn-action { padding: 15px 50px; font-size: 18px; width: 100%; max-width: 300px; }
             .list-section, .side-panel { order: 2; max-width: 100%; height: auto; max-height: 400px; background: rgba(20,20,25,0.8); margin-bottom: 10px; }
             .side-panel { order: 3; } 
             .btn-back { top: 15px; left: 15px; padding: 10px 15px; font-size: 12px; }
@@ -289,13 +377,13 @@
 
     <!-- МЕНЮ -->
     <div id="view-menu" class="view active">
-        <h1 class="menu-title" data-i18n="menu_title">WHEEL OF FORTUNE</h1>
+        <h1 class="menu-title" data-i18n="menu_title">WHEEL & DICE</h1>
         <div class="menu-subtitle" data-i18n="menu_subtitle">FORTUNE EDITION</div>
         <div class="menu-buttons">
-            <button class="btn-menu btn-click" onclick="switchView('view-game')" style="border-color: var(--accent-2);" data-i18n="btn_start">🚀 ПОЧАТИ ГРУ</button>
+            <button class="btn-menu btn-click" onclick="switchView('view-game')" style="border-color: var(--accent-2);" data-i18n="btn_start_wheel">🎡 КОЛЕСО ФОРТУНИ</button>
+            <button class="btn-menu btn-click" onclick="switchView('view-dice')" style="border-color: #00ff41;" data-i18n="btn_start_dice">🎲 КОЛЬОРОВІ КУБИКИ</button>
             <button class="btn-menu btn-click" onclick="switchView('view-settings')" data-i18n="btn_settings">⚙️ НАЛАШТУВАННЯ</button>
             <button class="btn-menu btn-click" style="border-color: rgba(255, 65, 108, 0.4);" onclick="switchView('view-authors')" data-i18n="btn_authors">👑 ПРО АВТОРІВ</button>
-            <button class="btn-menu btn-click" style="border-color: #00f2fe;" onclick="window.open('https://t.me/finx056', '_blank')" data-i18n="btn_chat">💬 НАПИСАТИ АДМІНУ</button>
         </div>
     </div>
 
@@ -317,7 +405,7 @@
         </div>
     </div>
 
-    <!-- ГРА -->
+    <!-- ГРА: КОЛЕСО ФОРТУНИ -->
     <div id="view-game" class="view">
         <button class="btn-back btn-click" onclick="switchView('view-menu')"><span data-i18n="btn_to_menu">← В МЕНЮ</span></button>
         <div class="game-layout">
@@ -326,12 +414,12 @@
                     <span data-i18n="panel_history">📜 Історія</span>
                     <div style="display: flex; gap: 8px;">
                         <button class="btn-3d-toggle btn-click" id="btn-3d" onclick="toggle3D()" title="Toggle 3D">3D: OFF</button>
-                        <button class="clear-all-btn btn-click" onclick="clearHistory()" title="Очистити">🗑</button>
+                        <button class="clear-all-btn btn-click" onclick="clearHistory('wheel')" title="Очистити">🗑</button>
                     </div>
                 </div>
-                <div class="history-list" id="history-list"></div>
+                <div class="history-list" id="history-list-wheel"></div>
             </div>
-            <div class="wheel-section">
+            <div class="center-section">
                 <div class="wheel-3d-wrapper" id="wheel-3d-wrapper">
                     <div class="pointer-container" id="wheel-pointer"><div class="pointer"></div></div>
                     <div class="wheel led-active" id="wheel">
@@ -339,7 +427,8 @@
                         <canvas id="wheelCanvas" width="800" height="800"></canvas>
                     </div>
                 </div>
-                <button class="btn-spin btn-click" id="spin-btn" data-i18n="btn_spin">КРУТИТИ</button>
+                <!-- Кнопка "КРУТИТИ": лівий клік = рандом, правий клік = секрет -->
+                <button class="btn-action" id="spin-btn" data-i18n="btn_spin">КРУТИТИ</button>
             </div>
             <div class="list-section glass-panel">
                 <div class="panel-title" style="margin-bottom:0;">
@@ -360,26 +449,60 @@
         </div>
     </div>
 
+    <!-- ГРА: КОЛЬОРОВІ КУБИКИ -->
+    <div id="view-dice" class="view">
+        <button class="btn-back btn-click" onclick="switchView('view-menu')"><span data-i18n="btn_to_menu">← В МЕНЮ</span></button>
+        <div class="game-layout">
+            <div class="side-panel glass-panel">
+                <div class="panel-title">
+                    <span data-i18n="panel_history">📜 Історія</span>
+                    <button class="clear-all-btn btn-click" onclick="clearHistory('dice')" title="Очистити">🗑</button>
+                </div>
+                <div class="history-list" id="history-list-dice"></div>
+            </div>
+            <div class="center-section">
+                <div class="dice-container" id="dice-container">
+                    <!-- Кубики генеруються через JS -->
+                </div>
+                <button class="btn-action btn-roll btn-click" id="roll-btn" data-i18n="btn_roll">КИДАТИ</button>
+                
+                <!-- Секретна палітра (Ізгой) -->
+                <div class="secret-dice-palette" id="secret-dice-palette">
+                    <!-- Буде згенеровано JS -->
+                </div>
+            </div>
+            <div class="list-section glass-panel">
+                <div class="panel-title" data-i18n="panel_dice_settings">⚙️ Налаштування Кубиків</div>
+                <div>
+                    <span class="settings-label"><span data-i18n="set_dice_count">Кількість кубиків:</span> <span id="val-dice-count" class="slider-value">3</span></span>
+                    <input type="range" id="set-dice-count" min="1" max="12" value="3" step="1" class="btn-click">
+                </div>
+                <div style="margin-top:20px; font-size:12px; color:rgba(255,255,255,0.6); line-height: 1.5; text-align: justify;" data-i18n="dice_info">
+                    Кожен кубик має 6 кольорів. На гранях завжди зображено число 1. Кольори випадають випадковим чином. 
+                    <br><br><span style="opacity: 0.5;">*Підказка: зверни увагу на кольорові крапки під кнопкою. Можливо, вони мають якийсь секрет? Спробуй натиснути ліву або праву кнопку миші.*</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- НАЛАШТУВАННЯ -->
     <div id="view-settings" class="view">
         <button class="btn-back btn-click" onclick="switchView('view-menu')"><span data-i18n="btn_save">← ЗБЕРЕГТИ</span></button>
         <h1 class="settings-title" id="settings-title" data-i18n="settings_title">НАЛАШТУВАННЯ</h1>
         
-        <!-- Контейнер, який змінює клас layout-tabs на layout-accordion -->
         <div id="settings-wrapper" class="settings-wrapper layout-tabs">
             
-            <!-- Навігація для Вкладок -->
             <div class="settings-tabs-nav" id="settings-tabs-nav">
                 <button class="tab-btn active btn-click" onclick="openTab('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
-                <button class="tab-btn btn-click" onclick="openTab('sec-game', this)" data-i18n="tab_game">🎮 Гра</button>
+                <button class="tab-btn btn-click" onclick="openTab('sec-game', this)" data-i18n="tab_game">🎮 Колесо</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-visuals', this)" data-i18n="tab_visuals">✨ Вигляд</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-physics', this)" data-i18n="tab_physics">🌪 Фізика</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-audio', this)" data-i18n="tab_audio">🔊 Звук</button>
-                <!-- Прихований за замовчуванням таб захисту -->
-                <button class="tab-btn btn-click" id="tab-nav-protect" style="display: none;" onclick="openTab('sec-protect', this)" data-i18n="tab_protect">🔒 Захист</button>
+                
+                <!-- Приховані адмін-вкладки -->
+                <button class="tab-btn btn-click admin-tab" id="tab-nav-protect" style="display: none; color: var(--accent-danger);" onclick="openTab('sec-protect', this)">🔒 Захист</button>
             </div>
 
-            <!-- Контейнер для секцій -->
             <div class="settings-sections-container" id="settings-sections-container">
                 
                 <!-- 1. Шаблони -->
@@ -400,9 +523,9 @@
                     </div>
                 </div>
 
-                <!-- 2. Гра -->
+                <!-- 2. Колесо -->
                 <div class="settings-section" id="sec-game">
-                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-game', this)" data-i18n="tab_game">🎮 Гра</button>
+                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-game', this)" data-i18n="tab_game">🎮 Колесо</button>
                     <div class="settings-content">
                         <div class="settings-column" style="max-width: 500px;">
                             <div class="settings-row">
@@ -579,10 +702,10 @@
                     </div>
                 </div>
 
-                <!-- 6. Секретний Захист (Створюється через ПІН-код) -->
+                <!-- АДМІН: 6. Секретний Захист -->
                 <div class="settings-section" id="sec-protect" style="display: none;">
-                    <button class="accordion-btn btn-click" id="accordion-btn-protect" onclick="toggleAccordion('sec-protect', this)" data-i18n="tab_protect">🔒 Захист</button>
-                    <div class="settings-content">
+                    <button class="accordion-btn btn-click admin-tab" style="display: none; color: var(--accent-danger);" id="accordion-btn-protect" onclick="toggleAccordion('sec-protect', this)">🔒 Захист</button>
+                    <div class="settings-content" style="border-color: var(--accent-danger);">
                         <div class="settings-column" style="max-width: 500px;">
                             <div class="settings-row">
                                 <div>
@@ -626,24 +749,27 @@
 
     <!-- Модалка ПІН-коду -->
     <div class="modal-overlay" id="pin-modal">
-        <div class="modal-content" style="box-shadow: 0 0 50px rgba(0, 85, 255, 0.4); max-width: 400px;">
-            <div class="modal-title" style="color: var(--accent-2);" data-i18n="pin_title">ВВЕДІТЬ ПІН-КОД</div>
+        <div class="modal-content" style="box-shadow: 0 0 50px rgba(255, 65, 108, 0.4); max-width: 400px; border-color: var(--accent-danger);">
+            <div class="modal-title" style="color: var(--accent-danger);" data-i18n="pin_title">ВВЕДІТЬ ПІН-КОД</div>
             <div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 20px;" data-i18n="pin_subtitle">Для доступу до панелі адміністратора</div>
             <input type="password" id="admin-pin-input" maxlength="5" placeholder="•••••" style="width: 100%; text-align: center; letter-spacing: 10px; font-size: 24px; padding: 12px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; outline: none; margin-bottom: 25px; font-family: 'JetBrains Mono', monospace;" autocomplete="off">
             <div class="modal-buttons" style="display: flex; gap: 10px;">
                 <button class="btn-awesome btn-click" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); flex: 1; padding: 12px; border-radius: 30px;" onclick="closePinModal()" data-i18n="pin_cancel">СКАСУВАТИ</button>
-                <button class="btn-awesome btn-click" style="flex: 1; padding: 12px;" onclick="checkAdminPin()" data-i18n="pin_confirm">ВХІД</button>
+                <button class="btn-awesome btn-click" style="flex: 1; padding: 12px; background: linear-gradient(90deg, #ff4b2b, var(--accent-danger));" onclick="checkAdminPin()" data-i18n="pin_confirm">ВХІД</button>
             </div>
         </div>
     </div>
 
     <script>
+        // =========================================================================
+        // ЛОКАЛІЗАЦІЯ
+        // =========================================================================
         const dict = {
             uk: {
-                menu_title: "WHEEL OF FORTUNE", menu_subtitle: "FORTUNE EDITION", btn_start: "🚀 ПОЧАТИ ГРУ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ",
+                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
-                btn_to_menu: "← В МЕНЮ", panel_history: "📜 Історія", btn_spin: "КРУТИТЬ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
-                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Гра", tab_visuals: "✨ Вигляд", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
+                btn_to_menu: "← В МЕНЮ", panel_history: "📜 Історія", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
+                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Колесо", tab_visuals: "✨ Вигляд", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
                 tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Скриває текст під час обертання", set_time: "Час обертання:", sec: "сек",
@@ -662,14 +788,17 @@
                 set_devtoolsBlock: "Блокування DevTools клавіш", set_devtools_desc: "Забороняє клавіші F12, Ctrl+U, Ctrl+Shift+I/J/C тощо",
                 modal_win: "ПЕРЕМОЖЕЦЬ", btn_cool: "КРУТО!", btn_take_del: "ЗАБРАТИ ТА ВИДАЛИТИ", empty_history: "Тут будуть переможці",
                 auth_finx_txt: "Привіт! 😎 Я створюю крутий код та генерую ідеї. Підписуйся:<br><br><span class='highlight' style='font-size: 35px;'>@finx056</span><br><span style='font-size: 16px; color: #888;'>в ТікТоці</span>", auth_gem_txt: "🤖 Я — штучний інтелект від Google. Допомагаю FINX писати ідеальний код та втілювати ці шалені ідеї!", auth_btn: "ЗРОЗУМІЛО", auth_t_finx: "ПРО АВТОРЯ", auth_t_gem: "ПРО АСИСТЕНТА",
-                btn_chat: "💬 НАПИСАТИ АДМІНУ", pre_yesno: "Так/Ні", pre_dice: "Кубик 1-6", pre_coin: "Орел/Решка",
-                pin_title: "ВВЕДІТЬ ПІН-КОД", pin_subtitle: "Для доступу до панелі адміністратора", pin_cancel: "СКАСУВАТИ", pin_confirm: "ВХІД"
+                pre_yesno: "Так/Ні", pre_dice: "Кубик 1-6", pre_coin: "Орел/Решка",
+                pin_title: "ВВЕДІТЬ ПІН-КОД", pin_subtitle: "Для доступу до панелі адміністратора", pin_cancel: "СКАСУВАТИ", pin_confirm: "ВХІД",
+                panel_dice_settings: "⚙️ Налаштування Кубиків", set_dice_count: "Кількість кубиків:",
+                dice_info: "Кожен кубик має 6 кольорів. На гранях завжди зображено число 1. Кольори випадають випадковим чином. <br><br><span style='opacity: 0.5;'>*Підказка: зверни увагу на кольорові крапки під кнопкою. Можливо, вони мають якийсь секрет? Спробуй натиснути ліву або праву кнопку миші.*</span>",
+                colors: { red:"Червоний", orange:"Помаранчевий", yellow:"Жовтий", green:"Зелений", blue:"Синій", purple:"Фіолетовий" }
             },
             en: {
-                menu_title: "WHEEL OF FORTUNE", menu_subtitle: "FORTUNE EDITION", btn_start: "🚀 START GAME", btn_settings: "⚙️ SETTINGS", btn_authors: "👑 ABOUT AUTHORS",
+                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 WHEEL OF FORTUNE", btn_start_dice: "🎲 COLOR DICE", btn_settings: "⚙️ SETTINGS", btn_authors: "👑 ABOUT AUTHORS",
                 btn_back: "← BACK", authors_title: "MASTERMINDS", author_role_finx: "Lead Dev & Ideologist", author_role_gemini: "AI Assistant by Google",
-                btn_to_menu: "← TO MENU", panel_history: "📜 History", btn_spin: "SPIN", panel_items: "🎯 Items", placeholder_new: "New option...",
-                btn_save: "← SAVE", settings_title: "SETTINGS", tab_templates: "🎨 Templates", tab_game: "🎮 Game", tab_visuals: "✨ Visuals", tab_physics: "🌪 Physics", tab_audio: "🔊 Audio", tab_protect: "🔒 Protection",
+                btn_to_menu: "← TO MENU", panel_history: "📜 History", btn_spin: "SPIN", btn_roll: "ROLL", panel_items: "🎯 Items", placeholder_new: "New option...",
+                btn_save: "← SAVE", settings_title: "SETTINGS", tab_templates: "🎨 Templates", tab_game: "🎮 Wheel", tab_visuals: "✨ Visuals", tab_physics: "🌪 Physics", tab_audio: "🔊 Audio", tab_protect: "🔒 Protection",
                 tpl_space: "Space", tpl_space_desc: "Dark matter and stars", tpl_sunset: "Sunset", tpl_sunset_desc: "Warm colors", tpl_casino: "Casino", tpl_casino_desc: "Gold, flat style", tpl_matrix: "Hacker", tpl_matrix_desc: "Matrix green, neon style", tpl_sakura: "Sakura", tpl_sakura_desc: "Anime style, pink color", tpl_cyberpunk: "Cyberpunk", tpl_cyberpunk_desc: "Original neon design", tpl_opt: "Optimized", tpl_opt_desc: "No effects, High FPS",
                 tpl_nature: "Nature", tpl_nature_desc: "Calm forest colors", tpl_fire: "Fire", tpl_fire_desc: "Burning gradients", tpl_ice: "Ice", tpl_ice_desc: "Cold neon & snow",
                 set_elimination: "Elimination Mode", set_elimination_desc: "Winner is removed from the list", set_mystery: "Mystery Mode", set_mystery_desc: "Hides text while spinning", set_time: "Spin Time:", sec: "sec",
@@ -688,14 +817,17 @@
                 set_devtoolsBlock: "Block DevTools Keys", set_devtools_desc: "Blocks F12, Ctrl+U, Ctrl+Shift+I/J/C etc",
                 modal_win: "WINNER", btn_cool: "AWESOME!", btn_take_del: "TAKE & DELETE", empty_history: "Winners will be here",
                 auth_finx_txt: "Hi! 😎 I create cool code and generate ideas. Follow me:<br><br><span class='highlight' style='font-size: 35px;'>@finx056</span><br><span style='font-size: 16px; color: #888;'>on TikTok</span>", auth_gem_txt: "🤖 I am an AI from Google. I help FINX write perfect code and bring crazy ideas to life!", auth_btn: "GOT IT", auth_t_finx: "ABOUT AUTHOR", auth_t_gem: "ABOUT ASSISTANT",
-                btn_chat: "💬 CONTACT ADMIN", pre_yesno: "Yes/No", pre_dice: "Dice 1-6", pre_coin: "Heads/Tails",
-                pin_title: "ENTER PIN CODE", pin_subtitle: "To access admin panel", pin_cancel: "CANCEL", pin_confirm: "LOGIN"
+                pre_yesno: "Yes/No", pre_dice: "Dice 1-6", pre_coin: "Heads/Tails",
+                pin_title: "ENTER PIN CODE", pin_subtitle: "To access admin panel", pin_cancel: "CANCEL", pin_confirm: "LOGIN",
+                panel_dice_settings: "⚙️ Dice Settings", set_dice_count: "Number of dice:",
+                dice_info: "Each die has 6 colors. The faces always show the number 1. Colors appear randomly. <br><br><span style='opacity: 0.5;'>*Hint: look at the colored dots under the button. Maybe they hide a secret? Try clicking left or right mouse button.*</span>",
+                colors: { red:"Red", orange:"Orange", yellow:"Yellow", green:"Green", blue:"Blue", purple:"Purple" }
             },
             ru: {
-                menu_title: "КОЛЕСО ФОРТУНЫ", menu_subtitle: "FORTUNE EDITION", btn_start: "🚀 НАЧАТЬ ИГРУ", btn_settings: "⚙️ НАСТРОЙКИ", btn_authors: "👑 ОБ АВТОРАХ",
+                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНЫ", btn_start_dice: "🎲 ЦВЕТНЫЕ КУБИКИ", btn_settings: "⚙️ НАСТРОЙКИ", btn_authors: "👑 ОБ АВТОРАХ",
                 btn_back: "← НАЗАД", authors_title: "СОЗДАТЕЛИ", author_role_finx: "Главный разработчик", author_role_gemini: "AI Ассистент от Google",
-                btn_to_menu: "← В МЕНЮ", panel_history: "📜 История", btn_spin: "КРУТИТЬ", panel_items: "🎯 Элементы", placeholder_new: "Новый вариант...",
-                btn_save: "← СОХРАНИТЬ", settings_title: "НАСТРОЙКИ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Игра", tab_visuals: "✨ Вид", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Защита",
+                btn_to_menu: "← В МЕНЮ", panel_history: "📜 История", btn_spin: "КРУТИТЬ", btn_roll: "БРОСАТЬ", panel_items: "🎯 Элементы", placeholder_new: "Новый вариант...",
+                btn_save: "← СОХРАНИТЬ", settings_title: "НАСТРОЙКИ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_visuals: "✨ Вид", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Защита",
                 tpl_space: "Космос", tpl_space_desc: "Темная материя и звезды", tpl_sunset: "Закат", tpl_sunset_desc: "Теплые цвета", tpl_casino: "Казино", tpl_casino_desc: "Золото, флэт стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зеленый неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аниме стиль, рожевый", tpl_cyberpunk: "Киберпанк", tpl_cyberpunk_desc: "Оригинальный неоновый дизайн", tpl_opt: "Оптимизированный", tpl_opt_desc: "Без эффектов, высокий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Лесные цвета", tpl_fire: "Огонь", tpl_fire_desc: "Пылающие градиенты", tpl_ice: "Лед", tpl_ice_desc: "Холодный неон и снег",
                 set_elimination: "Режим на выбывание", set_elimination_desc: "Победитель удаляется из списка", set_mystery: "Режим 'Интрига' (Mystery)", set_mystery_desc: "Скрывает текст во время вращения", set_time: "Время вращения:", sec: "сек",
@@ -714,16 +846,19 @@
                 set_devtoolsBlock: "Блокировка DevTools клавиш", set_devtools_desc: "Запрещает клавиши F12, Ctrl+U, Ctrl+Shift+I/J/C и т.д.",
                 modal_win: "ПОБЕДИТЕЛЬ", btn_cool: "КРУТО!", btn_take_del: "ЗАБРАТЬ И УДАЛИТЬ", empty_history: "Здесь будут победители",
                 auth_finx_txt: "Привет! 😎 Я создаю крутой код и генерирую идеи. Подписывайся:<br><br><span class='highlight' style='font-size: 35px;'>@finx056</span><br><span style='font-size: 16px; color: #888;'>в ТікТок</span>", auth_gem_txt: "🤖 Я — искусственный интеллект от Google. Помогаю FINX писать идеальный код и воплощать идеи!", auth_btn: "ПОНЯТНО", auth_t_finx: "ОБ АВТОРЕ", auth_t_gem: "ОБ АССИСТЕНТЕ",
-                btn_chat: "💬 НАПИСАТИ АДМИНУ", pre_yesno: "Да/Нет", pre_dice: "Кубик 1-6", pre_coin: "Орел/Решка",
-                pin_title: "ВВЕДИТЕ ПИН-КОД", pin_subtitle: "Для доступа к админ-панели", pin_cancel: "ОТМЕНА", pin_confirm: "ВХОД"
+                pre_yesno: "Да/Нет", pre_dice: "Кубик 1-6", pre_coin: "Орел/Решка",
+                pin_title: "ВВЕДИТЕ ПИН-КОД", pin_subtitle: "Для доступа к админ-панели", pin_cancel: "ОТМЕНА", pin_confirm: "ВХОД",
+                panel_dice_settings: "⚙️ Настройки Кубиков", set_dice_count: "Количество кубиков:",
+                dice_info: "У каждого кубика 6 цветов. На гранях всегда число 1. Цвета выпадают рандомно. <br><br><span style='opacity: 0.5;'>*Подсказка: посмотри на цветные точки под кнопкой. Возможно, в них есть секрет? Попробуй кликнуть левой или правой кнопкой.*</span>",
+                colors: { red:"Красный", orange:"Оранжевый", yellow:"Желтый", green:"Зеленый", blue:"Синий", purple:"Фиолетовый" }
             }
         };
 
-        let currentLang = localStorage.getItem('megaWheelLang') || 'ru';
+        let currentLang = localStorage.getItem('megaWheelLang_V6') || 'uk';
 
         function setLang(lang) {
             currentLang = lang;
-            localStorage.setItem('megaWheelLang', lang);
+            localStorage.setItem('megaWheelLang_V6', lang);
             
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
@@ -735,33 +870,48 @@
 
             document.getElementById('new-item-input').placeholder = dict[lang]['placeholder_new'];
             
-            // Застосовуємо секретний тригер на заголовок налаштувань
             applySecretTrigger();
-            renderHistory();
+            renderHistory('wheel');
+            renderHistory('dice');
+            renderDicePalette(); // Оновлюємо підказки
         }
 
-        // КОНФІГ ЗА ЗАМОВЧУВАННЯМ
+        // =========================================================================
+        // КОНФІГ ТА СТАН ДОДАТКА
+        // =========================================================================
         let cfg = {
             time: 6, anim: 'smooth', sound: 'classic', volume: 50,
             style: 'neon', textSize: 35, theme: 'darkmatter', particles: 'stars', confetti: 'classic',
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
             menuLayout: 'layout-tabs', currentTemplate: 'space',
             protect: true, contextBlock: true, devtoolsBlock: true,
-            customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' }
+            customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' },
+            diceCount: 3, cheatDiceBanColor: 'none' // Нові налаштування
         };
 
-        const savedCfg = localStorage.getItem('megaWheelCfgV5');
+        const savedCfg = localStorage.getItem('megaWheelCfg_V6');
         if (savedCfg) { cfg = { ...cfg, ...JSON.parse(savedCfg) }; }
-        function saveCfg() { localStorage.setItem('megaWheelCfgV5', JSON.stringify(cfg)); }
+        function saveCfg() { localStorage.setItem('megaWheelCfg_V6', JSON.stringify(cfg)); }
 
-        let items = JSON.parse(localStorage.getItem('megaWheelItems')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
-        let history = JSON.parse(localStorage.getItem('megaWheelHistory')) || [];
+        let wheelItems = JSON.parse(localStorage.getItem('megaWheelItems_V6')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
+        let wheelHistory = JSON.parse(localStorage.getItem('megaWheelHistory_V6')) || [];
+        let diceHistory = JSON.parse(localStorage.getItem('megaDiceHistory_V6')) || [];
         
         let isSpinning = false;
         let isAudioInit = false;
         let secretTargetIndex = -1;
         let winnerIndexGlobal = -1; 
         let isProtectTabUnlocked = localStorage.getItem('admin_protect_unlocked') === 'true';
+
+        // Кольори для кубиків
+        const diceColors = [
+            { id: 'red', hex: 'var(--dice-red)', name: 'red' },
+            { id: 'orange', hex: 'var(--dice-orange)', name: 'orange' },
+            { id: 'yellow', hex: 'var(--dice-yellow)', name: 'yellow' },
+            { id: 'green', hex: 'var(--dice-green)', name: 'green' },
+            { id: 'blue', hex: 'var(--dice-blue)', name: 'blue' },
+            { id: 'purple', hex: 'var(--dice-purple)', name: 'purple' }
+        ];
 
         function switchView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -771,11 +921,15 @@
                 winnerIndexGlobal = -1; 
                 setTimeout(drawWheel, 100);
             }
+            if(viewId === 'view-dice') {
+                renderDice();
+                renderDicePalette();
+            }
         }
 
-        /* -------------------------------------
-           ЛОГІКА МЕНЮ НАЛАШТУВАНЬ (Вкладки/Акордеон)
-        ---------------------------------------- */
+        // =========================================================================
+        // НАЛАШТУВАННЯ ТА БІНДИНГИ
+        // =========================================================================
         window.openTab = function(secId, btn) {
             if(cfg.menuLayout !== 'layout-tabs') return;
             playUIBeat();
@@ -821,6 +975,7 @@
             playUIBeat();
         }
 
+        // Шаблони тем
         const templates = {
             space: { theme: 'darkmatter', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'ripple' },
             sunset: { theme: 'sunset', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'sparkle' },
@@ -870,11 +1025,11 @@
         function applyCursor() {
             document.body.className = ''; 
             if (cfg.cursor !== 'default') document.body.classList.add(`cursor-${cfg.cursor}`);
-            applyProtectionStyles(); // Також оновлюємо класи захисту
+            applyProtectionStyles(); 
         }
 
         document.addEventListener('pointerdown', (e) => {
-            if(e.target.closest('.history-list') || e.target.closest('.items-list') || e.target.closest('.settings-content') || e.target.closest('input')) return;
+            if(e.target.closest('.history-list') || e.target.closest('.items-list') || e.target.closest('.settings-content') || e.target.closest('input') || e.target.closest('.secret-dice-dot')) return;
             if(cfg.clickfx === 'none') return;
             
             const el = document.createElement('div'); el.className = 'click-fx';
@@ -885,8 +1040,6 @@
                 for(let i=0; i<3; i++) {
                     const spark = document.createElement('div'); spark.className = 'click-fx fx-spark';
                     spark.style.left = (e.clientX + (Math.random()-0.5)*30) + 'px'; spark.style.top = (e.clientY + (Math.random()-0.5)*30) + 'px';
-                    spark.style.width = '10px'; spark.style.height = '10px'; spark.style.background = 'var(--accent-2)'; spark.style.borderRadius = '50%';
-                    spark.style.animation = 'sparkAnim 0.5s ease-out forwards';
                     document.body.appendChild(spark); setTimeout(() => spark.remove(), 500);
                 } return;
             } else {
@@ -934,6 +1087,8 @@
                 el.addEventListener('input', function() { cfg[key] = parseInt(this.value); if(valEl) valEl.innerText = cfg[key]; saveCfg(); if(cb) cb(); });
             } else if (type === 'select') {
                 el.value = cfg[key]; el.addEventListener('change', (e) => { cfg[key] = e.target.value; saveCfg(); if(cb) cb(); });
+            } else if (type === 'select-num') {
+                el.value = cfg[key]; el.addEventListener('change', (e) => { cfg[key] = parseInt(e.target.value); saveCfg(); if(cb) cb(); });
             } else if (type === 'checkbox') {
                 el.checked = cfg[key]; el.addEventListener('change', (e) => { cfg[key] = e.target.checked; saveCfg(); if(cb) cb(); });
             }
@@ -958,12 +1113,20 @@
             }
         });
 
-        bindInput('set-time', 'time', 'val-time', 'slider'); bindInput('set-text', 'textSize', 'val-text', 'slider', drawWheel);
+        bindInput('set-time', 'time', 'val-time', 'slider'); 
+        bindInput('set-text', 'textSize', 'val-text', 'slider', drawWheel);
         bindInput('set-volume', 'volume', 'val-volume', 'slider', () => { if(masterGain) masterGain.gain.value = cfg.volume / 100; });
-        bindInput('set-anim', 'anim', null, 'select'); bindInput('set-sound', 'sound', null, 'select'); bindInput('set-confetti', 'confetti', null, 'select');
-        bindInput('set-cursor', 'cursor', null, 'select', applyCursor); bindInput('set-clickfx', 'clickfx', null, 'select');
+        bindInput('set-dice-count', 'diceCount', 'val-dice-count', 'slider', renderDice);
+        
+        bindInput('set-anim', 'anim', null, 'select'); 
+        bindInput('set-sound', 'sound', null, 'select'); 
+        bindInput('set-confetti', 'confetti', null, 'select');
+        bindInput('set-cursor', 'cursor', null, 'select', applyCursor); 
+        bindInput('set-clickfx', 'clickfx', null, 'select');
         bindInput('set-style', 'style', null, 'select', () => { clearTemplateHighlight(); document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel'; drawWheel(); });
-        bindInput('set-theme', 'theme', null, 'select', () => { clearTemplateHighlight(); applyTheme(); }); bindInput('set-particles', 'particles', null, 'select', () => { clearTemplateHighlight(); initParticles(); });
+        bindInput('set-theme', 'theme', null, 'select', () => { clearTemplateHighlight(); applyTheme(); }); 
+        bindInput('set-particles', 'particles', null, 'select', () => { clearTemplateHighlight(); initParticles(); });
+        
         bindInput('set-parallax', 'parallax', null, 'checkbox', () => { 
             document.getElementById('btn-3d').classList.toggle('active', cfg.parallax);
             document.getElementById('btn-3d').innerText = cfg.parallax ? '3D: ON' : '3D: OFF';
@@ -972,27 +1135,29 @@
         bindInput('set-elimination', 'elimination', null, 'checkbox');
         bindInput('set-mystery', 'mystery', null, 'checkbox');
         
-        // Біндимо кастомні інпути для захисту
         bindInput('set-protect', 'protect', null, 'checkbox', applyProtectionStyles);
         bindInput('set-contextBlock', 'contextBlock', null, 'checkbox');
         bindInput('set-devtoolsBlock', 'devtoolsBlock', null, 'checkbox');
 
+        // =========================================================================
+        // ЛОГІКА КОЛЕСА ФОРТУНИ
+        // =========================================================================
         const canvas = document.getElementById('wheelCanvas'); const ctx = canvas.getContext('2d', { alpha: false });
         const wheel = document.getElementById('wheel'); const spinBtn = document.getElementById('spin-btn');
         const pointerEl = document.getElementById('wheel-pointer');
         
         function drawWheel() {
-            if(!canvas || items.length === 0) return;
+            if(!canvas || wheelItems.length === 0) return;
             ctx.fillStyle = "#050508"; ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            const radius = canvas.width / 2; const arc = (2 * Math.PI) / items.length; 
+            const radius = canvas.width / 2; const arc = (2 * Math.PI) / wheelItems.length; 
             const rs = getComputedStyle(document.documentElement);
             const a1 = rs.getPropertyValue('--accent-1').trim() || '#00f2fe'; const a2 = rs.getPropertyValue('--accent-danger').trim() || '#ff416c';
             const pal = [a1, a2, '#f093fb', '#43e97b', '#f5576c', '#38f9d7', '#e0c3fc'];
             
             const isMobile = window.innerWidth < 900;
 
-            items.forEach((text, i) => {
+            wheelItems.forEach((text, i) => {
                 const angle = i * arc; ctx.beginPath(); 
                 let baseColor = pal[i % pal.length];
                 
@@ -1033,7 +1198,8 @@
         }
 
         const itemsListEl = document.getElementById('items-list');
-        const historyListEl = document.getElementById('history-list');
+        const historyListWheelEl = document.getElementById('history-list-wheel');
+        const historyListDiceEl = document.getElementById('history-list-dice');
 
         function activateSecret(index, el) {
             secretTargetIndex = index;
@@ -1044,12 +1210,14 @@
         }
 
         function renderList() {
-            itemsListEl.innerHTML = ''; document.getElementById('items-count').innerText = items.length;
-            items.forEach((item, index) => {
+            itemsListEl.innerHTML = ''; document.getElementById('items-count').innerText = wheelItems.length;
+            wheelItems.forEach((item, index) => {
                 const div = document.createElement('div'); div.className = 'item btn-click';
+                if (index === secretTargetIndex) div.classList.add('secret-active');
+                
                 div.innerHTML = `<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${item}</span><button class="delete-btn" onclick="removeItem(event, ${index})">✕</button>`;
                 
-                div.addEventListener('contextmenu', (e) => { e.preventDefault(); activateSecret(index, div); });
+                div.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); activateSecret(index, div); });
                 
                 let pressTimer;
                 div.addEventListener('touchstart', (e) => { 
@@ -1061,44 +1229,58 @@
 
                 itemsListEl.appendChild(div);
             });
-            localStorage.setItem('megaWheelItems', JSON.stringify(items));
-            spinBtn.disabled = items.length <= 1; secretTargetIndex = -1;
+            localStorage.setItem('megaWheelItems_V6', JSON.stringify(wheelItems));
+            spinBtn.disabled = wheelItems.length <= 1;
             drawWheel();
         }
 
         window.loadPreset = function(type) {
-            if(type === 'yesno') items = currentLang === 'en' ? ["YES", "NO"] : currentLang === 'uk' ? ["ТАК", "НІ"] : ["ДА", "НЕТ"];
-            else if(type === 'dice') items = ["1", "2", "3", "4", "5", "6"];
-            else if(type === 'coin') items = currentLang === 'en' ? ["HEADS", "TAILS"] : currentLang === 'uk' ? ["ОРЕЛ", "РЕШКА"] : ["ОРЕЛ", "РЕШКА"];
+            if(type === 'yesno') wheelItems = currentLang === 'en' ? ["YES", "NO"] : currentLang === 'uk' ? ["ТАК", "НІ"] : ["ДА", "НЕТ"];
+            else if(type === 'dice') wheelItems = ["1", "2", "3", "4", "5", "6"];
+            else if(type === 'coin') wheelItems = currentLang === 'en' ? ["HEADS", "TAILS"] : currentLang === 'uk' ? ["ОРЕЛ", "РЕШКА"] : ["ОРЕЛ", "РЕШКА"];
             
             winnerIndexGlobal = -1;
             renderList(); initAudioAndSensors(); playUIBeat();
         }
         
-        window.clearItems = function() { items = []; items.push("ПУСТО"); winnerIndexGlobal = -1; renderList(); playUIBeat(); }
-        window.clearHistory = function() { history = []; renderHistory(); playUIBeat(); localStorage.removeItem('megaWheelHistory'); }
+        window.clearItems = function() { wheelItems = []; wheelItems.push("ПУСТО"); winnerIndexGlobal = -1; renderList(); playUIBeat(); }
+        window.clearHistory = function(type) { 
+            if(type === 'wheel') { wheelHistory = []; localStorage.removeItem('megaWheelHistory_V6'); renderHistory('wheel'); }
+            else { diceHistory = []; localStorage.removeItem('megaDiceHistory_V6'); renderHistory('dice'); }
+            playUIBeat(); 
+        }
 
-        window.removeItem = function(e, index) { e.stopPropagation(); items.splice(index, 1); if (items.length === 0) items.push("ПУСТО"); renderList(); initAudioAndSensors(); playUIBeat(); }
+        window.removeItem = function(e, index) { e.stopPropagation(); wheelItems.splice(index, 1); if (wheelItems.length === 0) wheelItems.push("ПУСТО"); renderList(); initAudioAndSensors(); playUIBeat(); }
         
         document.getElementById('add-btn').addEventListener('click', () => {
             const val = document.getElementById('new-item-input').value.trim();
-            if (val) { if (items.length === 1 && items[0] === "ПУСТО") items = []; items.push(val); document.getElementById('new-item-input').value = ''; renderList(); initAudioAndSensors(); }
+            if (val) { if (wheelItems.length === 1 && wheelItems[0] === "ПУСТО") wheelItems = []; wheelItems.push(val); document.getElementById('new-item-input').value = ''; renderList(); initAudioAndSensors(); }
         });
         document.getElementById('new-item-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('add-btn').click(); });
 
-        function renderHistory() {
-            historyListEl.innerHTML = '';
-            if (history.length === 0) { historyListEl.innerHTML = `<div style="color: rgba(255,255,255,0.3); text-align: center; padding: 20px; font-size: 13px;">${dict[currentLang]['empty_history']}</div>`; return; }
-            [...history].reverse().forEach(entry => {
+        function renderHistory(type) {
+            const list = type === 'wheel' ? wheelHistory : diceHistory;
+            const el = type === 'wheel' ? historyListWheelEl : historyListDiceEl;
+            
+            el.innerHTML = '';
+            if (list.length === 0) { el.innerHTML = `<div style="color: rgba(255,255,255,0.3); text-align: center; padding: 20px; font-size: 13px;">${dict[currentLang]['empty_history']}</div>`; return; }
+            
+            [...list].reverse().forEach(entry => {
                 const div = document.createElement('div'); div.className = 'history-item';
                 div.innerHTML = `<span class="time">${entry.time}</span><span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${entry.name}</span>`;
-                historyListEl.appendChild(div);
+                el.appendChild(div);
             });
         }
-        function addToHistory(name) {
+        function addToHistory(type, name) {
             const now = new Date(); const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            history.push({ name: name, time: timeStr }); if (history.length > 30) history.shift();
-            localStorage.setItem('megaWheelHistory', JSON.stringify(history)); renderHistory();
+            const list = type === 'wheel' ? wheelHistory : diceHistory;
+            
+            list.push({ name: name, time: timeStr }); if (list.length > 30) list.shift();
+            
+            if(type === 'wheel') localStorage.setItem('megaWheelHistory_V6', JSON.stringify(list));
+            else localStorage.setItem('megaDiceHistory_V6', JSON.stringify(list));
+            
+            renderHistory(type);
         }
 
         let currentRotation = 0; let animationFrameId;
@@ -1109,8 +1291,8 @@
             crazy: t => { const c1 = 1.70158; return 1 + (c1 + 1) * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
         };
 
-        async function startSpin() {
-            if (isSpinning || items.length <= 1) return;
+        async function startSpin(useSecret = false) {
+            if (isSpinning || wheelItems.length <= 1) return;
             
             await initAudioAndSensors();
             if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
@@ -1118,8 +1300,14 @@
             isSpinning = true; spinBtn.disabled = true; winnerIndexGlobal = -1; cancelAnimationFrame(animationFrameId); 
             drawWheel(); 
 
-            let targetIndex = (secretTargetIndex >= 0 && secretTargetIndex < items.length) ? secretTargetIndex : Math.floor(Math.random() * items.length);
-            const arcDegrees = 360 / items.length;
+            let targetIndex = Math.floor(Math.random() * wheelItems.length);
+            
+            // СЕКРЕТНИЙ СПІН
+            if (useSecret && secretTargetIndex >= 0 && secretTargetIndex < wheelItems.length) { 
+                targetIndex = secretTargetIndex; 
+            }
+
+            const arcDegrees = 360 / wheelItems.length;
             let targetAngle = 270 - (targetIndex * arcDegrees + arcDegrees / 2); if (targetAngle < 0) targetAngle += 360;
 
             let spins = Math.max(5, cfg.time * 2);
@@ -1153,18 +1341,166 @@
                     drawWheel(); 
                     playWinSound();
                     
-                    const winnerName = items[targetIndex].toUpperCase();
+                    const winnerName = wheelItems[targetIndex].toUpperCase();
                     modalPendingDeleteIndex = targetIndex; 
-                    addToHistory(winnerName); openWinModal(winnerName);
+                    addToHistory('wheel', winnerName); openWinModal(winnerName);
                     
-                    secretTargetIndex = -1;
-                    document.querySelectorAll('.item').forEach(el => el.classList.remove('secret-active'));
+                    // Секрет зберігається "до бескінечності" - ми НЕ скидаємо secretTargetIndex!
                 }
             }
             animationFrameId = requestAnimationFrame(animateSpin);
         }
-        spinBtn.addEventListener('click', startSpin);
+        spinBtn.addEventListener('click', () => startSpin(false));
+        spinBtn.addEventListener('contextmenu', (e) => {
+            e.preventDefault(); e.stopPropagation(); startSpin(true);
+        });
 
+        // =========================================================================
+        // ЛОГІКА КУБИКІВ (DICE) ТА СЕКРЕТІВ
+        // =========================================================================
+
+        function getFaceRotation(colorId) {
+            switch(colorId) {
+                case 'red': return {x:0, y:0};
+                case 'orange': return {x:0, y:-90};
+                case 'yellow': return {x:0, y:-180};
+                case 'green': return {x:0, y:90};
+                case 'blue': return {x:-90, y:0};
+                case 'purple': return {x:90, y:0};
+                default: return {x:0, y:0};
+            }
+        }
+
+        function renderDice() {
+            const cont = document.getElementById('dice-container'); cont.innerHTML = '';
+            for(let i=0; i<cfg.diceCount; i++) {
+                const scene = document.createElement('div'); scene.className = 'scene';
+                const cube = document.createElement('div'); cube.className = 'cube'; cube.id = `cube-${i}`;
+                cube.style.transform = `rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg)`;
+                
+                ['front','right','back','left','top','bottom'].forEach(f => {
+                    const face = document.createElement('div'); face.className = `cube__face cube__face--${f}`;
+                    face.innerHTML = '<div class="dice-dot"></div>'; // КРУГЛИЙ МАРКЕР
+                    cube.appendChild(face);
+                });
+                scene.appendChild(cube); cont.appendChild(scene);
+            }
+        }
+
+        document.getElementById('roll-btn').addEventListener('click', async () => {
+            if(isSpinning) return;
+            
+            await initAudioAndSensors();
+            if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
+
+            isSpinning = true;
+            document.getElementById('roll-btn').disabled = true;
+
+            const results = [];
+            let cubesFinished = 0;
+
+            for(let i=0; i<cfg.diceCount; i++) {
+                const cube = document.getElementById(`cube-${i}`);
+                cube.classList.add('rolling');
+                playTickSound();
+
+                setTimeout(() => {
+                    cube.classList.remove('rolling');
+                    
+                    // ЧІТ КУБИКІВ: Видаляємо "Ізгоя" з масиву доступних кольорів
+                    let availableColors = diceColors.filter(c => c.id !== cfg.cheatDiceBanColor);
+                    if(availableColors.length === 0) availableColors = diceColors; // Запобіжник
+                    
+                    const resultColor = availableColors[Math.floor(Math.random() * availableColors.length)];
+                    results.push(resultColor);
+                    
+                    const rot = getFaceRotation(resultColor.id);
+                    const finalX = rot.x + (Math.floor(Math.random()*2 + 2) * 360);
+                    const finalY = rot.y + (Math.floor(Math.random()*2 + 2) * 360);
+                    
+                    cube.style.transition = 'transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                    cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+                    playTickSound();
+
+                    cubesFinished++;
+                    if(cubesFinished === cfg.diceCount) {
+                        setTimeout(() => {
+                            isSpinning = false;
+                            document.getElementById('roll-btn').disabled = false;
+                            playWinSound();
+                            
+                            // Формування результату (Красиві кубики)
+                            const resText = results.map(r => `
+                                <div style="width: 50px; height: 50px; background: ${r.hex}; border-radius: 12px; display: inline-flex; justify-content: center; align-items: center; border: 2px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.4); margin: 0 5px;">
+                                    <div style="width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);"></div>
+                                </div>
+                            `).join('');
+                            const resNames = results.map(r => `<span style="color:${r.hex}">${dict[currentLang].colors[r.name]}</span>`).join(', ');
+                            addToHistory('dice', resNames);
+                            
+                            // Відкриваємо модалку
+                            document.getElementById('modal-title').innerText = dict[currentLang]['modal_win'];
+                            document.getElementById('modal-title').style.color = "var(--accent-1)";
+                            const mText = document.getElementById('modal-text'); 
+                            mText.style.fontSize = "clamp(30px, 8vw, 60px)";
+                            mText.innerHTML = `<div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;align-items:center;min-height:70px;">${resText}</div>`;
+                            document.getElementById('modal-btn').innerText = dict[currentLang]['btn_cool'];
+                            
+                            modal.classList.add('active');
+                            triggerConfetti();
+
+                        }, 1600);
+                    }
+                }, 500 + i * 150); 
+            }
+        });
+
+        // Секретна палітра кольорів кубиків (Ізгой-колір)
+        function renderDicePalette() {
+            const pal = document.getElementById('secret-dice-palette');
+            if(!pal) return;
+            pal.innerHTML = '';
+            
+            diceColors.forEach(c => {
+                const dot = document.createElement('div');
+                dot.className = 'secret-dice-dot';
+                dot.style.background = c.hex;
+                
+                // Лівий клік: фейкова анімація
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    initAudioAndSensors();
+                    dot.style.transform = 'scale(1.8)';
+                    setTimeout(() => dot.style.transform = '', 200);
+                    playTickSound();
+                });
+
+                // Правий клік: Банимо колір (Чіт) БЕЗ візуальних змін
+                dot.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation(); // Важливо для обходу загального захисту
+                    initAudioAndSensors();
+                    
+                    dot.style.transform = 'scale(1.8)';
+                    setTimeout(() => dot.style.transform = '', 200);
+
+                    if(cfg.cheatDiceBanColor === c.id) {
+                        cfg.cheatDiceBanColor = 'none'; // Знімаємо бан
+                        playTickSound();
+                    } else {
+                        cfg.cheatDiceBanColor = c.id; // Банимо колір
+                        playOscillator('sine', 1200, 0.05, 0.1); 
+                    }
+                    
+                    saveCfg();
+                });
+                pal.appendChild(dot);
+            });
+        }
+
+        // =========================================================================
+        // СПІЛЬНІ МОДАЛКИ ТА ЗВУКИ
+        // =========================================================================
         const modal = document.getElementById('modal'); let modalPendingDeleteIndex = -1;
         function openWinModal(winner) {
             document.getElementById('modal-title').innerText = dict[currentLang]['modal_win'];
@@ -1174,7 +1510,10 @@
             document.getElementById('modal-btn').innerText = cfg.elimination ? dict[currentLang]['btn_take_del'] : dict[currentLang]['btn_cool'];
             
             modal.classList.add('active');
-            
+            triggerConfetti();
+        }
+
+        function triggerConfetti() {
             if (typeof confetti === 'function') {
                 let confCfg = { zIndex: 2000, spread: window.innerWidth < 600 ? 70 : 100, origin: { y: 0.6 } };
                 if (cfg.confetti === 'stars') confCfg.shapes = ['star'];
@@ -1198,9 +1537,11 @@
 
         function closeModal() {
             modal.classList.remove('active'); playUIBeat();
-            if (cfg.elimination && modalPendingDeleteIndex !== -1) {
-                setTimeout(() => { items.splice(modalPendingDeleteIndex, 1); if (items.length === 0) items.push("ПУСТО"); modalPendingDeleteIndex = -1; winnerIndexGlobal = -1; renderList(); }, 300);
-            } else spinBtn.disabled = items.length <= 1;
+            if (cfg.elimination && modalPendingDeleteIndex !== -1 && document.getElementById('view-game').classList.contains('active')) {
+                setTimeout(() => { wheelItems.splice(modalPendingDeleteIndex, 1); if (wheelItems.length === 0) wheelItems.push("ПУСТО"); modalPendingDeleteIndex = -1; winnerIndexGlobal = -1; renderList(); }, 300);
+            } else {
+                spinBtn.disabled = wheelItems.length <= 1;
+            }
         }
 
         let audioCtx, masterGain;
@@ -1271,6 +1612,9 @@
 
         document.body.addEventListener('click', initAudioAndSensors, { once: true }); document.body.addEventListener('touchstart', initAudioAndSensors, { once: true, passive: true });
 
+        // =========================================================================
+        // ВІЗУАЛ ТА ЕФЕКТИ
+        // =========================================================================
         const wheel3dWrapper = document.getElementById('wheel-3d-wrapper'); const bgLayer = document.getElementById('bg-layer');
         let targetRotX=0, targetRotY=0, currentRotX=0, currentRotY=0; let targetBgX=0, targetBgY=0, currentBgX=0, currentBgY=0;
 
@@ -1347,39 +1691,9 @@
             pAnimationId = requestAnimationFrame(animateParticles);
         }
 
-        window.addEventListener('load', () => {
-            // Перевірка на активний бан перед запуском
-            if (checkBan()) return;
-
-            setLang(currentLang);
-            applyTheme(); applyCursor(); document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel';
-            
-            // Відновлюємо UI налаштування (Вкладки або Акордеон)
-            document.getElementById('settings-wrapper').className = `settings-wrapper ${cfg.menuLayout}`;
-            document.getElementById('set-menuLayout').value = cfg.menuLayout;
-            if(cfg.menuLayout === 'layout-tabs') {
-                document.getElementById('sec-templates').classList.add('active');
-                document.querySelector('.tab-btn[onclick*="sec-templates"]').classList.add('active');
-            }
-
-            // Показуємо заблоковану вкладку захисту, якщо її вже розблокували раніше
-            if (isProtectTabUnlocked) {
-                unlockProtectTabUI();
-            }
-
-            updateTemplateUI(); // Підсвічуємо поточний шаблон
-
-            document.getElementById('btn-3d').classList.toggle('active', cfg.parallax);
-            document.getElementById('btn-3d').innerText = cfg.parallax ? '3D: ON' : '3D: OFF';
-
-            renderList(); renderHistory(); initParticles();
-            
-            document.querySelectorAll('.btn-click').forEach(btn => {
-                btn.addEventListener('click', () => { playUIBeat(); initAudioAndSensors(); });
-            });
-        });
-
-        // Секретна логіка ПІН-коду
+        // =========================================================================
+        // АДМІН ПАНЕЛЬ ТА СЕКРЕТИ
+        // =========================================================================
         function applySecretTrigger() {
             const titleEl = document.getElementById('settings-title');
             if (!titleEl) return;
@@ -1428,16 +1742,15 @@
         }
 
         function unlockProtectTabUI() {
-            // Розблокувати вкладку в меню налаштувань
             document.getElementById('tab-nav-protect').style.display = 'block';
             document.getElementById('sec-protect').style.display = 'block';
         }
 
+
         // =========================================================================
-        // === АГРЕСИВНИЙ ЗАХИСТ ВІД КОПІЮВАННЯ ТА ПЕРЕГЛЯДУ КОДУ (ANTI-STEAL V5.5) ===
+        // АГРЕСИВНИЙ ЗАХИСТ ВІД КОПІЮВАННЯ ТА ПЕРЕГЛЯДУ КОДУ (ANTI-STEAL V5.5)
         // =========================================================================
         
-        // Перевірка активного бану (тепер бан 5 хвилин)
         function checkBan() {
             const banUntil = localStorage.getItem('ban_until_time_5m');
             if (banUntil) {
@@ -1447,13 +1760,12 @@
                     return true;
                 } else {
                     localStorage.removeItem('ban_until_time_5m');
-                    localStorage.setItem('global_violations_v2', '0'); // Скидаємо лічильник після бану
+                    localStorage.setItem('global_violations_v2', '0');
                 }
             }
             return false;
         }
 
-        // Екран Блокування (Бан 5 хвилин)
         function showBanScreen() {
             document.body.innerHTML = `
                 <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#050508;color:#ff416c;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999999;font-family:'Montserrat',sans-serif;text-align:center;padding:20px;">
@@ -1469,9 +1781,7 @@
             const interval = setInterval(() => {
                 const banExpiry = localStorage.getItem('ban_until_time_5m');
                 if (!banExpiry) {
-                    clearInterval(interval);
-                    location.reload();
-                    return;
+                    clearInterval(interval); location.reload(); return;
                 }
                 const remaining = parseInt(banExpiry) - Date.now();
                 if (remaining <= 0) {
@@ -1487,7 +1797,6 @@
             }, 1000);
         }
 
-        // Екран аварійного завершення (Crash Screen на 3, 6, 9 спробу)
         function triggerCrash() {
             document.body.innerHTML = `
                 <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#020205;color:#ff416c;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:99999999;font-family:'JetBrains Mono',monospace;text-align:center;padding:25px; line-height:1.6;">
@@ -1505,7 +1814,6 @@
             `;
         }
 
-        // Візуальне попередження на екрані (не блокує вікно)
         function showViolationWarning(count) {
             const oldBox = document.getElementById('security-warn-box');
             if (oldBox) oldBox.remove();
@@ -1513,24 +1821,12 @@
             const warnBox = document.createElement('div');
             warnBox.id = 'security-warn-box';
             warnBox.style.cssText = `
-                position: fixed;
-                top: 25px;
-                left: 50%;
-                transform: translateX(-50%) translateY(-150px);
+                position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-150px);
                 background: linear-gradient(135deg, rgba(255, 65, 108, 0.98), rgba(255, 75, 43, 0.98));
-                color: white;
-                padding: 16px 30px;
-                border-radius: 18px;
-                font-weight: 800;
-                z-index: 10000000;
-                box-shadow: 0 15px 40px rgba(255,65,108,0.5);
-                border: 1px solid rgba(255,255,255,0.25);
-                text-align: center;
-                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                pointer-events: none;
-                max-width: 90%;
-                width: 450px;
-                font-family: 'Montserrat', sans-serif;
+                color: white; padding: 16px 30px; border-radius: 18px; font-weight: 800; z-index: 10000000;
+                box-shadow: 0 15px 40px rgba(255,65,108,0.5); border: 1px solid rgba(255,255,255,0.25);
+                text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                pointer-events: none; max-width: 90%; width: 450px; font-family: 'Montserrat', sans-serif;
             `;
             warnBox.innerHTML = `
                 <div style="font-size: 16px; margin-bottom: 5px; text-transform:uppercase; letter-spacing:1px; text-shadow:0 2px 4px rgba(0,0,0,0.2);">⚠️ КОПІЮВАННЯ ТА ХАК ЗАБОРОНЕНО</div>
@@ -1542,23 +1838,15 @@
             document.body.appendChild(warnBox);
             
             setTimeout(() => { warnBox.style.transform = 'translateX(-50%) translateY(0)'; }, 50);
-            
-            setTimeout(() => {
-                warnBox.style.transform = 'translateX(-50%) translateY(-200px)';
-                setTimeout(() => warnBox.remove(), 500);
-            }, 4500);
+            setTimeout(() => { warnBox.style.transform = 'translateX(-50%) translateY(-200px)'; setTimeout(() => warnBox.remove(), 500); }, 4500);
         }
 
-        // Обробник порушень безпеки додатка
         function handleSecurityViolation() {
             let violations = parseInt(localStorage.getItem('global_violations_v2') || '0');
-            violations++;
-            localStorage.setItem('global_violations_v2', violations.toString());
-
+            violations++; localStorage.setItem('global_violations_v2', violations.toString());
             playOscillator('sawtooth', 120, 0.5, 0.4);
 
             if (violations >= 10) {
-                // Встановлюємо бан на 5 хвилин (300 000 мс)
                 const banExpiry = Date.now() + 300000;
                 localStorage.setItem('ban_until_time_5m', banExpiry.toString());
                 showBanScreen();
@@ -1569,126 +1857,104 @@
             }
         }
 
-        // Динамічне застосування стилів виділення
         function applyProtectionStyles() {
-            if (cfg.protect) {
-                document.body.classList.add('protected-selection');
-            } else {
-                document.body.classList.remove('protected-selection');
-            }
+            if (cfg.protect) { document.body.classList.add('protected-selection'); } 
+            else { document.body.classList.remove('protected-selection'); }
         }
 
-        // Повний захист від гарячих клавіш
         (function(){
-            // 1. Повне відключення контекстного меню (БЕЗ попередження та модалок при кліку правою кнопкою миші)
+            // Відключення контекстного меню
             document.addEventListener('contextmenu', e => {
+                // Дозволяємо правий клік по секретній палітрі кубиків, кнопці обертання та елементам колеса
+                if (e.target.closest('.secret-dice-dot') || e.target.closest('#spin-btn') || e.target.closest('.item')) {
+                    return; 
+                }
+
                 if (cfg.protect && cfg.contextBlock) {
                     if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-                        e.preventDefault();
-                        return false;
+                        e.preventDefault(); return false;
                     }
                 }
             });
             
-            // 2. Блокування всіх комбінацій перегляду джерела та відлагодження
+            // Блокування гарячих клавіш
             document.addEventListener('keydown', e => {
                 if (!cfg.protect || !cfg.devtoolsBlock) return;
-
-                const key = e.key ? e.key.toUpperCase() : '';
-                const isCtrlOrCmd = e.ctrlKey || e.metaKey;
-                const isShift = e.shiftKey;
-                const isAlt = e.altKey;
-
+                const key = e.key ? e.key.toUpperCase() : ''; const isCtrlOrCmd = e.ctrlKey || e.metaKey; const isShift = e.shiftKey; const isAlt = e.altKey;
                 let isViolation = false;
 
-                // F12
-                if (e.key === 'F12' || e.keyCode === 123) {
-                    isViolation = true;
-                }
-                // Ctrl+U / Cmd+U (Source Code)
-                if (isCtrlOrCmd && key === 'U') {
-                    isViolation = true;
-                }
-                // Ctrl+S / Cmd+S (Save)
-                if (isCtrlOrCmd && key === 'S') {
-                    isViolation = true;
-                }
-                // Ctrl+C / Cmd+C (Copy)
-                if (isCtrlOrCmd && key === 'C') {
-                    // Якщо користувач копіює в інпуті, ігноруємо
-                    if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-                        // дозволяємо
-                    } else {
-                        isViolation = true;
-                    }
-                }
-                // Ctrl+A / Cmd+A (Select All)
-                if (isCtrlOrCmd && key === 'A') {
-                    if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-                        // дозволяємо
-                    } else {
-                        isViolation = true;
-                    }
-                }
-                // Ctrl+Shift+I / J / C (DevTools shortcuts)
-                if (isCtrlOrCmd && isShift && ['I', 'J', 'C'].includes(key)) {
-                    isViolation = true;
-                }
-                // Cmd+Option+I / J (Mac DevTools equivalent)
-                if (isCtrlOrCmd && isAlt && ['I', 'J', 'C'].includes(key)) {
-                    isViolation = true;
-                }
+                if (e.key === 'F12' || e.keyCode === 123) isViolation = true;
+                if (isCtrlOrCmd && key === 'U') isViolation = true;
+                if (isCtrlOrCmd && key === 'S') isViolation = true;
+                if (isCtrlOrCmd && key === 'C') { if (!(document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA'))) isViolation = true; }
+                if (isCtrlOrCmd && key === 'A') { if (!(document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA'))) isViolation = true; }
+                if (isCtrlOrCmd && isShift && ['I', 'J', 'C'].includes(key)) isViolation = true;
+                if (isCtrlOrCmd && isAlt && ['I', 'J', 'C'].includes(key)) isViolation = true;
 
                 if (isViolation) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleSecurityViolation();
-                    return false;
+                    e.preventDefault(); e.stopPropagation(); handleSecurityViolation(); return false;
                 }
             }, true);
 
-            // 3. Блокування виділення тексту
+            // Блокування виділення
             document.addEventListener('selectstart', e => {
-                if (cfg.protect) {
-                    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-                        e.preventDefault();
-                        return false;
-                    }
-                }
+                if (cfg.protect) { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); return false; } }
             });
             
-            // 4. Блокування перетягування будь-яких картинок/елементів
+            // Блокування перетягування
             document.addEventListener('dragstart', e => {
-                if (cfg.protect) {
-                    e.preventDefault();
-                    return false;
-                }
+                if (cfg.protect) { e.preventDefault(); return false; }
             });
 
-            // 5. Заміна буфера обміну при спробі копіювання та фіксація порушення
+            // Заміна буфера обміну
             document.addEventListener('copy', e => {
                 if (cfg.protect) {
-                    if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-                        return; // дозволяємо
-                    }
+                    if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
                     e.clipboardData.setData('text/plain', 'Джерело захищено шифруванням FORTUNE EDITION!');
-                    e.preventDefault();
-                    handleSecurityViolation();
+                    e.preventDefault(); handleSecurityViolation();
                 }
             });
 
-            // 6. Anti-DevTools Debugger пастка
+            // Anti-DevTools Debugger пастка
             setInterval(() => {
                 if (cfg.protect && cfg.devtoolsBlock) {
-                    const start = performance.now();
-                    debugger; 
-                    const end = performance.now();
-                    if (end - start > 150) { 
-                        handleSecurityViolation();
-                    }
+                    const start = performance.now(); debugger; const end = performance.now();
+                    if (end - start > 150) { handleSecurityViolation(); }
                 }
             }, 1500);
         })();
+
+        // =========================================================================
+        // ІНІЦІАЛІЗАЦІЯ
+        // =========================================================================
+        window.addEventListener('load', () => {
+            if (checkBan()) return;
+
+            setLang(currentLang);
+            applyTheme(); applyCursor(); document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel';
+            
+            document.getElementById('settings-wrapper').className = `settings-wrapper ${cfg.menuLayout}`;
+            document.getElementById('set-menuLayout').value = cfg.menuLayout;
+            if(cfg.menuLayout === 'layout-tabs') {
+                document.getElementById('sec-templates').classList.add('active');
+                document.querySelector('.tab-btn[onclick*="sec-templates"]').classList.add('active');
+            }
+
+            if (isProtectTabUnlocked) { unlockProtectTabUI(); }
+            updateTemplateUI(); 
+
+            document.getElementById('btn-3d').classList.toggle('active', cfg.parallax);
+            document.getElementById('btn-3d').innerText = cfg.parallax ? '3D: ON' : '3D: OFF';
+
+            renderList(); renderHistory('wheel'); renderHistory('dice'); initParticles();
+            
+            // Генеруємо кубики (сховано) та палітру для ізгоя
+            renderDice(); renderDicePalette();
+            
+            document.querySelectorAll('.btn-click').forEach(btn => {
+                btn.addEventListener('click', () => { playUIBeat(); initAudioAndSensors(); });
+            });
+        });
     </script>
 </body>
 </html>
