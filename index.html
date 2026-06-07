@@ -30,7 +30,7 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { color: white; user-select: none; overflow: hidden; background-color: var(--theme-bg-1); perspective: 1000px; transition: cursor 0.3s; touch-action: pan-y; }
+        body { color: white; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; overflow: hidden; background-color: var(--theme-bg-1); perspective: 1000px; transition: cursor 0.3s; touch-action: pan-y; }
 
         /* КУРСОР И */
         body.cursor-crosshair { cursor: crosshair; }
@@ -129,6 +129,7 @@
         .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; width: 100%; }
         .template-card { background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 20px; text-align: center; cursor: inherit; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         .template-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); border-color: var(--accent-2); }
+        .template-card.active { border-color: var(--accent-1); background: rgba(255,255,255,0.1); box-shadow: 0 0 15px var(--wheel-shadow); }
         .template-icon { font-size: 35px; margin-bottom: 5px; }
         .template-name { font-weight: 900; font-size: 16px; color: white; letter-spacing: 1px; }
         .template-desc { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; line-height: 1.4; }
@@ -343,15 +344,15 @@
                     <button class="accordion-btn btn-click active" onclick="toggleAccordion('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
                     <div class="settings-content">
                         <div class="templates-grid">
-                            <div class="template-card btn-click" onclick="applyTemplate('space')"><div class="template-icon">🌌</div><div class="template-name" data-i18n="tpl_space">Космос</div><div class="template-desc" data-i18n="tpl_space_desc">Темна матерія та зірки</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('cyberpunk')"><div class="template-icon">🤖</div><div class="template-name" data-i18n="tpl_cyberpunk">Кіберпанк</div><div class="template-desc" data-i18n="tpl_cyberpunk_desc">Неоновий дизайн</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('optimized')" style="border-color: #00ff41;"><div class="template-icon">⚡</div><div class="template-name" data-i18n="tpl_opt">Оптимізований</div><div class="template-desc" data-i18n="tpl_opt_desc">Без ефектів, високий FPS</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('nature')"><div class="template-icon">🌿</div><div class="template-name" data-i18n="tpl_nature">Природа</div><div class="template-desc" data-i18n="tpl_nature_desc">Спокійні лісові кольори</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('fire')"><div class="template-icon">🔥</div><div class="template-name" data-i18n="tpl_fire">Вогонь</div><div class="template-desc" data-i18n="tpl_fire_desc">Палаючі градієнти</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('ice')"><div class="template-icon">❄️</div><div class="template-name" data-i18n="tpl_ice">Лід</div><div class="template-desc" data-i18n="tpl_ice_desc">Холодний неон та сніг</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('sunset')"><div class="template-icon">🌅</div><div class="template-name" data-i18n="tpl_sunset">Захід Сонця</div><div class="template-desc" data-i18n="tpl_sunset_desc">Теплі кольори</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('casino')"><div class="template-icon">🎰</div><div class="template-name" data-i18n="tpl_casino">Казино</div><div class="template-desc" data-i18n="tpl_casino_desc">Золото, флет стиль</div></div>
-                            <div class="template-card btn-click" onclick="applyTemplate('matrix')"><div class="template-icon">💻</div><div class="template-name" data-i18n="tpl_matrix">Хакер</div><div class="template-desc" data-i18n="tpl_matrix_desc">Матриця, неоновий зелений</div></div>
+                            <div class="template-card btn-click" id="tpl-space" onclick="applyTemplate('space')"><div class="template-icon">🌌</div><div class="template-name" data-i18n="tpl_space">Космос</div><div class="template-desc" data-i18n="tpl_space_desc">Темна матерія та зірки</div></div>
+                            <div class="template-card btn-click" id="tpl-cyberpunk" onclick="applyTemplate('cyberpunk')"><div class="template-icon">🤖</div><div class="template-name" data-i18n="tpl_cyberpunk">Кіберпанк</div><div class="template-desc" data-i18n="tpl_cyberpunk_desc">Неоновий дизайн</div></div>
+                            <div class="template-card btn-click" id="tpl-optimized" onclick="applyTemplate('optimized')"><div class="template-icon">⚡</div><div class="template-name" data-i18n="tpl_opt">Оптимізований</div><div class="template-desc" data-i18n="tpl_opt_desc">Без ефектів, високий FPS</div></div>
+                            <div class="template-card btn-click" id="tpl-nature" onclick="applyTemplate('nature')"><div class="template-icon">🌿</div><div class="template-name" data-i18n="tpl_nature">Природа</div><div class="template-desc" data-i18n="tpl_nature_desc">Спокійні лісові кольори</div></div>
+                            <div class="template-card btn-click" id="tpl-fire" onclick="applyTemplate('fire')"><div class="template-icon">🔥</div><div class="template-name" data-i18n="tpl_fire">Вогонь</div><div class="template-desc" data-i18n="tpl_fire_desc">Палаючі градієнти</div></div>
+                            <div class="template-card btn-click" id="tpl-ice" onclick="applyTemplate('ice')"><div class="template-icon">❄️</div><div class="template-name" data-i18n="tpl_ice">Лід</div><div class="template-desc" data-i18n="tpl_ice_desc">Холодний неон та сніг</div></div>
+                            <div class="template-card btn-click" id="tpl-sunset" onclick="applyTemplate('sunset')"><div class="template-icon">🌅</div><div class="template-name" data-i18n="tpl_sunset">Захід Сонця</div><div class="template-desc" data-i18n="tpl_sunset_desc">Теплі кольори</div></div>
+                            <div class="template-card btn-click" id="tpl-casino" onclick="applyTemplate('casino')"><div class="template-icon">🎰</div><div class="template-name" data-i18n="tpl_casino">Казино</div><div class="template-desc" data-i18n="tpl_casino_desc">Золото, флет стиль</div></div>
+                            <div class="template-card btn-click" id="tpl-matrix" onclick="applyTemplate('matrix')"><div class="template-icon">💻</div><div class="template-name" data-i18n="tpl_matrix">Хакер</div><div class="template-desc" data-i18n="tpl_matrix_desc">Матриця, неоновий зелений</div></div>
                         </div>
                     </div>
                 </div>
@@ -549,11 +550,28 @@
     </div>
 
     <script>
+        // === ЗАХИСТ ВІД КОПІЮВАННЯ ТА ПЕРЕГЛЯДУ КОДУ ===
+        // Блокування правої кнопки миші (контекстного меню)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Блокування гарячих клавіш розробника та копіювання
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || // F12 (DevTools)
+               (e.ctrlKey && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) || // Ctrl+Shift+I/J/C
+               (e.ctrlKey && ['U', 'u', 'S', 's', 'C', 'c', 'P', 'p'].includes(e.key))) { // Ctrl+U (Source), Ctrl+S (Save), Ctrl+C (Copy), Ctrl+P (Print)
+                e.preventDefault();
+            }
+        });
+
+        // Блокування перетягування (Drag & Drop) елементів
+        document.addEventListener('dragstart', e => e.preventDefault());
+        // ===============================================
+
         const dict = {
             uk: {
                 menu_title: "WHEEL OF FORTUNE", menu_subtitle: "FORTUNE EDITION", btn_start: "🚀 ПОЧАТИ ГРУ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
-                btn_to_menu: "← В МЕНЮ", panel_history: "📜 Історія", btn_spin: "КРУТИТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
+                btn_to_menu: "← В МЕНЮ", panel_history: "📜 Історія", btn_spin: "КРУТИТЬ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
                 btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Гра", tab_visuals: "✨ Вигляд", tab_physics: "🌪 Фізика", tab_audio: "🔊 Звук",
                 tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
@@ -566,7 +584,7 @@
                 set_style: "Стиль Колеса:", opt_st_neon: "Неон (Градієнти)", opt_st_flat: "Флет (Мінімалізм)", opt_st_dark: "Дарк (Темний фон)",
                 set_textsize: "Розмір тексту:", set_particles: "Частинки:", opt_pt_stars: "Космічні зорі", opt_pt_snow: "Сніг", opt_pt_matrix: "Матриця (Цифри)", opt_pt_bubbles: "Бульбашки", opt_pt_none: "Вимкнути",
                 set_confetti: "Стиль Конфеті:", opt_cf_classic: "Класичне", opt_cf_stars: "Зірки", opt_cf_emoji: "Емодзі (💰🎉)",
-                set_parallax: "3D Паралакс", set_parallax_desc: "Реагує на мишку/телефон", set_anim: "Анімація крутіння:", opt_an_smooth: "Плавна", opt_an_elastic: "Еластична (Відскок)", opt_an_linear: "Рівномірна", opt_an_crazy: "Шалена",
+                set_parallax: "3D Паралакс", set_parallax_desc: "Реагує на мишку/телефон", set_anim: "Анімація крутіння:", opt_an_smooth: "Плавная", opt_an_elastic: "Еластична (Відскок)", opt_an_linear: "Рівномірна", opt_an_crazy: "Шалена",
                 set_volume: "Гучність:", set_sound: "Звуковий пакет:", opt_sd_classic: "Класика (Пік-пік)", opt_sd_arcade: "Аркада (8-bit)", opt_sd_soft: "М'який (Chill)", opt_sd_casino: "Казино (Тріскачка)", opt_sd_cyber: "Кіберпанк (Синт)", opt_sd_magic: "Магія (Дзвін)", opt_sd_drum: "Барабан", opt_sd_bass: "Глибокий Бас",
                 modal_win: "ПЕРЕМОЖЕЦЬ", btn_cool: "КРУТО!", btn_take_del: "ЗАБРАТИ ТА ВИДАЛИТИ", empty_history: "Тут будуть переможці",
                 auth_finx_txt: "Привіт! 😎 Я створюю крутий код та генерую ідеї. Підписуйся:<br><br><span class='highlight' style='font-size: 35px;'>@finx056</span><br><span style='font-size: 16px; color: #888;'>в ТікТоці</span>", auth_gem_txt: "🤖 Я — штучний інтелект від Google. Допомагаю FINX писати ідеальний код та втілювати ці шалені ідеї!", auth_btn: "ЗРОЗУМІЛО", auth_t_finx: "ПРО АВТОРА", auth_t_gem: "ПРО АСИСТЕНТА",
@@ -641,7 +659,7 @@
             time: 6, anim: 'smooth', sound: 'classic', volume: 50,
             style: 'neon', textSize: 35, theme: 'darkmatter', particles: 'stars', confetti: 'classic',
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
-            menuLayout: 'layout-tabs', /* <-- НОВЕ НАЛАШТУВАННЯ ІНТЕРФЕЙСУ */
+            menuLayout: 'layout-tabs', currentTemplate: 'space',
             customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' }
         };
 
@@ -727,8 +745,26 @@
             ice: { theme: 'ice', particles: 'snow', sound: 'classic', style: 'neon', clickfx: 'sparkle' }
         };
 
+        function updateTemplateUI() {
+            document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+            if (cfg.currentTemplate) {
+                const activeCard = document.getElementById('tpl-' + cfg.currentTemplate);
+                if (activeCard) activeCard.classList.add('active');
+            }
+        }
+
+        function clearTemplateHighlight() {
+            cfg.currentTemplate = null;
+            updateTemplateUI();
+            saveCfg();
+        }
+
         function applyTemplate(id) {
             const t = templates[id];
+            
+            cfg.currentTemplate = id;
+            updateTemplateUI();
+            
             cfg.theme = t.theme; cfg.particles = t.particles; cfg.sound = t.sound; cfg.style = t.style;
             if(t.clickfx) cfg.clickfx = t.clickfx;
             if(t.parallax !== undefined) { cfg.parallax = !t.parallax; toggle3D(); }
@@ -816,7 +852,7 @@
 
         ['bg1', 'bg2', 'ac1', 'ac2'].forEach(k => {
             const el = document.getElementById('col-'+k); el.value = cfg.customColors[k];
-            el.addEventListener('input', (e) => { cfg.customColors[k] = e.target.value; saveCfg(); applyTheme(); });
+            el.addEventListener('input', (e) => { cfg.customColors[k] = e.target.value; saveCfg(); applyTheme(); clearTemplateHighlight(); });
         });
 
         // Інтеграція нового селекту стилю меню
@@ -838,8 +874,8 @@
         bindInput('set-volume', 'volume', 'val-volume', 'slider', () => { if(masterGain) masterGain.gain.value = cfg.volume / 100; });
         bindInput('set-anim', 'anim', null, 'select'); bindInput('set-sound', 'sound', null, 'select'); bindInput('set-confetti', 'confetti', null, 'select');
         bindInput('set-cursor', 'cursor', null, 'select', applyCursor); bindInput('set-clickfx', 'clickfx', null, 'select');
-        bindInput('set-style', 'style', null, 'select', () => { document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel'; drawWheel(); });
-        bindInput('set-theme', 'theme', null, 'select', applyTheme); bindInput('set-particles', 'particles', null, 'select', initParticles);
+        bindInput('set-style', 'style', null, 'select', () => { clearTemplateHighlight(); document.getElementById('wheel').className = cfg.style === 'neon' ? 'wheel led-active' : 'wheel'; drawWheel(); });
+        bindInput('set-theme', 'theme', null, 'select', () => { clearTemplateHighlight(); applyTheme(); }); bindInput('set-particles', 'particles', null, 'select', () => { clearTemplateHighlight(); initParticles(); });
         bindInput('set-parallax', 'parallax', null, 'checkbox', () => { 
             document.getElementById('btn-3d').classList.toggle('active', cfg.parallax);
             document.getElementById('btn-3d').innerText = cfg.parallax ? '3D: ON' : '3D: OFF';
@@ -1229,6 +1265,8 @@
                 document.getElementById('sec-templates').classList.add('active');
                 document.querySelector('.tab-btn[onclick*="sec-templates"]').classList.add('active');
             }
+
+            updateTemplateUI(); // Підсвічуємо поточний шаблон
 
             document.getElementById('btn-3d').classList.toggle('active', cfg.parallax);
             document.getElementById('btn-3d').innerText = cfg.parallax ? '3D: ON' : '3D: OFF';
