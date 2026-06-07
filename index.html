@@ -320,7 +320,6 @@
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
         
         .item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.05); padding: 14px 18px; border-radius: 14px; font-weight: 800; border: 1px solid rgba(255,255,255,0.03); transition: 0.2s; font-size: 14px; position: relative; overflow: hidden; }
-        .item.secret-active { border-left: 4px solid var(--accent-1); background: rgba(79, 172, 254, 0.15); box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);}
         .delete-btn { background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 8px; font-size: 14px; cursor: inherit; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .delete-btn:active { background: var(--accent-danger); color: white; }
 
@@ -384,6 +383,7 @@
             <button class="btn-menu btn-click" onclick="switchView('view-dice')" style="border-color: #00ff41;" data-i18n="btn_start_dice">🎲 КОЛЬОРОВІ КУБИКИ</button>
             <button class="btn-menu btn-click" onclick="switchView('view-settings')" data-i18n="btn_settings">⚙️ НАЛАШТУВАННЯ</button>
             <button class="btn-menu btn-click" style="border-color: rgba(255, 65, 108, 0.4);" onclick="switchView('view-authors')" data-i18n="btn_authors">👑 ПРО АВТОРІВ</button>
+            <button class="btn-menu btn-click" onclick="window.open('https://t.me/finx056', '_blank')" style="border-color: #00f2fe;" data-i18n="btn_admin">💬 НАПИСАТИ АДМІНУ</button>
         </div>
     </div>
 
@@ -766,11 +766,11 @@
         // =========================================================================
         const dict = {
             uk: {
-                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ",
+                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ", btn_admin: "💬 НАПИСАТИ АДМІНУ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 Історія", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
                 btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Колесо", tab_visuals: "✨ Вигляд", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
-                tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
+                tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Скриває текст під час обертання", set_time: "Час обертання:", sec: "сек",
                 set_menu_layout: "Стиль меню налаштувань:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Акордеон)",
@@ -795,7 +795,7 @@
                 colors: { red:"Червоний", orange:"Помаранчевий", yellow:"Жовтий", green:"Зелений", blue:"Синій", purple:"Фіолетовий" }
             },
             en: {
-                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 WHEEL OF FORTUNE", btn_start_dice: "🎲 COLOR DICE", btn_settings: "⚙️ SETTINGS", btn_authors: "👑 ABOUT AUTHORS",
+                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 WHEEL OF FORTUNE", btn_start_dice: "🎲 COLOR DICE", btn_settings: "⚙️ SETTINGS", btn_authors: "👑 ABOUT AUTHORS", btn_admin: "💬 CONTACT ADMIN",
                 btn_back: "← BACK", authors_title: "MASTERMINDS", author_role_finx: "Lead Dev & Ideologist", author_role_gemini: "AI Assistant by Google",
                 btn_to_menu: "← TO MENU", panel_history: "📜 History", btn_spin: "SPIN", btn_roll: "ROLL", panel_items: "🎯 Items", placeholder_new: "New option...",
                 btn_save: "← SAVE", settings_title: "SETTINGS", tab_templates: "🎨 Templates", tab_game: "🎮 Wheel", tab_visuals: "✨ Visuals", tab_physics: "🌪 Physics", tab_audio: "🔊 Audio", tab_protect: "🔒 Protection",
@@ -824,7 +824,7 @@
                 colors: { red:"Red", orange:"Orange", yellow:"Yellow", green:"Green", blue:"Blue", purple:"Purple" }
             },
             ru: {
-                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНЫ", btn_start_dice: "🎲 ЦВЕТНЫЕ КУБИКИ", btn_settings: "⚙️ НАСТРОЙКИ", btn_authors: "👑 ОБ АВТОРАХ",
+                menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНЫ", btn_start_dice: "🎲 ЦВЕТНЫЕ КУБИКИ", btn_settings: "⚙️ НАСТРОЙКИ", btn_authors: "👑 ОБ АВТОРАХ", btn_admin: "💬 НАПИСАТЬ АДМИНУ",
                 btn_back: "← НАЗАД", authors_title: "СОЗДАТЕЛИ", author_role_finx: "Главный разработчик", author_role_gemini: "AI Ассистент от Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 История", btn_spin: "КРУТИТЬ", btn_roll: "БРОСАТЬ", panel_items: "🎯 Элементы", placeholder_new: "Новый вариант...",
                 btn_save: "← СОХРАНИТЬ", settings_title: "НАСТРОЙКИ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_visuals: "✨ Вид", tab_physics: "🌪 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Защита",
@@ -850,7 +850,7 @@
                 pin_title: "ВВЕДИТЕ ПИН-КОД", pin_subtitle: "Для доступа к админ-панели", pin_cancel: "ОТМЕНА", pin_confirm: "ВХОД",
                 panel_dice_settings: "⚙️ Настройки Кубиков", set_dice_count: "Количество кубиков:",
                 dice_info: "У каждого кубика 6 цветов. На гранях всегда число 1. Цвета выпадают рандомно. <br><br><span style='opacity: 0.5;'>*Подсказка: посмотри на цветные точки под кнопкой. Возможно, в них есть секрет? Попробуй кликнуть левой или правой кнопкой.*</span>",
-                colors: { red:"Красный", orange:"Оранжевый", yellow:"Желтый", green:"Зеленый", blue:"Синий", purple:"Фиолетовый" }
+                colors: { red:"Красный", orange:"Оранжевый", желтый:"Желтый", green:"Зеленый", blue:"Синий", purple:"Фиолетовый" }
             }
         };
 
@@ -900,6 +900,7 @@
         let isSpinning = false;
         let isAudioInit = false;
         let secretTargetIndex = -1;
+        let blinkingSectorIndex = -1; // Для анімації секретного кліку по колесу
         let winnerIndexGlobal = -1; 
         let isProtectTabUnlocked = localStorage.getItem('admin_protect_unlocked') === 'true';
 
@@ -1170,6 +1171,13 @@
                 if(i === winnerIndexGlobal) { ctx.fillStyle = "#fff"; }
 
                 ctx.moveTo(radius, radius); ctx.arc(radius, radius, radius, angle, angle + arc); ctx.fill();
+                
+                // Слабке блимання секрету 1 раз
+                if (i === blinkingSectorIndex) {
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+                    ctx.fill();
+                }
+
                 ctx.strokeStyle = i === winnerIndexGlobal ? a2 : "rgba(255,255,255,0.15)"; 
                 ctx.lineWidth = i === winnerIndexGlobal ? 10 : 2; 
                 ctx.stroke();
@@ -1182,7 +1190,7 @@
                 let actualFontSize = Math.max(10, Math.min(cfg.textSize, (radius * arc) * 0.45, 60)); 
                 ctx.font = `900 ${actualFontSize}px Montserrat, sans-serif`;
                 
-                if (!isMobile && (cfg.style === 'neon' || cfg.style === 'dark') && i !== winnerIndexGlobal) { 
+                if (!isMobile && (cfg.style === 'neon' || cfg.style === 'dark') && i !== winnerIndexGlobal && i !== blinkingSectorIndex) { 
                     ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = 10; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2; 
                 }
                 
@@ -1197,14 +1205,47 @@
             });
         }
 
+        // Обробка правого кліку по самому колесу (Вибір секретного переможця)
+        document.getElementById('wheel').addEventListener('contextmenu', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            if(isSpinning || wheelItems.length === 0) return;
+
+            // Визначаємо координати центру колеса
+            const rect = document.getElementById('wheel').getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const dx = e.clientX - centerX;
+            const dy = e.clientY - centerY;
+            
+            // Вираховуємо кут кліку
+            let clickAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+            if (clickAngle < 0) clickAngle += 360;
+            
+            // Коригуємо кут з урахуванням поточного обертання колеса
+            let canvasAngle = (clickAngle - currentRotation) % 360;
+            if (canvasAngle < 0) canvasAngle += 360;
+            
+            const arcDegrees = 360 / wheelItems.length;
+            const index = Math.floor(canvasAngle / arcDegrees);
+            
+            // Активуємо секрет
+            const itemsListElements = document.querySelectorAll('.item');
+            activateSecret(index, itemsListElements[index]);
+            
+            // Анімація блимання обраного сектора (слабо, 1 раз)
+            blinkingSectorIndex = index; drawWheel();
+            setTimeout(() => { blinkingSectorIndex = -1; drawWheel(); }, 150);
+        });
+
         const itemsListEl = document.getElementById('items-list');
         const historyListWheelEl = document.getElementById('history-list-wheel');
         const historyListDiceEl = document.getElementById('history-list-dice');
 
-        function activateSecret(index, el) {
+        function activateSecret(index, el = null) {
             secretTargetIndex = index;
-            document.querySelectorAll('.item').forEach(e => e.classList.remove('secret-active'));
-            el.classList.add('secret-active');
+            // Більше не показуємо візуально в списку, повна скритність
+            // Залишаємо лише тихий звуковий сигнал/вібрацію для розуміння, що клік пройшов
             playTickSound();
             if(navigator.vibrate) navigator.vibrate(50); 
         }
@@ -1213,7 +1254,6 @@
             itemsListEl.innerHTML = ''; document.getElementById('items-count').innerText = wheelItems.length;
             wheelItems.forEach((item, index) => {
                 const div = document.createElement('div'); div.className = 'item btn-click';
-                if (index === secretTargetIndex) div.classList.add('secret-active');
                 
                 div.innerHTML = `<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${item}</span><button class="delete-btn" onclick="removeItem(event, ${index})">✕</button>`;
                 
@@ -1865,8 +1905,8 @@
         (function(){
             // Відключення контекстного меню
             document.addEventListener('contextmenu', e => {
-                // Дозволяємо правий клік по секретній палітрі кубиків, кнопці обертання та елементам колеса
-                if (e.target.closest('.secret-dice-dot') || e.target.closest('#spin-btn') || e.target.closest('.item')) {
+                // Дозволяємо правий клік по секретній палітрі кубиків, кнопці обертання, елементам колеса ТА самому колесу (додано для секрету)
+                if (e.target.closest('.secret-dice-dot') || e.target.closest('#spin-btn') || e.target.closest('.item') || e.target.closest('#wheel')) {
                     return; 
                 }
 
