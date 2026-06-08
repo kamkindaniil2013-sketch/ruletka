@@ -530,12 +530,6 @@
                     <div class="tr-item" data-c="red"><div class="tr-sq red"></div><div class="tr-info"><span class="tr-color" data-i18n="col_red">Красный</span><span class="tr-trade" data-i18n="tr_fail">Fail Trade</span></div></div>
                     <div class="tr-item" data-c="yellow"><div class="tr-sq yellow"></div><div class="tr-info"><span class="tr-color" data-i18n="col_yellow">Желтый</span><span class="tr-trade" data-i18n="tr_deal">Deal?</span></div></div>
                 </div>
-
-                <div class="panel-title" data-i18n="panel_dice_settings" style="margin-top: 10px;">⚙️ Налаштування Кубиків</div>
-                <div>
-                    <span class="settings-label"><span data-i18n="set_dice_count">Кількість кубиків:</span> <span id="val-dice-count" class="slider-value">3</span></span>
-                    <input type="range" id="set-dice-count" min="1" max="6" value="3" step="1" class="btn-click">
-                </div>
             </div>
         </div>
     </div>
@@ -549,6 +543,7 @@
             <div class="settings-tabs-nav" id="settings-tabs-nav">
                 <button class="tab-btn active btn-click" onclick="openTab('sec-templates', this)" data-i18n="tab_templates">🎨 Шаблони</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-game', this)" data-i18n="tab_game">🎮 Колесо</button>
+                <button class="tab-btn btn-click" onclick="openTab('sec-dice', this)" data-i18n="tab_dice">🎲 Кубики</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-visuals', this)" data-i18n="tab_visuals">✨ Вигляд</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-physics', this)" data-i18n="tab_physics">🌀 Фізика</button>
                 <button class="tab-btn btn-click" onclick="openTab('sec-audio', this)" data-i18n="tab_audio">🔊 Звук</button>
@@ -598,6 +593,18 @@
                             <div>
                                 <span class="settings-label"><span data-i18n="set_time">Час обертання:</span> <span id="val-time" class="slider-value">5</span> <span data-i18n="sec">сек</span></span>
                                 <input type="range" id="set-time" min="2" max="15" value="5" step="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section" id="sec-dice">
+                    <button class="accordion-btn btn-click" onclick="toggleAccordion('sec-dice', this)" data-i18n="tab_dice">🎲 Кубики</button>
+                    <div class="settings-content">
+                        <div class="settings-column" style="max-width: 500px;">
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_dice_count">Кількість кубиків:</span> <span id="val-dice-count" class="slider-value">3</span></span>
+                                <input type="range" id="set-dice-count" min="1" max="6" value="3" step="1" class="btn-click">
                             </div>
                         </div>
                     </div>
@@ -736,9 +743,9 @@
                             <div>
                                 <span class="settings-label" data-i18n="set_sound">Звуковий пакет:</span>
                                 <select id="set-sound" class="custom-select btn-click">
+                                    <option value="soft" data-i18n="opt_sd_soft">М'який (Chill)</option>
                                     <option value="classic" data-i18n="opt_sd_classic">Класика (Пік-пік)</option>
                                     <option value="arcade" data-i18n="opt_sd_arcade">Аркада (8-bit)</option>
-                                    <option value="soft" data-i18n="opt_sd_soft">М'який (Chill)</option>
                                     <option value="casino" data-i18n="opt_sd_casino">Казино (Тріскачка)</option>
                                     <option value="cyberpunk" data-i18n="opt_sd_cyber">Кіберпанк (Синт)</option>
                                     <option value="magic" data-i18n="opt_sd_magic">Магия (Дзвін)</option>
@@ -877,7 +884,7 @@
                 menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ", btn_admin: "💬 НАПИСАТИ АДМІНУ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 ІСТОРІЯ", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
-                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
+                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_dice: "🎲 Кубики", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
                 tpl_space: "Космос", tpl_space_desc: "Темная матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Приховує текст під час обертання", set_time: "Час обертання:", sec: "сек",
@@ -908,7 +915,7 @@
                 menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 WHEEL OF FORTUNE", btn_start_dice: "🎲 COLOR DICE", btn_settings: "⚙️ SETTINGS", btn_authors: "👑 ABOUT AUTHORS", btn_admin: "💬 CONTACT ADMIN",
                 btn_back: "← BACK", authors_title: "MASTERMINDS", author_role_finx: "Lead Dev & Ideologist", author_role_gemini: "AI Assistant by Google",
                 btn_to_menu: "← TO MENU", panel_history: "📜 History", btn_spin: "SPIN", btn_roll: "ROLL", panel_items: "🎯 Items", placeholder_new: "New option...",
-                btn_save: "← SAVE", settings_title: "SETTINGS", tab_templates: "🎨 Templates", tab_game: "🎮 Wheel", tab_visuals: "✨ Visuals", tab_physics: "🌀 Physics", tab_audio: "🔊 Audio", tab_protect: "🔒 Protection",
+                btn_save: "← SAVE", settings_title: "SETTINGS", tab_templates: "🎨 Templates", tab_game: "🎮 Wheel", tab_dice: "🎲 Dice", tab_visuals: "✨ Visuals", tab_physics: "🌀 Physics", tab_audio: "🔊 Audio", tab_protect: "🔒 Protection",
                 tpl_space: "Space", tpl_space_desc: "Dark matter and stars", tpl_sunset: "Sunset", tpl_sunset_desc: "Warm colors", tpl_casino: "Casino", tpl_casino_desc: "Gold, flat style", tpl_matrix: "Hacker", tpl_matrix_desc: "Matrix green, neon style", tpl_sakura: "Sakura", tpl_sakura_desc: "Anime style, pink color", tpl_cyberpunk: "Cyberpunk", tpl_cyberpunk_desc: "Original neon design", tpl_opt: "Optimized", tpl_opt_desc: "No effects, High FPS",
                 tpl_nature: "Nature", tpl_nature_desc: "Calm forest colors", tpl_fire: "Fire", tpl_fire_desc: "Burning gradients", tpl_ice: "Ice", tpl_ice_desc: "Cold neon & snow",
                 set_elimination: "Elimination Mode", set_elimination_desc: "Winner is removed from the list", set_mystery: "Mystery Mode", set_mystery_desc: "Hides text while spinning", set_time: "Spin Time:", sec: "sec",
@@ -939,7 +946,7 @@
                 menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНЫ", btn_start_dice: "🎲 ЦВЕТНЫЕ КУБИКИ", btn_settings: "⚙️ НАСТРОЙКИ", btn_authors: "👑 ОБ АВТОРАХ", btn_admin: "💬 НАПИСАТЬ АДМИНУ",
                 btn_back: "← НАЗАД", authors_title: "СОЗДАТЕЛИ", author_role_finx: "Главный разработчик", author_role_gemini: "AI Ассистент от Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 История", btn_spin: "КРУТИТЬ", btn_roll: "БРОСАТЬ", panel_items: "🎯 Элементы", placeholder_new: "Новый вариант...",
-                btn_save: "← СОХРАНИТЬ", settings_title: "НАСТРОЙКИ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_visuals: "✨ Вид", tab_physics: "🌀 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Защита",
+                btn_save: "← СОХРАНИТЬ", settings_title: "НАСТРОЙКИ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_dice: "🎲 Кубики", tab_visuals: "✨ Вид", tab_physics: "🌀 Физика", tab_audio: "🔊 Звук", tab_protect: "🔒 Защита",
                 tpl_space: "Космос", tpl_space_desc: "Темная материя и звезды", tpl_sunset: "Закат", tpl_sunset_desc: "Теплые цвета", tpl_casino: "Казино", tpl_casino_desc: "Золото, флэт стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матрица, зеленый неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аниме стиль, розовый", tpl_cyberpunk: "Киберпанк", tpl_cyberpunk_desc: "Оригинальный неоновый дизайн", tpl_opt: "Оптимизированный", tpl_opt_desc: "Без эффектов, высокий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Лесные цвета", tpl_fire: "Огонь", tpl_fire_desc: "Пылающие градиенты", tpl_ice: "Лед", tpl_ice_desc: "Холодный неон и снег",
                 set_elimination: "Режим на выбывание", set_elimination_desc: "Победитель удаляется из списка", set_mystery: "Режим 'Интрига' (Mystery)", set_mystery_desc: "Скрывает текст во время вращения", set_time: "Время вращения:", sec: "сек",
@@ -994,7 +1001,7 @@
         // КОНФІГ ТА СТАН ДОДАТКА
         // ========================================================
         let cfg = {
-            time: 6, anim: 'smooth', sound: 'classic', volume: 50,
+            time: 6, anim: 'smooth', sound: 'soft', volume: 50,
             style: 'neon', textSize: 35, theme: 'darkmatter', particles: 'stars', confetti: 'classic',
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
             menuLayout: 'layout-tabs', currentTemplate: 'space',
@@ -1166,15 +1173,15 @@
         }
 
         const templates = {
-            space: { theme: 'darkmatter', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'ripple' },
-            sunset: { theme: 'sunset', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'sparkle' },
-            casino: { theme: 'gold', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'money' },
-            matrix: { theme: 'matrix', particles: 'matrix', sound: 'classic', style: 'neon', clickfx: 'none' },
-            cyberpunk: { theme: 'cyberpunk', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'ripple' },
-            optimized: { theme: 'cyberpunk', particles: 'none', sound: 'classic', style: 'flat', clickfx: 'none', parallax: false, anim: 'smooth' },
-            nature: { theme: 'nature', particles: 'bubbles', sound: 'classic', style: 'flat', clickfx: 'none' },
-            fire: { theme: 'fire', particles: 'stars', sound: 'classic', style: 'neon', clickfx: 'sparkle' },
-            ice: { theme: 'ice', particles: 'snow', sound: 'classic', style: 'neon', clickfx: 'sparkle' }
+            space: { theme: 'darkmatter', particles: 'stars', sound: 'soft', style: 'neon', clickfx: 'ripple' },
+            sunset: { theme: 'sunset', particles: 'none', sound: 'soft', style: 'flat', clickfx: 'sparkle' },
+            casino: { theme: 'gold', particles: 'none', sound: 'soft', style: 'flat', clickfx: 'money' },
+            matrix: { theme: 'matrix', particles: 'matrix', sound: 'soft', style: 'neon', clickfx: 'none' },
+            cyberpunk: { theme: 'cyberpunk', particles: 'stars', sound: 'soft', style: 'neon', clickfx: 'ripple' },
+            optimized: { theme: 'cyberpunk', particles: 'none', sound: 'soft', style: 'flat', clickfx: 'none', parallax: false, anim: 'smooth' },
+            nature: { theme: 'nature', particles: 'bubbles', sound: 'soft', style: 'flat', clickfx: 'none' },
+            fire: { theme: 'fire', particles: 'stars', sound: 'soft', style: 'neon', clickfx: 'sparkle' },
+            ice: { theme: 'ice', particles: 'snow', sound: 'soft', style: 'neon', clickfx: 'sparkle' }
         };
 
         function updateTemplateUI() {
@@ -1688,6 +1695,10 @@
             }
             
             await sleep(600);
+            
+            // Фінальний акорд після того, як всі кубики приземлились!
+            playWinSound();
+
             // Показуємо кнопку прийняття
             document.getElementById('mega-actions').style.display = 'block';
             
@@ -1733,7 +1744,9 @@
                 const cy = rect.top + rect.height/2;
                 spawnImpact(cx, cy, colorObj.name);
                 spawnStars(cx, cy);
-                playWinSound(true);
+                
+                // Відтворюємо короткий звук кубика замість гучного акорду
+                playTickSound();
                 
                 setTimeout(resolve, 500);
             });
@@ -1984,6 +1997,7 @@
             else if (cfg.sound === 'magic') playOscillator('sine', 1200 + Math.random()*400, 0.1, 0.05);
             else if (cfg.sound === 'drum') playOscillator('square', 80, 0.3, 0.05);
             else if (cfg.sound === 'bass') playOscillator('sawtooth', 60, 0.4, 0.08);
+            else if (cfg.sound === 'soft') playOscillator('sine', 440, 0.1, 0.05); 
             else playOscillator('triangle', 400, 0.2, 0.08);
         }
 
@@ -1996,13 +2010,20 @@
                 else if (cfg.sound === 'cyberpunk') { chords = [150, 200, 250, 300]; type = 'sawtooth'; } 
                 else if (cfg.sound === 'magic') { chords = [880, 1046, 1318, 1760]; type = 'sine'; }
                 else if (cfg.sound === 'drum' || cfg.sound === 'bass') { chords = [100, 80, 60, 40]; type = 'sawtooth'; }
-                else { chords = [523.25, 659.25, 783.99, 1046.50]; }
+                else if (cfg.sound === 'classic') { chords = [523.25, 659.25, 783.99, 1046.50]; type = 'triangle'; }
+                else { 
+                    // 'soft' - очень мягкий и расслабляющий аккорд (C Major / синусоида)
+                    chords = [261.63, 329.63, 392.00, 523.25]; 
+                    type = 'sine'; 
+                }
                 
                 chords.forEach((freq, i) => {
                     const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                     osc.connect(gain); gain.connect(masterGain); osc.type = type; osc.frequency.value = freq;
-                    let startT = audioCtx.currentTime + (short ? 0 : i * 0.1); let endT = startT + (short ? 0.3 : 1.5);
-                    gain.gain.setValueAtTime(0, startT); gain.gain.linearRampToValueAtTime(0.2, startT + 0.1); gain.gain.exponentialRampToValueAtTime(0.01, endT);
+                    let startT = audioCtx.currentTime + (short ? 0 : i * 0.1); let endT = startT + (short ? 0.4 : 1.5);
+                    gain.gain.setValueAtTime(0, startT); 
+                    gain.gain.linearRampToValueAtTime(0.15, startT + 0.1); 
+                    gain.gain.exponentialRampToValueAtTime(0.001, endT);
                     osc.start(startT); osc.stop(endT);
                     setTimeout(() => { osc.disconnect(); gain.disconnect(); }, (endT - audioCtx.currentTime)*1000 + 100);
                 });
