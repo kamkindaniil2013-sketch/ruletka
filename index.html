@@ -271,11 +271,16 @@
             background: rgba(0,0,0,0.3); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
         }
         .secret-dice-dot {
-            width: 18px; height: 18px; border-radius: 50%; cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 18px; height: 18px; border-radius: 4px; cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), outline 0.2s;
             box-shadow: 0 0 5px rgba(0,0,0,0.5); position: relative;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
         }
         .secret-dice-dot:hover { transform: scale(1.3); }
+        .secret-dice-dot.banned {
+            outline: 2px solid rgba(255, 255, 255, 0.25);
+        }
 
         /* -----------------------
            КНОПКИ ТА ЕЛЕМЕНТИ УПРАВЛІННЯ
@@ -852,7 +857,7 @@
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 ІСТОРІЯ", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
                 btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Колесо", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
-                tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
+                tpl_space: "Космос", tpl_space_desc: "Темная матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогодь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Приховує текст під час обертання", set_time: "Час обертання:", sec: "сек",
                 set_menu_layout: "Стиль меню налаштувань:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Акордеон)",
@@ -1766,6 +1771,8 @@
             diceColors.forEach(c => {
                 const dot = document.createElement('div');
                 dot.className = 'secret-dice-dot';
+                // Відображення вибраного кольору (ледь помітна обводка)
+                if (cfg.cheatDiceBanColor === c.id) dot.classList.add('banned');
                 dot.style.background = c.hex;
                 
                 // Лівий клік: фейкова анімація
@@ -1794,6 +1801,8 @@
                         playOscillator('sine', 1200, 0.05, 0.1); 
                     }
                     saveCfg();
+                    // Оновлюємо візуал палітри
+                    renderDicePalette();
                 });
                 pal.appendChild(dot);
             });
