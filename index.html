@@ -803,7 +803,32 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ========================================================
+        // ГЛОБАЛЬНІ ФУНКЦІЇ ДЛЯ HTML
+        // ========================================================
+        window.setLang = setLang;
+        window.switchView = switchView;
+        window.openAuthorModal = openAuthorModal;
+        window.clearHistory = clearHistory;
+        window.toggle3D = toggle3D;
+        window.clearItems = clearItems;
+        window.loadPreset = loadPreset;
+        window.closeMega = closeMega;
+        window.doMegaRoll = doMegaRoll;
+        window.openTab = openTab;
+        window.toggleAccordion = toggleAccordion;
+        window.applyTemplate = applyTemplate;
+        window.closeModal = closeModal;
+        window.openPinModal = openPinModal;
+        window.closePinModal = closePinModal;
+        window.checkAdminPin = checkAdminPin;
+        window.removeItem = removeItem;
+
         // ========================================================
         // BONGO COLOR DICE SERVER API
         // ========================================================
@@ -851,13 +876,13 @@
             uk: {
                 menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ", btn_admin: "💬 НАПИСАТИ АДМІНУ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
-                btn_to_menu: "← В МЕНЮ", panel_history: "📜 ІСТОРІЯ", btn_spin: "КРУТИТЬ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
-                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Колесо", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
+                btn_to_menu: "← В МЕНЮ", panel_history: "📜 ІСТОРІЯ", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
+                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
                 tpl_space: "Космос", tpl_space_desc: "Темная матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
-                tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогодь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
+                tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Приховує текст під час обертання", set_time: "Час обертання:", sec: "сек",
                 set_menu_layout: "Стиль меню налаштувань:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Акордеон)",
-                set_theme: "Глобальна Тема:", opt_th_cyber: "Кіберпанк (Неон)", opt_th_matrix: "Матриця (Зелений)", opt_th_sakura: "Сакура (Рожевий)", opt_th_blood: "Кривавий Місяць", opt_th_ocean: "Океан (Синій)", opt_th_gold: "Золотий Люкс", opt_th_vapor: "Vaporwave (80-ті)", opt_th_dark: "Темна Матерія", opt_th_sunset: "Захід Сонця", opt_th_ice: "Лід (Блакитний)", opt_th_fire: "Вогодь (Помаранчевий)", opt_th_nature: "Ліс (Зелений)", opt_th_custom: "🎨 СВІЙ ДИЗАЙН",
+                set_theme: "Глобальна Тема:", opt_th_cyber: "Кіберпанк (Неон)", opt_th_matrix: "Матриця (Зелений)", opt_th_sakura: "Сакура (Рожевий)", opt_th_blood: "Кривавий Місяць", opt_th_ocean: "Океан (Синій)", opt_th_gold: "Золотий Люкс", opt_th_vapor: "Vaporwave (80-ті)", opt_th_dark: "Темна Матерія", opt_th_sunset: "Захід Сонця", opt_th_ice: "Лід (Блакитний)", opt_th_fire: "Вогонь (Помаранчевий)", opt_th_nature: "Ліс (Зелений)", opt_th_custom: "🎨 СВІЙ ДИЗАЙН",
                 col_bg1: "Фон (Центр)", col_bg2: "Фон (Края)", col_ac1: "Акцент 1 (Колесо)", col_ac2: "Акцент 2 (Кнопки)",
                 set_cursor: "Курсор миші:", opt_cur_def: "Стандартний", opt_cur_cross: "Приціл", opt_cur_sword: "Неоновий Меч 🗡️", opt_cur_wand: "Магічна Паличка 🪄", opt_cur_kunai: "Кунай 🗡️", opt_cur_rocket: "Ракета 🚀", opt_cur_pizza: "Піца 🍕", opt_cur_crown: "Корона 👑", opt_cur_ghost: "Привид 👻",
                 set_clickfx: "Ефект кліку:", opt_fx_rip: "Неоновий Пульс", opt_fx_spark: "Іскри", opt_fx_hearts: "Сердечка 💖", opt_fx_skulls: "Черепи 💀", opt_fx_money: "Монетки 💰", opt_fx_none: "Вимкнути",
@@ -973,7 +998,6 @@
             style: 'neon', textSize: 35, theme: 'darkmatter', particles: 'stars', confetti: 'classic',
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
             menuLayout: 'layout-tabs', currentTemplate: 'space',
-            protect: true, contextBlock: true, devtoolsBlock: true,
             customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' },
             diceCount: 3, cheatDiceBanColor: 'none' 
         };
@@ -981,6 +1005,80 @@
         const savedCfg = localStorage.getItem('megaWheelCfg_V6');
         if (savedCfg) { cfg = { ...cfg, ...JSON.parse(savedCfg) }; }
         function saveCfg() { localStorage.setItem('megaWheelCfg_V6', JSON.stringify(cfg)); }
+
+        // ========================================================
+        // ГЛОБАЛЬНІ АДМІН-НАЛАШТУВАННЯ (FIREBASE)
+        // ========================================================
+        let globalAdminSettings = JSON.parse(localStorage.getItem('localAdminFallback')) || {
+            protect: true,
+            contextBlock: true,
+            devtoolsBlock: true
+        };
+
+        let db = null, auth = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                const initAuth = async () => {
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch(e) { console.warn("Auth error", e); }
+                };
+                initAuth();
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user && db) {
+                        const adminDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'admin', 'globalConfig');
+                        onSnapshot(adminDocRef, (snapshot) => {
+                            if (snapshot.exists()) {
+                                const data = snapshot.data();
+                                globalAdminSettings.protect = data.protect ?? true;
+                                globalAdminSettings.contextBlock = data.contextBlock ?? true;
+                                globalAdminSettings.devtoolsBlock = data.devtoolsBlock ?? true;
+                                
+                                // Синхронізація UI
+                                const chkProtect = document.getElementById('set-protect');
+                                if (chkProtect) chkProtect.checked = globalAdminSettings.protect;
+                                const chkCtx = document.getElementById('set-contextBlock');
+                                if (chkCtx) chkCtx.checked = globalAdminSettings.contextBlock;
+                                const chkDev = document.getElementById('set-devtoolsBlock');
+                                if (chkDev) chkDev.checked = globalAdminSettings.devtoolsBlock;
+
+                                applyProtectionStyles();
+                            } else {
+                                setDoc(adminDocRef, globalAdminSettings).catch(e => console.warn(e));
+                            }
+                        }, (error) => {
+                            console.error("Firestore sync error:", error);
+                        });
+                    }
+                });
+            }
+        } catch(e) {
+            console.warn("Firebase Init skipped", e);
+        }
+
+        window.updateGlobalAdminSettings = function(key, value) {
+            globalAdminSettings[key] = value;
+            applyProtectionStyles();
+            if (db && auth && auth.currentUser) {
+                const adminDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'admin', 'globalConfig');
+                setDoc(adminDocRef, globalAdminSettings, { merge: true }).catch(e => console.warn(e));
+            } else {
+                localStorage.setItem('localAdminFallback', JSON.stringify(globalAdminSettings));
+            }
+        };
+
 
         let wheelItems = JSON.parse(localStorage.getItem('megaWheelItems_V6')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
         let wheelHistory = JSON.parse(localStorage.getItem('megaWheelHistory_V6')) || [];
@@ -1022,16 +1120,16 @@
         // ========================================================
         // НАЛАШТУВАННЯ ТА БІНДИНГИ
         // ========================================================
-        window.openTab = function(secId, btn) {
+        function openTab(secId, btn) {
             if(cfg.menuLayout !== 'layout-tabs') return;
             playUIBeat();
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById(secId).classList.add('active');
-        };
+        }
 
-        window.toggleAccordion = function(secId, btn) {
+        function toggleAccordion(secId, btn) {
             if(cfg.menuLayout !== 'layout-accordion') return;
             playUIBeat();
             const section = document.getElementById(secId);
@@ -1044,7 +1142,7 @@
                 section.classList.add('active');
                 btn.classList.add('active');
             }
-        };
+        }
 
         function toggle3D() {
             cfg.parallax = !cfg.parallax;
@@ -1227,9 +1325,17 @@
         bindInput('set-elimination', 'elimination', null, 'checkbox');
         bindInput('set-mystery', 'mystery', null, 'checkbox');
         
-        bindInput('set-protect', 'protect', null, 'checkbox', applyProtectionStyles);
-        bindInput('set-contextBlock', 'contextBlock', null, 'checkbox');
-        bindInput('set-devtoolsBlock', 'devtoolsBlock', null, 'checkbox');
+        // Підключення глобальних налаштувань для вкладки Захисту
+        ['protect', 'contextBlock', 'devtoolsBlock'].forEach(key => {
+            const el = document.getElementById('set-' + key);
+            if(el) {
+                el.checked = globalAdminSettings[key];
+                el.addEventListener('change', (e) => {
+                    playUIBeat();
+                    window.updateGlobalAdminSettings(key, e.target.checked);
+                });
+            }
+        });
 
         // ========================================================
         // ЛОГІКА КОЛЕСА ФОРТУНИ
@@ -1365,7 +1471,7 @@
             drawWheel();
         }
 
-        window.loadPreset = function(type) {
+        function loadPreset(type) {
             if(type === 'yesno') wheelItems = currentLang === 'en' ? ["YES", "NO"] : currentLang === 'uk' ? ["ТАК", "НІ"] : ["ДА", "НЕТ"];
             else if(type === 'dice') wheelItems = ["1", "2", "3", "4", "5", "6"];
             else if(type === 'coin') wheelItems = currentLang === 'en' ? ["HEADS", "TAILS"] : currentLang === 'uk' ? ["ОРЕЛ", "РЕШКА"] : ["ОРЕЛ", "РЕШКА"];
@@ -1374,14 +1480,14 @@
             renderList(); initAudioAndSensors(); playUIBeat();
         }
         
-        window.clearItems = function() { wheelItems = []; wheelItems.push("ПУСТО"); winnerIndexGlobal = -1; renderList(); playUIBeat(); }
-        window.clearHistory = function(type) { 
+        function clearItems() { wheelItems = []; wheelItems.push("ПУСТО"); winnerIndexGlobal = -1; renderList(); playUIBeat(); }
+        function clearHistory(type) { 
             if(type === 'wheel') { wheelHistory = []; localStorage.removeItem('megaWheelHistory_V6'); renderHistory('wheel'); }
             else { diceHistory = []; localStorage.removeItem('megaDiceHistory_V6'); renderHistory('dice'); }
             playUIBeat(); 
         }
 
-        window.removeItem = function(e, index) { e.stopPropagation(); wheelItems.splice(index, 1); if (wheelItems.length === 0) wheelItems.push("ПУСТО"); renderList(); initAudioAndSensors(); playUIBeat(); }
+        function removeItem(e, index) { e.stopPropagation(); wheelItems.splice(index, 1); if (wheelItems.length === 0) wheelItems.push("ПУСТО"); renderList(); initAudioAndSensors(); playUIBeat(); }
         
         document.getElementById('add-btn').addEventListener('click', () => {
             const val = document.getElementById('new-item-input').value.trim();
@@ -1669,7 +1775,7 @@
             }
         }
 
-        window.closeMega = function() {
+        function closeMega() {
             // Повертаємо оригінальний вигляд екрану (з 3D кубиками)
             document.getElementById('mega-actions').style.display = 'none';
             document.getElementById('megaDiceRow').style.display = 'none';
@@ -1994,6 +2100,7 @@
             if (rawText.length > 0) {
                 const mainPart = rawText.slice(0, -1);
                 const lastChar = rawText.slice(-1);
+                // Робимо останню літеру клікабельною для виклику пін-коду
                 titleEl.innerHTML = `${mainPart}<span id="secret-trigger" class="btn-click" style="cursor: inherit; color: inherit; text-shadow: inherit;">${lastChar}</span>`;
                 
                 document.getElementById('secret-trigger').addEventListener('click', () => {
@@ -2018,6 +2125,7 @@
 
         function checkAdminPin() {
             const enteredPin = document.getElementById('admin-pin-input').value;
+            // Пін-код: 22867
             if (enteredPin === '22867') {
                 playWinSound(true);
                 isProtectTabUnlocked = true;
@@ -2040,7 +2148,7 @@
         }
 
         function applyProtectionStyles() {
-            if (cfg.protect) { document.body.classList.add('protected-selection'); } 
+            if (globalAdminSettings.protect) { document.body.classList.add('protected-selection'); } 
             else { document.body.classList.remove('protected-selection'); }
         }
 
@@ -2050,17 +2158,23 @@
                 if (e.target.closest('.secret-dice-dot') || e.target.closest('#spin-btn') || e.target.closest('.item') || e.target.closest('#wheel')) {
                     return; 
                 }
-                if (cfg.protect && cfg.contextBlock) {
+                // Перевірка глобальних налаштувань
+                if (globalAdminSettings.protect && globalAdminSettings.contextBlock) {
                     if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
                         e.preventDefault(); return false;
                     }
                 }
             });
             
-            // Блокування гарячих клавіш
+            // Блокування гарячих клавіш DevTools (F12, Ctrl+U, Ctrl+Shift+I тощо)
             document.addEventListener('keydown', e => {
-                if (!cfg.protect || !cfg.devtoolsBlock) return;
-                const key = e.key ? e.key.toUpperCase() : ''; const isCtrlOrCmd = e.ctrlKey || e.metaKey; const isShift = e.shiftKey; const isAlt = e.altKey;
+                if (!globalAdminSettings.protect || !globalAdminSettings.devtoolsBlock) return;
+                
+                const key = e.key ? e.key.toUpperCase() : ''; 
+                const isCtrlOrCmd = e.ctrlKey || e.metaKey; 
+                const isShift = e.shiftKey; 
+                const isAlt = e.altKey;
+                
                 let isViolation = false;
 
                 if (e.key === 'F12' || e.keyCode === 123) isViolation = true;
@@ -2079,17 +2193,21 @@
 
             // Блокування виділення
             document.addEventListener('selectstart', e => {
-                if (cfg.protect) { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); return false; } }
+                if (globalAdminSettings.protect) { 
+                    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { 
+                        e.preventDefault(); return false; 
+                    } 
+                }
             });
             
             // Блокування перетягування
             document.addEventListener('dragstart', e => {
-                if (cfg.protect) { e.preventDefault(); return false; }
+                if (globalAdminSettings.protect) { e.preventDefault(); return false; }
             });
 
             // Заміна буфера обміну
             document.addEventListener('copy', e => {
-                if (cfg.protect) {
+                if (globalAdminSettings.protect) {
                     if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
                     e.clipboardData.setData('text/plain', 'Захищено FORTUNE EDITION!');
                     e.preventDefault(); 
@@ -2120,6 +2238,7 @@
             renderList(); renderHistory('wheel'); renderHistory('dice'); initParticles();
             
             renderDice(); renderDicePalette();
+            applyProtectionStyles(); // Застосування глобального захисту при завантаженні
             
             document.querySelectorAll('.btn-click').forEach(btn => {
                 btn.addEventListener('click', () => { playUIBeat(); initAudioAndSensors(); });
