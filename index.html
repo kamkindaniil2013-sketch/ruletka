@@ -884,8 +884,8 @@
                 menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ", btn_admin: "💬 НАПИСАТИ АДМІНУ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 ІСТОРІЯ", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
-                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_dice: "🎲 Кубики", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
-                tpl_space: "Космос", tpl_space_desc: "Темная матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
+                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Колесо", tab_dice: "🎲 Кубики", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
+                tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Приховує текст під час обертання", set_time: "Час обертання:", sec: "сек",
                 set_menu_layout: "Стиль меню налаштувань:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Акордеон)",
@@ -907,7 +907,7 @@
                 pin_title: "ВВЕДІТЬ ПІН-КОД", pin_subtitle: "Для доступу до панелі адмін-налаштувань", pin_cancel: "СКАСУВАТИ", pin_confirm: "ВХІД",
                 panel_dice_settings: "⚙️ Налаштування Кубиків", set_dice_count: "Кількість кубиків:",
                 trade_ref_title: "📊 ТРЕЙДИ (ЗНАЧЕННЯ)", tr_fail: "Fail Trade (Відмова)", tr_no: "No Thanks (Ні, дякую)", tr_deal: "Deal? (Домовились?)", tr_fair: "Fair Trade (Чесний обмін)", tr_last: "Last Offer (Остання пропозиція)", tr_add: "Add More (Додай ще)",
-                col_red: "Червоний", col_orange: "Помаранчевий", col_yellow: "Жовтий", col_green: "Зелений", col_blue: "Синий", col_purple: "Фіолетовий",
+                col_red: "Червоний", col_orange: "Помаранчевий", col_yellow: "Жовтий", col_green: "Зелений", col_blue: "Синій", col_purple: "Фіолетовий",
                 btn_mega_close: "✓ ПРИЙНЯТИ",
                 colors: { red:"Червоний", orange:"Помаранчевий", yellow:"Жовтий", green:"Зелений", blue:"Синій", purple:"Фіолетовий" }
             },
@@ -1215,7 +1215,7 @@
             
             saveCfg(); applyTheme(); initParticles(); drawWheel();
             playWinSound(true);
-            setTimeout(() => switchView('view-game'), 400); 
+            // setTimeout прибрано, щоб користувач залишався на вкладці налаштувань
         }
 
         function applyCursor() {
