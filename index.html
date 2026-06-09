@@ -612,12 +612,28 @@
                                 <input type="range" id="set-dice-time" min="0.5" max="4" value="1.5" step="0.5" class="btn-click">
                             </div>
                             <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            
+                            <div class="settings-row">
+                                <div>
+                                    <span class="settings-label" data-i18n="set_roll_autoclose">Авто-закриття звичайного кидка</span>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="set-roll-autoclose" class="btn-click"><span class="slider-toggle"></span></label>
+                            </div>
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_roll_autoclose_time">Затримка закриття:</span> <span id="val-roll-autoclose-time" class="slider-value">2</span> <span data-i18n="sec">сек</span></span>
+                                <input type="range" id="set-roll-autoclose-time" min="0.5" max="4" value="2" step="0.5" class="btn-click">
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            
                             <div class="settings-row">
                                 <div>
                                     <span class="settings-label" data-i18n="set_mega_autoclose">Авто-закриття Mega Roll</span>
-                                    <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_mega_autoclose_desc">Автоматично закриває після показу</div>
                                 </div>
                                 <label class="toggle-switch"><input type="checkbox" id="set-mega-autoclose" class="btn-click"><span class="slider-toggle"></span></label>
+                            </div>
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_mega_autoclose_time">Затримка закриття:</span> <span id="val-mega-autoclose-time" class="slider-value">2.5</span> <span data-i18n="sec">сек</span></span>
+                                <input type="range" id="set-mega-autoclose-time" min="0.5" max="4" value="2.5" step="0.5" class="btn-click">
                             </div>
                         </div>
                     </div>
@@ -919,7 +935,9 @@
                 pre_yesno: "Так/Ні", pre_dice: "Кубики 1-6", pre_coin: "Орел/Решка",
                 pin_title: "ВВЕДІТЬ ПІН-КОД", pin_subtitle: "Для доступу до панелі адмін-налаштувань", pin_cancel: "СКАСУВАТИ", pin_confirm: "ВХІД",
                 panel_dice_settings: "⚙️ Налаштування Кубиків", set_dice_count: "Кількість кубиків:",
-                set_dice_time: "Час кидка:", set_mega_autoclose: "Авто-закриття Mega Roll", set_mega_autoclose_desc: "Автоматично закриває після показу результату",
+                set_dice_time: "Час кидка:", 
+                set_mega_autoclose: "Авто-закриття Mega Roll", set_mega_autoclose_desc: "Автоматично закриває після показу",
+                set_roll_autoclose: "Авто-закриття звичайного кидка", set_roll_autoclose_time: "Затримка закриття:", set_mega_autoclose_time: "Затримка закриття:",
                 trade_ref_title: "📊 ТРЕЙДИ (ЗНАЧЕННЯ)", tr_fail: "Fail Trade (Відмова)", tr_no: "No Thanks (Ні, дякую)", tr_deal: "Deal? (Домовились?)", tr_fair: "Fair Trade (Чесний обмін)", tr_last: "Last Offer (Остання пропозиція)", tr_add: "Add More (Додай ще)",
                 col_red: "Червоний", col_orange: "Помаранчевий", col_yellow: "Жовтий", col_green: "Зелений", col_blue: "Синий", col_purple: "Фіолетовий",
                 btn_mega_close: "✓ ПРИЙНЯТИ",
@@ -951,7 +969,9 @@
                 pre_yesno: "Yes/No", pre_dice: "Dice 1-6", pre_coin: "Heads/Tails",
                 pin_title: "ENTER PIN CODE", pin_subtitle: "To access admin panel", pin_cancel: "CANCEL", pin_confirm: "LOGIN",
                 panel_dice_settings: "⚙️ Dice Settings", set_dice_count: "Number of dice:",
-                set_dice_time: "Roll Duration:", set_mega_autoclose: "Auto-close Mega Roll", set_mega_autoclose_desc: "Automatically closes after showing results",
+                set_dice_time: "Roll Duration:", 
+                set_mega_autoclose: "Auto-close Mega Roll", set_mega_autoclose_desc: "Automatically closes after showing results",
+                set_roll_autoclose: "Auto-close regular roll", set_roll_autoclose_time: "Close delay:", set_mega_autoclose_time: "Close delay:",
                 trade_ref_title: "📊 TRADES (VALUES)", tr_fail: "Fail Trade", tr_no: "No Thanks", tr_deal: "Deal?", tr_fair: "Fair Trade", tr_last: "Last Offer", tr_add: "Add More",
                 col_red: "Red", col_orange: "Orange", col_yellow: "Yellow", col_green: "Green", col_blue: "Blue", col_purple: "Purple",
                 btn_mega_close: "✓ ACCEPT",
@@ -968,7 +988,7 @@
                 set_menu_layout: "Стиль меню настроек:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Аккордеон)",
                 set_theme: "Глобальная Тема:", opt_th_cyber: "Киберпанк (Неон)", opt_th_matrix: "Матрица (Зеленый)", opt_th_sakura: "Сакура (Розовый)", opt_th_blood: "Кровавая Луна", opt_th_ocean: "Океан (Синий)", opt_th_gold: "Золотой Люкс", opt_th_vapor: "Vaporwave (80-е)", opt_th_dark: "Темная Материя", opt_th_sunset: "Закат", opt_th_ice: "Лед (Голубой)", opt_th_fire: "Огонь (Оранжевый)", opt_th_nature: "Лес (Зеленый)", opt_th_custom: "🎨 СВОЙ ДИЗАЙН",
                 col_bg1: "Фон (Центр)", col_bg2: "Фон (Края)", col_ac1: "Accent 1 (Колесо)", col_ac2: "Accent 2 (Кнопки)",
-                set_cursor: "Курсор мыши:", opt_cur_def: "Стандартный", opt_cur_cross: "Прицел", opt_cur_sword: "Неоновый Меч 🗡️", opt_cur_wand: "Магическая Палочка 🪄", opt_cur_kunai: "Кунай 🗡️", opt_cur_rocket: "Ракета 🚀", opt_cur_pizza: "Пицца 🍕", opt_cur_crown: "Корона 👑", opt_cur_ghost: "Призрак 👻",
+                set_cursor: "Курсор мыши:", opt_cur_def: "Стандартний", opt_cur_cross: "Прицел", opt_cur_sword: "Неоновый Меч 🗡️", opt_cur_wand: "Магическая Палочка 🪄", opt_cur_kunai: "Кунай 🗡️", opt_cur_rocket: "Ракета 🚀", opt_cur_pizza: "Пицца 🍕", opt_cur_crown: "Корона 👑", opt_cur_ghost: "Призрак 👻",
                 set_clickfx: "Эффект клика:", opt_fx_rip: "Неоновый Пульс", opt_fx_spark: "Искры", opt_fx_hearts: "Сердечки 💖", opt_fx_skulls: "Черепа 💀", opt_fx_money: "Монетки 💰", opt_fx_none: "Выключить",
                 set_style: "Стиль Колеса:", opt_st_neon: "Неон (Градиенты)", opt_st_flat: "Флэт (Минимализм)", opt_st_dark: "Дарк (Темный фон)",
                 set_textsize: "Размер текста:", set_particles: "Частицы:", opt_pt_stars: "Космические Звезды", opt_pt_snow: "Снег", opt_pt_matrix: "Матрица (Цифры)", opt_pt_bubbles: "Пузырьки", opt_pt_none: "Выключить",
@@ -983,7 +1003,9 @@
                 pre_yesno: "Да/Нет", pre_dice: "Кубики 1-6", pre_coin: "Орел/Решка",
                 pin_title: "ВВЕДИТЕ ПИН-КОД", pin_subtitle: "Для доступа к админ-панели", pin_cancel: "ОТМЕНА", pin_confirm: "ВХОД",
                 panel_dice_settings: "⚙️ Настройки Кубиков", set_dice_count: "Количество кубиков:",
-                set_dice_time: "Время броска:", set_mega_autoclose: "Авто-закрытие Mega Roll", set_mega_autoclose_desc: "Автоматически закрывает после показа результата",
+                set_dice_time: "Время броска:", 
+                set_mega_autoclose: "Авто-закрытие Mega Roll", set_mega_autoclose_desc: "Автоматически закрывает после показа",
+                set_roll_autoclose: "Авто-закрытие обычного броска", set_roll_autoclose_time: "Задержка закрытия:", set_mega_autoclose_time: "Задержка закрытия:",
                 trade_ref_title: "📊 ТРЕЙДЫ (ЗНАЧЕНИЯ)", tr_fail: "Fail Trade (Отказ)", tr_no: "No Thanks (Нет, спасибо)", tr_deal: "Deal? (Договорились?)", tr_fair: "Fair Trade (Честный обмен)", tr_last: "Last Offer (Последнее предл.)", tr_add: "Add More (Добавь еще)",
                 col_red: "Красный", col_orange: "Оранжевый", col_yellow: "Желтый", col_green: "Зеленый", col_blue: "Синий", col_purple: "Фиолетовый",
                 btn_mega_close: "✓ ПРИНЯТЬ",
@@ -1024,7 +1046,9 @@
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
             menuLayout: 'layout-tabs', currentTemplate: 'space',
             customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' },
-            diceCount: 3, cheatDiceBanColor: 'none', diceTime: 1.5, megaAutoClose: false
+            diceCount: 3, cheatDiceBanColor: 'none', diceTime: 1.5, 
+            megaAutoClose: false, megaAutoCloseTime: 2.5,
+            rollAutoClose: false, rollAutoCloseTime: 2.0
         };
 
         const savedCfg = localStorage.getItem('megaWheelCfg_V6');
@@ -1333,7 +1357,11 @@
         bindInput('set-volume', 'volume', 'val-volume', 'slider', () => { if(masterGain) masterGain.gain.value = cfg.volume / 100; });
         bindInput('set-dice-count', 'diceCount', 'val-dice-count', 'slider', renderDice);
         bindInput('set-dice-time', 'diceTime', 'val-dice-time', 'slider');
+        
         bindInput('set-mega-autoclose', 'megaAutoClose', null, 'checkbox');
+        bindInput('set-mega-autoclose-time', 'megaAutoCloseTime', 'val-mega-autoclose-time', 'slider');
+        bindInput('set-roll-autoclose', 'rollAutoClose', null, 'checkbox');
+        bindInput('set-roll-autoclose-time', 'rollAutoCloseTime', 'val-roll-autoclose-time', 'slider');
         
         bindInput('set-anim', 'anim', null, 'select'); 
         bindInput('set-sound', 'sound', null, 'select'); 
@@ -1735,7 +1763,7 @@
             if (cfg.megaAutoClose) {
                 setTimeout(() => {
                     if(megaRolling) closeMega();
-                }, 2500);
+                }, cfg.megaAutoCloseTime * 1000);
             }
         }
 
@@ -1766,42 +1794,12 @@
                 const cy = rect.top + rect.height/2;
                 spawnImpact(cx, cy, colorObj.name);
                 spawnStars(cx, cy);
-                playMegaRevealSound(); // <--- Використовуємо новий епічний звук замість playWinSound
+                
+                // ПОВЕРТАЄМО КЛАСИЧНИЙ ЗВУК
+                playWinSound(true); 
                 
                 setTimeout(resolve, 500);
             });
-        }
-
-        // СПЕЦІАЛЬНИЙ ЗВУК ДЛЯ MEGA ROLL (чистий та приємний)
-        function playMegaRevealSound() {
-            if (!audioCtx || cfg.volume === 0) return;
-            try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                
-                // Nice crisp ping/chime
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(masterGain);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-                
-                // Accompanied by a low "thump"
-                const osc2 = audioCtx.createOscillator();
-                const gain2 = audioCtx.createGain();
-                osc2.connect(gain2); gain2.connect(masterGain);
-                osc2.type = 'square';
-                osc2.frequency.setValueAtTime(100, audioCtx.currentTime);
-                osc2.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.2);
-                gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc2.start(); osc2.stop(audioCtx.currentTime + 0.3);
-
-                setTimeout(() => { osc.disconnect(); gain.disconnect(); osc2.disconnect(); gain2.disconnect(); }, 600);
-            } catch(e) {}
         }
 
         function spawnImpact(x, y, colorName) {
@@ -1922,6 +1920,13 @@
                             
                             modal.classList.add('active');
                             triggerConfetti();
+
+                            // АВТОЗАКРИТТЯ ДЛЯ ЗВИЧАЙНОГО БРОСКА
+                            if (cfg.rollAutoClose) {
+                                setTimeout(() => {
+                                    if(modal.classList.contains('active')) closeModal();
+                                }, cfg.rollAutoCloseTime * 1000);
+                            }
 
                         }, (cfg.diceTime * 1000) + 100);
                     }
