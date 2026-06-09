@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -414,8 +414,8 @@
     <canvas id="particles-bg"></canvas>
 
     <div class="lang-switcher">
-        <button class="lang-btn active btn-click" onclick="setLang('uk')">UK</button>
-        <button class="lang-btn btn-click" onclick="setLang('en')">EN</button>
+        <button class="lang-btn btn-click" onclick="setLang('uk')">UK</button>
+        <button class="lang-btn active btn-click" onclick="setLang('en')">EN</button>
         <button class="lang-btn btn-click" onclick="setLang('ru')">RU</button>
     </div>
 
@@ -605,6 +605,19 @@
                             <div>
                                 <span class="settings-label"><span data-i18n="set_dice_count">Кількість кубиків:</span> <span id="val-dice-count" class="slider-value">3</span></span>
                                 <input type="range" id="set-dice-count" min="1" max="6" value="3" step="1" class="btn-click">
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            <div>
+                                <span class="settings-label"><span data-i18n="set_dice_time">Час кидка:</span> <span id="val-dice-time" class="slider-value">1.5</span> <span data-i18n="sec">сек</span></span>
+                                <input type="range" id="set-dice-time" min="0.5" max="4" value="1.5" step="0.5" class="btn-click">
+                            </div>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.05); margin: 10px 0;">
+                            <div class="settings-row">
+                                <div>
+                                    <span class="settings-label" data-i18n="set_mega_autoclose">Авто-закриття Mega Roll</span>
+                                    <div style="font-size:11px; color:rgba(255,255,255,0.5); font-weight:600;" data-i18n="set_mega_autoclose_desc">Автоматично закриває після показу</div>
+                                </div>
+                                <label class="toggle-switch"><input type="checkbox" id="set-mega-autoclose" class="btn-click"><span class="slider-toggle"></span></label>
                             </div>
                         </div>
                     </div>
@@ -884,8 +897,8 @@
                 menu_title: "WHEEL & DICE", menu_subtitle: "FORTUNE EDITION", btn_start_wheel: "🎡 КОЛЕСО ФОРТУНИ", btn_start_dice: "🎲 КОЛЬОРОВІ КУБИКИ", btn_settings: "⚙️ НАЛАШТУВАННЯ", btn_authors: "👑 ПРО АВТОРІВ", btn_admin: "💬 НАПИСАТИ АДМІНУ",
                 btn_back: "← НАЗАД", authors_title: "ТВОРЦІ ШЕДЕВРУ", author_role_finx: "Головний розробник & Ідеолог", author_role_gemini: "AI Асистент від Google",
                 btn_to_menu: "← В МЕНЮ", panel_history: "📜 ІСТОРІЯ", btn_spin: "КРУТИТИ", btn_roll: "КИДАТИ", panel_items: "🎯 Елементи", placeholder_new: "Новий варіант...",
-                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблони", tab_game: "🎮 Колесо", tab_dice: "🎲 Кубики", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
-                tpl_space: "Космос", tpl_space_desc: "Темна матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимізований", tpl_opt_desc: "Без ефектів, високий FPS",
+                btn_save: "← ЗБЕРЕГТИ", settings_title: "НАЛАШТУВАННЯ", tab_templates: "🎨 Шаблоны", tab_game: "🎮 Колесо", tab_dice: "🎲 Кубики", tab_visuals: "✨ Вигляд", tab_physics: "🌀 Фізика", tab_audio: "🔊 Звук", tab_protect: "🔒 Захист",
+                tpl_space: "Космос", tpl_space_desc: "Темная матерія та зірки", tpl_sunset: "Захід Сонця", tpl_sunset_desc: "Теплі кольори", tpl_casino: "Казино", tpl_casino_desc: "Золото, флет стиль", tpl_matrix: "Хакер", tpl_matrix_desc: "Матриця, зелений неон", tpl_sakura: "Сакура", tpl_sakura_desc: "Аніме стиль, рожевий колір", tpl_cyberpunk: "Кіберпанк", tpl_cyberpunk_desc: "Оригінальний неоновий дизайн", tpl_opt: "Оптимизований", tpl_opt_desc: "Без ефектів, високий FPS",
                 tpl_nature: "Природа", tpl_nature_desc: "Спокійні лісові кольори", tpl_fire: "Вогонь", tpl_fire_desc: "Палаючі градієнти", tpl_ice: "Лід", tpl_ice_desc: "Холодний неон та сніг",
                 set_elimination: "Режим на вибування", set_elimination_desc: "Переможець видаляється зі списку", set_mystery: "Режим 'Інтрига' (Mystery)", set_mystery_desc: "Приховує текст під час обертання", set_time: "Час обертання:", sec: "сек",
                 set_menu_layout: "Стиль меню налаштувань:", opt_ml_tabs: "Вкладки (Кнопки)", opt_ml_acc: "Списки (Акордеон)",
@@ -906,8 +919,9 @@
                 pre_yesno: "Так/Ні", pre_dice: "Кубики 1-6", pre_coin: "Орел/Решка",
                 pin_title: "ВВЕДІТЬ ПІН-КОД", pin_subtitle: "Для доступу до панелі адмін-налаштувань", pin_cancel: "СКАСУВАТИ", pin_confirm: "ВХІД",
                 panel_dice_settings: "⚙️ Налаштування Кубиків", set_dice_count: "Кількість кубиків:",
+                set_dice_time: "Час кидка:", set_mega_autoclose: "Авто-закриття Mega Roll", set_mega_autoclose_desc: "Автоматично закриває після показу результату",
                 trade_ref_title: "📊 ТРЕЙДИ (ЗНАЧЕННЯ)", tr_fail: "Fail Trade (Відмова)", tr_no: "No Thanks (Ні, дякую)", tr_deal: "Deal? (Домовились?)", tr_fair: "Fair Trade (Чесний обмін)", tr_last: "Last Offer (Остання пропозиція)", tr_add: "Add More (Додай ще)",
-                col_red: "Червоний", col_orange: "Помаранчевий", col_yellow: "Жовтий", col_green: "Зелений", col_blue: "Синій", col_purple: "Фіолетовий",
+                col_red: "Червоний", col_orange: "Помаранчевий", col_yellow: "Жовтий", col_green: "Зелений", col_blue: "Синий", col_purple: "Фіолетовий",
                 btn_mega_close: "✓ ПРИЙНЯТИ",
                 colors: { red:"Червоний", orange:"Помаранчевий", yellow:"Жовтий", green:"Зелений", blue:"Синій", purple:"Фіолетовий" }
             },
@@ -937,6 +951,7 @@
                 pre_yesno: "Yes/No", pre_dice: "Dice 1-6", pre_coin: "Heads/Tails",
                 pin_title: "ENTER PIN CODE", pin_subtitle: "To access admin panel", pin_cancel: "CANCEL", pin_confirm: "LOGIN",
                 panel_dice_settings: "⚙️ Dice Settings", set_dice_count: "Number of dice:",
+                set_dice_time: "Roll Duration:", set_mega_autoclose: "Auto-close Mega Roll", set_mega_autoclose_desc: "Automatically closes after showing results",
                 trade_ref_title: "📊 TRADES (VALUES)", tr_fail: "Fail Trade", tr_no: "No Thanks", tr_deal: "Deal?", tr_fair: "Fair Trade", tr_last: "Last Offer", tr_add: "Add More",
                 col_red: "Red", col_orange: "Orange", col_yellow: "Yellow", col_green: "Green", col_blue: "Blue", col_purple: "Purple",
                 btn_mega_close: "✓ ACCEPT",
@@ -968,6 +983,7 @@
                 pre_yesno: "Да/Нет", pre_dice: "Кубики 1-6", pre_coin: "Орел/Решка",
                 pin_title: "ВВЕДИТЕ ПИН-КОД", pin_subtitle: "Для доступа к админ-панели", pin_cancel: "ОТМЕНА", pin_confirm: "ВХОД",
                 panel_dice_settings: "⚙️ Настройки Кубиков", set_dice_count: "Количество кубиков:",
+                set_dice_time: "Время броска:", set_mega_autoclose: "Авто-закрытие Mega Roll", set_mega_autoclose_desc: "Автоматически закрывает после показа результата",
                 trade_ref_title: "📊 ТРЕЙДЫ (ЗНАЧЕНИЯ)", tr_fail: "Fail Trade (Отказ)", tr_no: "No Thanks (Нет, спасибо)", tr_deal: "Deal? (Договорились?)", tr_fair: "Fair Trade (Честный обмен)", tr_last: "Last Offer (Последнее предл.)", tr_add: "Add More (Добавь еще)",
                 col_red: "Красный", col_orange: "Оранжевый", col_yellow: "Желтый", col_green: "Зеленый", col_blue: "Синий", col_purple: "Фиолетовый",
                 btn_mega_close: "✓ ПРИНЯТЬ",
@@ -975,11 +991,13 @@
             }
         };
 
-        let currentLang = localStorage.getItem('megaWheelLang_V6') || 'uk';
+        // За замовчуванням стоїть англійська мова (en)
+        let currentLang = localStorage.getItem('megaWheelLang_V6') || 'en';
 
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('megaWheelLang_V6', lang);
+            document.documentElement.lang = lang;
             
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
@@ -1006,7 +1024,7 @@
             parallax: false, elimination: false, mystery: false, cursor: 'default', clickfx: 'ripple',
             menuLayout: 'layout-tabs', currentTemplate: 'space',
             customColors: { bg1: '#050508', bg2: '#0a0a1a', ac1: '#7b2cbf', ac2: '#e0aaff' },
-            diceCount: 3, cheatDiceBanColor: 'none' 
+            diceCount: 3, cheatDiceBanColor: 'none', diceTime: 1.5, megaAutoClose: false
         };
 
         const savedCfg = localStorage.getItem('megaWheelCfg_V6');
@@ -1087,7 +1105,7 @@
         };
 
 
-        let wheelItems = JSON.parse(localStorage.getItem('megaWheelItems_V6')) || ["MACBOOK", "IPHONE", "$100", "ЗНИЖКА 50%", "ПУСТО"];
+        let wheelItems = JSON.parse(localStorage.getItem('megaWheelItems_V6')) || ["MACBOOK", "IPHONE", "$100", "50% DISCOUNT", "EMPTY"];
         let wheelHistory = JSON.parse(localStorage.getItem('megaWheelHistory_V6')) || [];
         let diceHistory = JSON.parse(localStorage.getItem('megaDiceHistory_V6')) || [];
         
@@ -1215,7 +1233,7 @@
             
             saveCfg(); applyTheme(); initParticles(); drawWheel();
             playWinSound(true);
-            // setTimeout прибрано, щоб користувач залишався на вкладці налаштувань
+            setTimeout(() => switchView('view-game'), 400); 
         }
 
         function applyCursor() {
@@ -1281,7 +1299,7 @@
             const el = document.getElementById(id); if (!el) return;
             if (type === 'slider') {
                 const valEl = document.getElementById(valId); el.value = cfg[key]; if(valEl) valEl.innerText = cfg[key];
-                el.addEventListener('input', function() { cfg[key] = parseInt(this.value); if(valEl) valEl.innerText = cfg[key]; saveCfg(); if(cb) cb(); });
+                el.addEventListener('input', function() { cfg[key] = parseFloat(this.value); if(valEl) valEl.innerText = cfg[key]; saveCfg(); if(cb) cb(); });
             } else if (type === 'select') {
                 el.value = cfg[key]; el.addEventListener('change', (e) => { cfg[key] = e.target.value; saveCfg(); if(cb) cb(); });
             } else if (type === 'select-num') {
@@ -1314,6 +1332,8 @@
         bindInput('set-text', 'textSize', 'val-text', 'slider', drawWheel);
         bindInput('set-volume', 'volume', 'val-volume', 'slider', () => { if(masterGain) masterGain.gain.value = cfg.volume / 100; });
         bindInput('set-dice-count', 'diceCount', 'val-dice-count', 'slider', renderDice);
+        bindInput('set-dice-time', 'diceTime', 'val-dice-time', 'slider');
+        bindInput('set-mega-autoclose', 'megaAutoClose', null, 'checkbox');
         
         bindInput('set-anim', 'anim', null, 'select'); 
         bindInput('set-sound', 'sound', null, 'select'); 
@@ -1498,7 +1518,7 @@
         
         document.getElementById('add-btn').addEventListener('click', () => {
             const val = document.getElementById('new-item-input').value.trim();
-            if (val) { if (wheelItems.length === 1 && wheelItems[0] === "ПУСТО") wheelItems = []; wheelItems.push(val); document.getElementById('new-item-input').value = ''; renderList(); initAudioAndSensors(); }
+            if (val) { if (wheelItems.length === 1 && wheelItems[0] === "ПУСТО" || wheelItems[0] === "EMPTY") wheelItems = []; wheelItems.push(val); document.getElementById('new-item-input').value = ''; renderList(); initAudioAndSensors(); }
         });
         document.getElementById('new-item-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('add-btn').click(); });
 
@@ -1690,15 +1710,11 @@
             }
             
             for(let i=0; i<cfg.diceCount; i++) {
-                await sleep(i === 0 ? 400 : 1500); // Точні таймінги з oooo.html
+                await sleep(i === 0 ? 400 : (cfg.diceTime * 1000)); 
                 await landMegaDice(i, results[i]);
             }
             
             await sleep(600);
-            
-            // Фінальний акорд після того, як всі кубики приземлились!
-            playWinSound();
-
             // Показуємо кнопку прийняття
             document.getElementById('mega-actions').style.display = 'block';
             
@@ -1715,6 +1731,12 @@
             // Add to history
             const resNames = results.map(r => `<span style="color:${r.hex}">${dict[currentLang].colors[r.name]}</span>`).join(', ');
             addToHistory('dice', resNames);
+
+            if (cfg.megaAutoClose) {
+                setTimeout(() => {
+                    if(megaRolling) closeMega();
+                }, 2500);
+            }
         }
 
         function landMegaDice(i, colorObj) {
@@ -1744,12 +1766,42 @@
                 const cy = rect.top + rect.height/2;
                 spawnImpact(cx, cy, colorObj.name);
                 spawnStars(cx, cy);
-                
-                // Відтворюємо короткий звук кубика замість гучного акорду
-                playTickSound();
+                playMegaRevealSound(); // <--- Використовуємо новий епічний звук замість playWinSound
                 
                 setTimeout(resolve, 500);
             });
+        }
+
+        // СПЕЦІАЛЬНИЙ ЗВУК ДЛЯ MEGA ROLL (чистий та приємний)
+        function playMegaRevealSound() {
+            if (!audioCtx || cfg.volume === 0) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                // Nice crisp ping/chime
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(masterGain);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(2400, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+                
+                // Accompanied by a low "thump"
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.connect(gain2); gain2.connect(masterGain);
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.2);
+                gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc2.start(); osc2.stop(audioCtx.currentTime + 0.3);
+
+                setTimeout(() => { osc.disconnect(); gain.disconnect(); osc2.disconnect(); gain2.disconnect(); }, 600);
+            } catch(e) {}
         }
 
         function spawnImpact(x, y, colorName) {
@@ -1839,7 +1891,7 @@
                     const finalX = rot.x + (Math.floor(Math.random()*2 + 2) * 360);
                     const finalY = rot.y + (Math.floor(Math.random()*2 + 2) * 360);
                     
-                    cube.style.transition = 'transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                    cube.style.transition = `transform ${cfg.diceTime}s cubic-bezier(0.2, 0.8, 0.2, 1)`;
                     cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
                     playTickSound();
 
@@ -1871,7 +1923,7 @@
                             modal.classList.add('active');
                             triggerConfetti();
 
-                        }, 1600);
+                        }, (cfg.diceTime * 1000) + 100);
                     }
                 }, 500 + i * 150); 
             }
